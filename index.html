@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Only Myself Company</title>
+<title>My Work</title>
 <meta name="description" content="Websites, apps and experiments I've built. Pick one and try it.">
 <meta name="theme-color" content="#07070D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -240,13 +240,18 @@ const PROJECTS=[
    blurb:"A simple, friendly calorie log. Tap common Indian foods, sort by meal, watch the ring fill up. Shares profiles with Fridge Chef.",
    tags:["Calories","Health","Tracker"],
    feats:["Progress ring, remaining calories and a 7-day chart","48 Indian-kitchen foods with calories, plus custom entries","Auto-picks breakfast / lunch / snack / dinner by time","Streak counter and confetti when you hit the goal","\"Log this meal\" handoff from Fridge Chef recipes"]},
-  {slug:"", name:"Disease Predictor", emoji:["🧪","💊"], status:"soon", cat:"health", c1:"rgba(31,201,216,.35)", c2:"rgba(138,63,224,.4)",
+  {slug:"healthhelper", name:"Health Helper", emoji:["🩺","💚"], status:"live", cat:"health", c1:"rgba(31,201,216,.45)", c2:"rgba(94,69,214,.35)",
+   blurb:"Should you worry, or can you look after it at home? Red-flag checks, comfort care, first aid and a symptom diary for the doctor.",
+   tags:["Health","First aid","Triage"],
+   feats:["Tells you one of three things: home care, see a doctor, or get help now","Never guesses the illness — it checks the warning signs doctors use","Age-aware: a fever in a 2-month-old is treated very differently","Comfort care, the ORS recipe, and first aid for choking, burns, snake bite and more","Symptom diary with a temperature graph you can show the doctor"]},
+  {slug:"", name:"Next Experiment", emoji:["🧪","✨"], status:"soon", cat:"experiments", c1:"rgba(31,201,216,.35)", c2:"rgba(138,63,224,.4)",
    blurb:"A space for the next website, tool, game or experiment. Something's cooking.",
    tags:["Experiment","Coming soon"],
-   feats:["Oh sorry this isnt made yet \"live\""]},
+   feats:["Replace this card in the PROJECTS list at the top of index.html","Set slug to the folder name and status to \"live\""]},
 ];
 const CATS={all:"All",food:"🍳 Food",health:"🔥 Health",experiments:"🧪 Experiments"};
 const CHANGELOG=[
+  ["19 Sep","<b>Health Helper</b> added — red-flag checks, first aid and a symptom diary."],
   ["19 Sep","<b>Home page</b> launched — one place for every project."],
   ["19 Sep","<b>Calorie Chef</b> moved in next to Fridge Chef and now shares chef profiles + theme."],
   ["18 Sep","Fridge Chef: <b>cook mode</b>, read-aloud steps, servings, favourites, Hindi UI, sound packs, 3D effects."],
