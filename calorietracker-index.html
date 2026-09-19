@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calorie Chef</title>
+<meta name="description" content="Log what you ate today. Part of Fridge Chef.">
+<meta name="theme-color" content="#07070D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,700;0,9..40,800&display=swap">
+<style>
+:root, :root[data-theme="dark"]{
+  --bg:#07070D; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
+  --ink:#E6E3F5; --muted:#7E7B9C; --line:rgba(255,255,255,.09);
+  --sun:#9EDB1F; --tomato:#E0207A; --mint:#1FC9D8; --berry:#5E45D6; --grape:#8A3FE0;
+  --ok-bg:rgba(31,201,216,.12); --ok-ink:#6FDCE6; --warn-bg:rgba(224,32,122,.14); --warn-ink:#F07AB4;
+  --shadow:0 12px 30px -12px rgba(0,0,0,.8); --glow:0 0 0 1px rgba(255,255,255,.07), 0 0 40px -12px rgba(94,69,214,.5);
+  --radius:26px; --body-font:"DM Sans",system-ui,sans-serif; --display-font:"Unbounded","DM Sans",system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#FFFDF6; --panel:#FFFFFF; --panel2:#FFF6D6; --ink:#141320; --muted:#5B5870; --line:#141320;
+  --sun:#C9F55A; --tomato:#FF4D8D; --mint:#5FD4FF; --berry:#7B61FF; --grape:#B48CFF;
+  --ok-bg:#D9F3FF; --ok-ink:#141320; --warn-bg:#FFD9E6; --warn-ink:#141320;
+  --shadow:4px 4px 0 #141320; --glow:6px 6px 0 #141320; color-scheme:light;
+}
+*{box-sizing:border-box} [hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body-font); font-size:17px; line-height:1.45; padding-inline:16px; padding-block:0 40px; position:relative; overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--display-font); line-height:1.05; margin:0; letter-spacing:-.02em; text-wrap:balance}
+button{font:inherit; color:inherit; cursor:pointer; border:0; background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--berry); outline-offset:3px}
+input,select{font:inherit; color:var(--ink); background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:12px 14px; width:100%; font-weight:600}
+input::placeholder{color:var(--muted)}
+.blobs{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none}
+.blob{position:absolute; width:55vmax; height:55vmax; border-radius:50%; filter:blur(100px); opacity:.28; mix-blend-mode:screen; animation:drift 26s ease-in-out infinite alternate}
+.blob.b1{background:#4A2FBF; top:-20vmax; left:-15vmax} .blob.b2{background:#B0185F; bottom:-25vmax; right:-10vmax; animation-delay:-8s} .blob.b3{background:#158FA0; top:30vh; left:55vw; width:35vmax; height:35vmax; opacity:.16}
+@keyframes drift{from{transform:translate(0,0) scale(1)} to{transform:translate(8vw,6vh) scale(1.15)}}
+:root[data-theme="light"] .blobs{display:none}
+:root[data-theme="light"] body{background:var(--bg) radial-gradient(#141320 1px, transparent 1.2px) 0 0/22px 22px; background-attachment:fixed}
+:root[data-theme="light"] body::before{content:""; position:fixed; inset:0; z-index:-1; background:var(--bg); opacity:.86}
+@media (prefers-reduced-motion: reduce){ .blob{animation:none} }
+
+.top{max-width:1180px; margin:0 auto; padding-block:22px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.logo{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
+.logo .flame{width:46px; height:46px; border-radius:14px; background:var(--sun); display:grid; place-items:center; font-size:1.5rem; box-shadow:0 0 30px -6px var(--sun); transform:rotate(-6deg)}
+.logo h1{font-size:1.7rem; font-weight:900; text-transform:uppercase; letter-spacing:-.03em}
+.logo h1 span{color:var(--sun)}
+.head-right{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.pillbtn{display:flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(14px); border-radius:999px; padding:8px 14px; font-weight:800; text-decoration:none; color:inherit}
+.pillbtn b{font-family:var(--display-font); font-size:1rem; color:var(--sun)}
+.nav{max-width:1180px; margin:0 auto 20px; display:flex; gap:6px; background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(20px); border-radius:999px; padding:6px; box-shadow:var(--shadow); position:sticky; top:calc(8px + env(safe-area-inset-top,0px)); z-index:5}
+.navbtn{flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:11px 8px; border-radius:999px; font-weight:800; color:var(--muted)}
+.navbtn[aria-current="page"]{background:var(--sun); color:#07070D; box-shadow:0 0 24px -6px var(--sun)}
+@media (max-width:600px){ body{padding-bottom:96px} .nav{position:fixed; left:12px; right:12px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); top:auto; margin:0; max-width:none; background:color-mix(in srgb,var(--bg) 88%,transparent)} .navbtn{flex-direction:column; gap:2px; font-size:.75rem; padding:8px 4px} .navbtn .ni{font-size:1.4rem} }
+.wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; position:relative; z-index:1}
+@media (max-width:860px){ .wrap{grid-template-columns:1fr} }
+.view[hidden]{display:none}
+.panel{background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(18px); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; min-width:0}
+.panel.hero{background:linear-gradient(160deg,rgba(94,69,214,.28),rgba(255,255,255,.03))}
+.eyebrow{text-transform:uppercase; letter-spacing:.14em; font-weight:800; font-size:.72rem; color:var(--muted); margin-bottom:6px}
+.panel h2{font-size:1.5rem; font-weight:800}
+.sub{color:var(--muted); font-weight:600; font-size:.95rem; margin:6px 0 0}
+.head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; font-weight:800; font-size:.93rem; background:var(--panel2); color:var(--ink); border:1px solid var(--line); transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.btn:hover{transform:translateY(-2px)} .btn:active{transform:scale(.96)}
+.btn.lime{background:var(--sun); color:#07070D; border-color:transparent; box-shadow:0 8px 24px -8px var(--sun)}
+.btn.mint{background:var(--mint); color:#062A33; border-color:transparent; box-shadow:0 8px 24px -8px var(--mint)}
+.btn.pink{background:transparent; color:var(--warn-ink)}
+.btn.sm{padding:7px 13px; font-size:.82rem}
+.btn:disabled{opacity:.5; transform:none}
+
+/* ring + stats */
+.glance{display:grid; grid-template-columns:auto 1fr 1fr; gap:14px; margin-top:18px; align-items:center}
+@media (max-width:520px){ .glance{grid-template-columns:1fr 1fr} .ring{grid-column:1/-1; justify-self:center} }
+.ring{width:150px; height:150px; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--sun) calc(var(--p,0)*1%), var(--panel2) 0); box-shadow:0 0 40px -12px var(--sun)}
+.ring::before{content:""; position:absolute; inset:12px; border-radius:50%; background:var(--bg)}
+.ring.over{background:conic-gradient(var(--tomato) calc(var(--p,0)*1%), var(--panel2) 0); box-shadow:0 0 40px -12px var(--tomato)}
+.ring div{position:relative; text-align:center; line-height:1}
+.ring b{font-family:var(--display-font); font-size:2rem; display:block; font-variant-numeric:tabular-nums}
+.ring small{color:var(--muted); font-weight:700; font-size:.8rem}
+.stat{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:14px 16px}
+.stat small{display:block; color:var(--muted); font-weight:700; font-size:.82rem}
+.stat b{font-family:var(--display-font); font-size:1.5rem; font-variant-numeric:tabular-nums}
+.stat b.lime{color:var(--sun)} .stat b.mint{color:var(--mint)} .stat b.pink{color:var(--tomato)}
+.stat.wide{grid-column:span 2}
+.tiles3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px}
+@media (max-width:520px){ .tiles3{grid-template-columns:1fr 1fr} }
+
+/* chips */
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.chip{display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.93rem; transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.chip small{color:var(--muted); font-weight:700}
+.chip:hover{transform:translateY(-2px) rotate(-1deg)} .chip:active{transform:scale(.94)}
+.search{width:100%; margin-top:12px; border-radius:999px; padding:13px 18px}
+
+/* meals */
+.meals{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px}
+@media (max-width:520px){ .meals{grid-template-columns:1fr} }
+.meal{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:14px; min-height:120px}
+.meal h4{display:flex; justify-content:space-between; font-family:var(--body-font); font-weight:800; font-size:1rem}
+.meal h4 span{color:var(--muted); font-weight:700; font-size:.85rem; font-variant-numeric:tabular-nums}
+.meal ul{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:6px}
+.meal li{display:flex; align-items:center; gap:8px; font-weight:700; font-size:.9rem; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:7px 10px}
+.meal li .k{margin-left:auto; color:var(--muted); font-variant-numeric:tabular-nums}
+.meal li .x{color:var(--muted); font-weight:900; padding:0 4px}
+.meal .none{color:var(--muted); font-weight:600; margin-top:10px; font-size:.9rem}
+.badge-cnt{background:var(--sun); color:#07070D; border-radius:999px; min-width:26px; height:26px; display:inline-grid; place-items:center; font-size:.85rem; padding:0 8px; font-family:var(--body-font); vertical-align:middle; margin-left:6px}
+
+/* add form */
+.form{display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:10px; margin-top:16px}
+@media (max-width:860px){ .form{grid-template-columns:1fr 1fr} .form .btn{grid-column:1/-1; justify-content:center} }
+.form input,.form select{margin:0}
+.err{color:var(--tomato); font-weight:800; margin-top:8px}
+
+/* progress */
+.bars{margin-top:12px; display:flex; flex-direction:column; gap:12px}
+.bar{display:grid; grid-template-columns:90px 1fr 70px; gap:12px; align-items:center; font-weight:800; font-size:.95rem}
+.bar .track{height:12px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); overflow:hidden}
+.bar .fill{height:100%; border-radius:999px; background:linear-gradient(90deg,var(--sun),var(--mint)); width:0; transition:width .4s}
+.bar .k{text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; font-size:.85rem}
+.week{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:14px; height:170px; align-items:end; position:relative}
+.week .goal{position:absolute; left:0; right:0; border-top:2px dashed var(--sun); opacity:.7; pointer-events:none}
+.week .goal i{position:absolute; right:0; top:-18px; font-style:normal; font-size:.7rem; font-weight:800; color:var(--sun)}
+.week .col{display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end}
+.week .col .v{flex:1; width:100%; display:flex; align-items:flex-end}
+.week .col .b{width:100%; border-radius:10px 10px 4px 4px; background:linear-gradient(180deg,var(--sun),var(--mint)); min-height:4px; position:relative; transition:height .4s}
+.week .col.today .b{background:linear-gradient(180deg,var(--tomato),var(--grape))}
+.week .col .b i{position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-style:normal; font-size:.72rem; font-weight:800; color:var(--muted); white-space:nowrap}
+.week .col small{color:var(--muted); font-weight:800; font-size:.75rem; text-transform:uppercase; letter-spacing:.06em}
+.week .col.today small{color:var(--tomato)}
+.goal-line{border-top:2px dashed var(--line); position:relative; margin-top:-1px}
+
+/* settings */
+.row{display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--line)}
+.row b{display:block} .row small{color:var(--muted); font-weight:600; display:block}
+.row input,.row select{width:130px; text-align:center}
+.tip{margin-top:14px; padding:12px 14px; border-radius:16px; background:linear-gradient(120deg,rgba(124,92,255,.18),rgba(255,61,154,.14)); border:1px solid var(--line); font-weight:600}
+
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:#14141F; color:var(--ink); border:1px solid var(--sun); padding:12px 20px; border-radius:999px; font-weight:800; z-index:31; box-shadow:0 0 30px -6px var(--sun); max-width:calc(100% - 32px); text-align:center}
+@media (max-width:600px){ .toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))} }
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:30}
+
+/* light theme touches */
+:root[data-theme="light"] .panel,:root[data-theme="light"] .nav,:root[data-theme="light"] .pillbtn{border:2px solid var(--line); backdrop-filter:none; border-radius:20px}
+:root[data-theme="light"] .nav,:root[data-theme="light"] .pillbtn{border-radius:999px}
+:root[data-theme="light"] .panel.hero{background:var(--panel2)}
+:root[data-theme="light"] .navbtn{color:var(--ink)} :root[data-theme="light"] .navbtn[aria-current="page"]{background:var(--ink); color:#fff; box-shadow:none}
+:root[data-theme="light"] .chip,:root[data-theme="light"] .btn,:root[data-theme="light"] .stat,:root[data-theme="light"] .meal,:root[data-theme="light"] .meal li,:root[data-theme="light"] input,:root[data-theme="light"] select,:root[data-theme="light"] .bar .track{border:2px solid var(--line); background:#fff}
+:root[data-theme="light"] .chip,:root[data-theme="light"] .btn{box-shadow:2px 2px 0 var(--line)}
+:root[data-theme="light"] .btn.lime{background:var(--sun); color:var(--ink)} :root[data-theme="light"] .btn.mint{background:var(--mint); color:var(--ink)}
+:root[data-theme="light"] .ring::before{background:#fff} :root[data-theme="light"] .ring{box-shadow:none; border:2px solid var(--line)}
+:root[data-theme="light"] .stat b.lime{color:#5A8A00}
+:root[data-theme="light"] .toast{background:var(--sun); color:var(--ink); border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)}
+:root[data-theme="light"] .logo .flame{border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)} :root[data-theme="light"] .logo h1 span{color:var(--tomato)}
+:root[data-theme="light"] .tip{background:var(--panel2)}
+</style>
+</head>
+<body>
+<div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<header class="top">
+  <a class="logo" href="../fridgechef/"><div class="flame">🔥</div><h1>Calorie<span>Chef</span></h1></a>
+  <div class="head-right">
+    <a class="pillbtn" href="../" title="Home">🏠</a>
+    <a class="pillbtn" href="../fridgechef/" title="Back to Fridge Chef">🍳 <span id="chefName">Fridge Chef</span></a>
+    <div class="pillbtn" id="dateBadge">📅</div>
+    <div class="pillbtn" title="Days logged in a row">🔥 <b id="streak">0</b></div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <button class="navbtn" data-view="today" aria-current="page"><span class="ni">🍽️</span><span>Today</span></button>
+  <button class="navbtn" data-view="add"><span class="ni">➕</span><span>Add food</span></button>
+  <button class="navbtn" data-view="progress"><span class="ni">📈</span><span>Progress</span></button>
+  <button class="navbtn" data-view="more"><span class="ni">⚙️</span><span>More</span></button>
+</nav>
+
+<!-- TODAY -->
+<main class="wrap view" data-view="today">
+  <section class="panel hero">
+    <div class="eyebrow">Today's energy budget</div>
+    <h2>Fuel up, don't stress about it.</h2>
+    <p class="sub">Log what you eat, watch the total, see what's left.</p>
+    <div class="glance">
+      <div class="ring" id="ring"><div><b id="ringEaten">0</b><small>kcal eaten</small></div></div>
+      <div class="stat"><small>Daily goal</small><b id="sGoal">2,000</b></div>
+      <div class="stat"><small>Remaining</small><b class="lime" id="sLeft">2,000</b></div>
+      <div class="stat"><small>Foods logged</small><b class="mint" id="sCount">0</b></div>
+      <div class="stat"><small>Progress</small><b class="pink" id="sPct">0%</b></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="head"><div><div class="eyebrow">Quick add</div><h2>What did you eat?</h2><p class="sub">Tap a common food to log it instantly.</p></div><button class="btn sm mint" id="goAdd">✨ custom</button></div>
+    <div class="chips" id="quickChips"></div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow">Fast logging</div>
+    <h2>Popular foods <span class="badge-cnt" id="foodCount">0</span></h2>
+    <input class="search" id="search" type="search" placeholder="search… banana, paneer, poha, whatever">
+    <div class="chips" id="foodChips"></div>
+  </section>
+
+  <section class="panel">
+    <div class="head"><div><div class="eyebrow">Your day</div><h2>Meals <span class="badge-cnt" id="mealCount">0</span></h2></div><button class="btn sm lime" id="sampleBtn">🎲 add sample</button></div>
+    <div class="meals" id="meals"></div>
+  </section>
+</main>
+
+<!-- ADD -->
+<main class="wrap view" data-view="add" hidden style="grid-template-columns:1fr">
+  <section class="panel">
+    <div class="eyebrow">Manual entry</div>
+    <h2>Add food</h2>
+    <p class="sub">Type any food and its calories. Pick which meal it goes in.</p>
+    <form class="form" id="addForm">
+      <input id="fName" type="text" placeholder="Food name, e.g. Paneer sandwich" maxlength="40" required>
+      <input id="fKcal" type="number" inputmode="numeric" placeholder="Calories" min="1" max="5000" required>
+      <select id="fMeal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snack">Snack</option></select>
+      <button class="btn mint" type="submit">Add food</button>
+    </form>
+    <div class="err" id="addErr" hidden></div>
+    <div class="eyebrow" style="margin-top:20px">Quick presets</div>
+    <div class="chips" id="presetChips"></div>
+    <div class="tip">💡 Not sure of the calories? The number on the packet is per serving. For home food, the presets are decent guesses — being roughly right is fine.</div>
+  </section>
+</main>
+
+<!-- PROGRESS -->
+<main class="wrap view" data-view="progress" hidden>
+  <section class="panel hero">
+    <div class="eyebrow">Today at a glance</div>
+    <h2>Your progress</h2>
+    <p class="sub">A breakdown of calories logged across your meals.</p>
+    <div class="tiles3">
+      <div class="stat"><small>Eaten</small><b id="pEaten">0</b><small>kcal</small></div>
+      <div class="stat"><small>Remaining</small><b class="lime" id="pLeft">2,000</b><small>kcal</small></div>
+      <div class="stat"><small>Goal</small><b id="pGoal">2,000</b><small>kcal</small></div>
+    </div>
+  </section>
+  <section class="panel">
+    <div class="eyebrow">Meal breakdown</div>
+    <h2>Calories by meal</h2>
+    <div class="bars" id="bars"></div>
+  </section>
+  <section class="panel" style="grid-column:1/-1">
+    <div class="eyebrow">Last 7 days</div>
+    <h2>The week</h2>
+    <p class="sub">Each bar is a day. Dashed line is your goal.</p>
+    <div class="week" id="week"></div>
+  </section>
+</main>
+
+<!-- MORE -->
+<main class="wrap view" data-view="more" hidden>
+  <section class="panel hero">
+    <div class="eyebrow">Preferences</div>
+    <h2>More</h2>
+    <div class="row"><div><b>Daily calorie goal</b><small>Used for the ring and remaining calories.</small></div><input type="number" id="goalIn" min="800" max="5000" step="50"></div>
+    <div class="row"><div><b>Default meal</b><small>Preselected when you add a custom food.</small></div><select id="defMeal"><option value="auto">Auto (by time)</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snack">Snack</option></select></div>
+    <div style="margin-top:16px"><button class="btn lime" id="saveBtn">Save settings</button></div>
+  </section>
+  <section class="panel">
+    <div class="eyebrow">Data</div>
+    <h2>Today's log</h2>
+    <p class="sub">Your entries are stored only in this browser, per chef.</p>
+    <div class="chips" style="gap:10px">
+      <button class="btn" id="copyBtn">📋 Copy today's data</button>
+      <button class="btn" id="clearDayBtn">🧹 Clear today</button>
+      <button class="btn pink" id="resetBtn">Reset app data</button>
+    </div>
+    <div class="tip">🍳 Cooked something in Fridge Chef? Open the recipe there and tap "log this meal" — it lands here with the name filled in.</div>
+  </section>
+</main>
+
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- foods ---------- */
+const FOODS=[
+ ["🍌","Banana",105],["🍎","Apple",95],["🥭","Mango",135],["🥣","Poha",250],["🥛","Buttermilk",70],["🫓","Roti",120],
+ ["🍚","Rice (1 katori)",205],["🥣","Dal (1 katori)",180],["🧀","Paneer (100g)",265],["🥗","Salad",90],["🌱","Tofu",150],["🥜","Peanuts (handful)",170],
+ ["🥚","Boiled egg",78],["🍳","Omelette",160],["🍞","Bread slice",80],["🥪","Cheese sandwich",350],["🍕","Bread pizza",280],["🍜","Instant noodles",380],
+ ["🥛","Milk (1 glass)",150],["🍶","Curd (1 katori)",100],["🥤","Mango lassi",220],["🧃","Juice (1 glass)",120],["☕","Chai",60],["☕","Hot chocolate",250],
+ ["🥞","Banana pancakes (3)",300],["🍛","Veg fried rice",320],["🍝","Pasta (1 bowl)",400],["🌯","Paneer wrap",380],["🥔","Jeera aloo",220],["🍲","Upma",230],
+ ["🍘","Bhel puri",250],["🍿","Popcorn (bowl)",120],["🍪","Biscuit (2)",100],["🍫","Chocolate (small bar)",240],["🍦","Ice cream (scoop)",140],["🧁","Mug cake",350],
+ ["🥭","Fruit chaat",120],["🍧","Fruit popsicle",60],["🍋","Nimbu pani",50],["🥥","Coconut ladoo (1)",110],["🟡","Besan ladoo (1)",180],["🍢","Samosa",260],
+ ["🌽","Masala corn",150],["🥒","Cucumber",16],["🍅","Tomato",22],["🥕","Carrot",25],["🍇","Grapes (bowl)",100],["🍉","Watermelon (bowl)",50],
+];
+const QUICK=["Banana","Apple","Roti","Dal (1 katori)","Rice (1 katori)"];
+const MEALS={breakfast:["🌅","Breakfast"],lunch:["☀️","Lunch"],dinner:["🌙","Dinner"],snack:["🍿","Snack"]};
+
+/* ---------- storage (shares Fridge Chef's profile + theme, same origin) ---------- */
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const FC=LS.get("fc_global")||{};
+const chef=(FC.profiles||[]).find(p=>p.id===FC.active);
+const KEY="cc_"+(chef?chef.id:"solo");
+const S=Object.assign({goal:2000,defMeal:"auto",days:{}},LS.get(KEY)||{});
+const save=()=>LS.set(KEY,S);
+const todayKey=(d=new Date())=>d.toISOString().slice(0,10);
+const day=()=> (S.days[todayKey()]=S.days[todayKey()]||[]);
+const fmt=n=>Math.round(n).toLocaleString("en-IN");
+
+/* theme follows Fridge Chef */
+function applyTheme(){ const t=FC.theme||"dark"; const dark=t==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:t!=="light"; document.documentElement.dataset.theme=dark?"dark":"light"; }
+applyTheme();
+if(chef) document.getElementById("chefName").textContent=`${chef.avatar} ${chef.name}`;
+document.getElementById("dateBadge").textContent="📅 "+new Date().toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
+
+/* ---------- views ---------- */
+function showView(v){ document.querySelectorAll(".view").forEach(m=>m.hidden=m.dataset.view!==v); document.querySelectorAll(".navbtn").forEach(b=>b.dataset.view===v?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")); scrollTo({top:0,behavior:"smooth"}); }
+document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{ showView(b.dataset.view); pop(); }));
+document.getElementById("goAdd").addEventListener("click",()=>{ showView("add"); document.getElementById("fName").focus(); });
+
+/* ---------- sound (tiny) ---------- */
+let actx=null; function tone(f,d,type="sine",v=.15,to=null){ try{ actx=actx||new (AudioContext||webkitAudioContext)(); if(FC.muted) return; const o=actx.createOscillator(),g=actx.createGain(); o.type=type; o.frequency.setValueAtTime(f,actx.currentTime); if(to) o.frequency.exponentialRampToValueAtTime(to,actx.currentTime+d); g.gain.setValueAtTime(v,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d); o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime+d);}catch(e){} }
+const pop=()=>tone(520,.09,"sine",.18,180), tick=()=>tone(880,.12,"triangle",.1), fanfare=()=>[523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.25,"triangle",.12),i*90));
+
+/* ---------- logging ---------- */
+function autoMeal(){ const h=new Date().getHours(); return h<11?"breakfast":h<16?"lunch":h<19?"snack":"dinner"; }
+function addFood(name,kcal,meal){
+  meal=meal||(S.defMeal==="auto"?autoMeal():S.defMeal);
+  day().push({name,kcal:Math.round(kcal),meal,ts:Date.now()}); save(); render(); tick();
+  const total=eaten(); toast(`${name} · ${kcal} kcal → ${MEALS[meal][1]}`);
+  if(total>=S.goal && total-kcal<S.goal){ setTimeout(()=>{ toast("Goal reached for today 🎯"); fanfare(); confetti(); },900); }
+}
+function removeFood(i){ const d=day(); const [f]=d.splice(i,1); save(); render(); toast(`Removed ${f.name}`); }
+const eaten=(k=todayKey())=>(S.days[k]||[]).reduce((a,b)=>a+b.kcal,0);
+function streak(){ let n=0; const d=new Date(); for(;;){ const k=todayKey(d); if((S.days[k]||[]).length){ n++; d.setDate(d.getDate()-1); } else break; if(n>365) break; } return n; }
+
+/* ---------- render ---------- */
+function chip(f,extra=""){ return `<button class="chip" data-name="${f[1]}" data-kcal="${f[2]}"><span>${f[0]}</span>${f[1]} <small>${extra||f[2]+" kcal"}</small></button>`; }
+function wireChips(el){ el.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>addFood(b.dataset.name,+b.dataset.kcal))); }
+function render(){
+  const e=eaten(), left=Math.max(0,S.goal-e), pct=Math.min(999,Math.round(e/S.goal*100)), d=day();
+  document.getElementById("ringEaten").textContent=fmt(e); const ring=document.getElementById("ring"); ring.style.setProperty("--p",Math.min(100,pct)); ring.classList.toggle("over",e>S.goal);
+  document.getElementById("sGoal").textContent=fmt(S.goal); document.getElementById("sLeft").textContent=e>S.goal?"−"+fmt(e-S.goal):fmt(left);
+  document.getElementById("sLeft").className=e>S.goal?"pink":"lime";
+  document.getElementById("sCount").textContent=d.length; document.getElementById("sPct").textContent=pct+"%";
+  document.getElementById("pEaten").textContent=fmt(e); document.getElementById("pLeft").textContent=fmt(left); document.getElementById("pGoal").textContent=fmt(S.goal);
+  document.getElementById("streak").textContent=streak();
+  document.getElementById("mealCount").textContent=d.length; document.getElementById("foodCount").textContent=FOODS.length;
+  // quick + presets
+  const q=document.getElementById("quickChips"); q.innerHTML=QUICK.map(n=>FOODS.find(f=>f[1]===n)).map(f=>chip(f,"· "+f[2])).join(""); wireChips(q);
+  const p=document.getElementById("presetChips"); p.innerHTML=FOODS.slice(0,12).map(f=>chip(f)).join(""); wireChips(p);
+  renderFoods();
+  // meals
+  const m=document.getElementById("meals"); m.innerHTML=Object.keys(MEALS).map(k=>{
+    const items=d.map((f,i)=>({...f,i})).filter(f=>f.meal===k); const tot=items.reduce((a,b)=>a+b.kcal,0);
+    return `<div class="meal"><h4><span style="color:inherit">${MEALS[k][0]} ${MEALS[k][1]}</span><span>${fmt(tot)} kcal</span></h4>${items.length?`<ul>${items.map(f=>`<li>${f.name}<span class="k">${f.kcal}</span><button class="x" data-i="${f.i}" aria-label="Remove">✕</button></li>`).join("")}</ul>`:`<div class="none">Nothing logged yet</div>`}</div>`;
+  }).join("");
+  m.querySelectorAll(".x").forEach(b=>b.addEventListener("click",()=>removeFood(+b.dataset.i)));
+  // bars
+  const mx=Math.max(1,...Object.keys(MEALS).map(k=>d.filter(f=>f.meal===k).reduce((a,b)=>a+b.kcal,0)));
+  document.getElementById("bars").innerHTML=Object.keys(MEALS).map(k=>{ const tot=d.filter(f=>f.meal===k).reduce((a,b)=>a+b.kcal,0); return `<div class="bar"><span>${MEALS[k][1]}</span><div class="track"><div class="fill" style="width:${tot/mx*100}%"></div></div><span class="k">${fmt(tot)} kcal</span></div>`; }).join("");
+  // week
+  const days=[...Array(7)].map((_,i)=>{ const dt=new Date(); dt.setDate(dt.getDate()-(6-i)); return {k:todayKey(dt),l:dt.toLocaleDateString("en-IN",{weekday:"short"}),today:i===6}; });
+  const top=Math.max(S.goal,...days.map(x=>eaten(x.k)))*1.15;
+  document.getElementById("week").innerHTML=days.map(x=>{ const v=eaten(x.k); return `<div class="col ${x.today?"today":""}"><div class="v"><div class="b" style="height:${v/top*100}%"><i>${v?fmt(v):""}</i></div></div><small>${x.l}</small></div>`; }).join("")
+    +`<div class="goal" style="bottom:calc(24px + (100% - 24px) * ${(S.goal/top).toFixed(3)})"><i>goal ${fmt(S.goal)}</i></div>`;
+  // settings
+  document.getElementById("goalIn").value=S.goal; document.getElementById("defMeal").value=S.defMeal;
+}
+function renderFoods(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const el=document.getElementById("foodChips"); el.innerHTML=FOODS.filter(f=>!q||f[1].toLowerCase().includes(q)).map(f=>chip(f)).join("")||`<p class="sub">Nothing matches — add it as a custom food.</p>`; wireChips(el);
+}
+document.getElementById("search").addEventListener("input",renderFoods);
+
+/* add form */
+document.getElementById("addForm").addEventListener("submit",e=>{
+  e.preventDefault(); const n=document.getElementById("fName").value.trim(), k=+document.getElementById("fKcal").value, err=document.getElementById("addErr");
+  if(!n||!k||k<1){ err.hidden=false; err.textContent="Give it a name and a calorie number."; return; }
+  err.hidden=true; addFood(n,k,document.getElementById("fMeal").value); e.target.reset(); document.getElementById("fMeal").value=S.defMeal==="auto"?autoMeal():S.defMeal; showView("today");
+});
+document.getElementById("fMeal").value=S.defMeal==="auto"?autoMeal():S.defMeal;
+
+/* sample, settings, data */
+document.getElementById("sampleBtn").addEventListener("click",()=>{ [["Poha",250,"breakfast"],["Chai",60,"breakfast"],["Rice (1 katori)",205,"lunch"],["Dal (1 katori)",180,"lunch"],["Banana",105,"snack"]].forEach(([n,k,m])=>day().push({name:n,kcal:k,meal:m,ts:Date.now()})); save(); render(); toast("Sample day added — delete anything that's wrong"); tick(); });
+document.getElementById("saveBtn").addEventListener("click",()=>{ S.goal=Math.min(5000,Math.max(800,+document.getElementById("goalIn").value||2000)); S.defMeal=document.getElementById("defMeal").value; save(); render(); toast("Settings saved ✅"); tick(); });
+document.getElementById("copyBtn").addEventListener("click",async()=>{ const d=day(); const text=`Calorie Chef · ${new Date().toDateString()}\n${d.map(f=>`• ${MEALS[f.meal][1]}: ${f.name} — ${f.kcal} kcal`).join("\n")}\nTotal: ${eaten()} / ${S.goal} kcal`; try{ await navigator.clipboard.writeText(text); toast("Copied!"); }catch(e){ toast("Couldn't copy on this browser."); } });
+document.getElementById("clearDayBtn").addEventListener("click",()=>{ if(!day().length) return; if(confirm("Clear everything logged today?")){ S.days[todayKey()]=[]; save(); render(); toast("Today cleared"); } });
+document.getElementById("resetBtn").addEventListener("click",()=>{ if(confirm("Reset ALL Calorie Chef data for this chef? Every day's log will be deleted.")){ localStorage.removeItem(KEY); location.reload(); } });
+
+/* handoff from Fridge Chef: ?food=Bread%20Pizza&kcal=280 */
+{ const u=new URL(location.href), f=u.searchParams.get("food"), k=u.searchParams.get("kcal");
+  if(f){ showView("add"); document.getElementById("fName").value=f; if(k) document.getElementById("fKcal").value=k; setTimeout(()=>document.getElementById(k?"fMeal":"fKcal").focus(),100); history.replaceState(null,"",location.pathname); } }
+
+/* misc */
+let tt; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2600); }
+function confetti(){ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return; const c=document.getElementById("confetti"),x=c.getContext("2d"); c.width=innerWidth; c.height=innerHeight; const cs=["#9EDB1F","#E0207A","#1FC9D8","#5E45D6","#8A3FE0"]; const b=Array.from({length:140},()=>({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*18,vy:-Math.random()*18-4,r:Math.random()*8+4,c:cs[Math.random()*5|0],a:Math.random()*6,s:(Math.random()-.5)*.3})); let t=0; (function f(){ x.clearRect(0,0,c.width,c.height); b.forEach(p=>{ p.vy+=.45; p.x+=p.vx; p.y+=p.vy; p.a+=p.s; x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.fillStyle=p.c; x.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6); x.restore(); }); if(++t<110) requestAnimationFrame(f); else x.clearRect(0,0,c.width,c.height); })(); }
+render();
+</script>
+</body>
+</html>

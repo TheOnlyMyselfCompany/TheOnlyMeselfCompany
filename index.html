@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Work</title>
+<meta name="description" content="Websites, apps and experiments I've built. Pick one and try it.">
+<meta name="theme-color" content="#07070D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,700;0,9..40,800&display=swap">
+<style>
+:root, :root[data-theme="dark"]{
+  --bg:#07070D; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
+  --ink:#E6E3F5; --muted:#7E7B9C; --line:rgba(255,255,255,.09);
+  --sun:#9EDB1F; --tomato:#E0207A; --mint:#1FC9D8; --berry:#5E45D6; --grape:#8A3FE0;
+  --shadow:0 12px 30px -12px rgba(0,0,0,.8); --glow:0 0 0 1px rgba(255,255,255,.07), 0 0 40px -12px rgba(94,69,214,.5);
+  --radius:26px; --body:"DM Sans",system-ui,sans-serif; --display:"Unbounded","DM Sans",system-ui,sans-serif; color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#FFFDF6; --panel:#FFFFFF; --panel2:#FFF6D6; --ink:#141320; --muted:#5B5870; --line:#141320;
+  --sun:#C9F55A; --tomato:#FF4D8D; --mint:#5FD4FF; --berry:#7B61FF; --grape:#B48CFF;
+  --shadow:4px 4px 0 #141320; --glow:6px 6px 0 #141320; color-scheme:light;
+}
+*{box-sizing:border-box} [hidden]{display:none!important}
+html{scroll-behavior:smooth} html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.5; padding-inline:16px; padding-block:0 60px; overflow-x:hidden; position:relative}
+h1,h2,h3{font-family:var(--display); line-height:1.05; margin:0; letter-spacing:-.02em; text-wrap:balance}
+a{color:inherit}
+button{font:inherit; color:inherit; cursor:pointer; border:0; background:none}
+a:focus-visible,button:focus-visible{outline:3px solid var(--berry); outline-offset:3px}
+.blobs{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none}
+.blob{position:absolute; width:55vmax; height:55vmax; border-radius:50%; filter:blur(100px); opacity:.28; mix-blend-mode:screen; animation:drift 26s ease-in-out infinite alternate}
+.blob.b1{background:#4A2FBF; top:-20vmax; left:-15vmax} .blob.b2{background:#B0185F; bottom:-25vmax; right:-10vmax; animation-delay:-8s} .blob.b3{background:#158FA0; top:30vh; left:55vw; width:35vmax; height:35vmax; opacity:.16}
+@keyframes drift{from{transform:translate(0,0) scale(1)} to{transform:translate(8vw,6vh) scale(1.15)}}
+.grain{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.07; mix-blend-mode:overlay; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+:root[data-theme="light"] .blobs,:root[data-theme="light"] .grain{display:none}
+:root[data-theme="light"] body{background:var(--bg) radial-gradient(#141320 1px, transparent 1.2px) 0 0/22px 22px; background-attachment:fixed}
+:root[data-theme="light"] body::before{content:""; position:fixed; inset:0; z-index:-1; background:var(--bg); opacity:.86}
+@media (prefers-reduced-motion: reduce){ .blob,.hero-emoji span,.pulse{animation:none!important} }
+
+.wrap{max-width:1180px; margin:0 auto; position:relative; z-index:1}
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding-block:22px 12px}
+.logo{display:flex; align-items:center; gap:12px; text-decoration:none}
+.logo .mark{width:46px; height:46px; border-radius:14px; background:linear-gradient(160deg,var(--berry),var(--tomato)); display:grid; place-items:center; font-size:1.4rem; box-shadow:0 0 30px -6px var(--berry); transform:rotate(-6deg)}
+.logo b{font-family:var(--display); font-size:1.4rem; font-weight:900; text-transform:uppercase; letter-spacing:-.03em}
+.nav{display:flex; gap:6px; background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(20px); border-radius:999px; padding:6px; box-shadow:var(--shadow)}
+.nav a,.nav button{padding:10px 16px; border-radius:999px; font-weight:800; color:var(--muted); text-decoration:none; display:inline-flex; gap:6px; align-items:center}
+.nav a:hover{color:var(--ink)}
+@media (max-width:600px){ .nav a span{display:none} .nav a,.nav button{padding:10px 12px} }
+
+.hero{text-align:center; padding-block:60px 30px}
+.eyebrow{text-transform:uppercase; letter-spacing:.16em; font-weight:800; font-size:.75rem; color:var(--muted); margin-bottom:12px}
+.hero h1{font-size:clamp(2.2rem,7vw,4.6rem); font-weight:900; text-transform:uppercase; letter-spacing:-.04em; line-height:.98}
+.hero h1 span{background:linear-gradient(90deg,var(--sun),var(--mint),var(--berry)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero p{max-width:640px; margin:18px auto 0; color:var(--muted); font-weight:600; font-size:1.05rem}
+.hero-emoji{display:flex; justify-content:center; gap:14px; font-size:2.6rem; margin:26px 0 8px; line-height:1}
+.hero-emoji span{display:inline-block; animation:bob 2.6s ease-in-out infinite; filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.hero-emoji span:nth-child(2){animation-delay:-.6s} .hero-emoji span:nth-child(3){animation-delay:-1.2s} .hero-emoji span:nth-child(4){animation-delay:-1.8s} .hero-emoji span:nth-child(5){animation-delay:-2.4s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-8deg)} 50%{transform:translateY(-10px) rotate(8deg)}}
+.cta{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:26px}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:13px 22px; border-radius:999px; font-weight:800; background:var(--panel2); color:var(--ink); border:1px solid var(--line); text-decoration:none; transition:transform .15s cubic-bezier(.34,1.56,.64,1), box-shadow .15s}
+.btn:hover{transform:translateY(-2px) scale(1.02)} .btn:active{transform:scale(.97)}
+.btn.lime{background:var(--sun); color:#07070D; border-color:transparent; box-shadow:0 8px 24px -8px var(--sun)}
+.btn.berry{background:linear-gradient(120deg,var(--berry),var(--grape)); color:#fff; border-color:transparent; box-shadow:0 8px 24px -8px var(--berry)}
+.btn.sm{padding:8px 14px; font-size:.85rem}
+.btn:disabled,.btn.dis{opacity:.5; pointer-events:none}
+
+.welcome{margin:10px auto 0; max-width:720px; display:flex; align-items:center; gap:14px; background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:12px 16px; text-align:left; backdrop-filter:blur(14px)}
+.welcome .av{font-size:2rem; line-height:1}
+.welcome b{font-family:var(--display); font-size:.95rem} .welcome small{display:block; color:var(--muted); font-weight:600}
+.welcome .btn{margin-left:auto}
+
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:900px; margin:34px auto 0}
+@media (max-width:600px){ .stats{grid-template-columns:1fr 1fr} }
+.stat{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:16px; text-align:center; backdrop-filter:blur(14px)}
+.stat b{display:block; font-family:var(--display); font-size:1.8rem; font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted); font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.1em}
+
+section{padding-block:50px 10px}
+.sec-head{display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap; margin-bottom:18px}
+.sec-head h2{font-size:clamp(1.5rem,3vw,2.2rem); font-weight:800}
+.sec-head p{margin:6px 0 0; color:var(--muted); font-weight:600}
+.filters{display:flex; gap:8px; flex-wrap:wrap}
+.filter{padding:9px 14px; border-radius:999px; font-weight:800; border:1px solid var(--line); color:var(--muted); background:transparent}
+.filter[aria-pressed="true"]{background:var(--sun); color:#07070D; border-color:transparent; box-shadow:0 0 18px -6px var(--sun)}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; perspective:1200px}
+.card{position:relative; display:flex; flex-direction:column; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); backdrop-filter:blur(14px); overflow:hidden; text-decoration:none; color:inherit; transform-style:preserve-3d; --rx:0deg; --ry:0deg; --mx:50%; --my:50%; transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s}
+.card.tilting{transition:none; transform:rotateX(var(--rx)) rotateY(var(--ry)) translateZ(6px); box-shadow:var(--glow)}
+.card::after{content:""; position:absolute; inset:0; pointer-events:none; opacity:0; background:radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,.18), transparent 45%); transition:opacity .2s; mix-blend-mode:screen}
+.card.tilting::after{opacity:1}
+.card:hover:not(.tilting){transform:translateY(-4px); box-shadow:var(--glow)}
+.card .art{height:150px; display:flex; align-items:center; justify-content:center; gap:14px; font-size:3.4rem; position:relative; background:radial-gradient(circle at 30% 20%, var(--c1,rgba(94,69,214,.45)), transparent 60%), radial-gradient(circle at 80% 90%, var(--c2,rgba(224,32,122,.35)), transparent 55%)}
+.card .art span{display:inline-block; filter:drop-shadow(0 10px 16px rgba(0,0,0,.5)); transform:rotate(-8deg); transition:transform .25s}
+.card .art span:nth-child(2){transform:rotate(8deg)}
+.card:hover .art span{transform:rotate(-2deg) scale(1.1) translateZ(30px)} .card:hover .art span:nth-child(2){transform:rotate(2deg) scale(1.1) translateZ(30px)}
+.status{position:absolute; top:14px; right:14px; font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.1em; padding:6px 10px; border-radius:999px; background:rgba(7,7,13,.75); color:#fff; display:inline-flex; gap:6px; align-items:center; border:1px solid rgba(255,255,255,.12)}
+.status i{width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block}
+.status.live i{background:var(--sun); box-shadow:0 0 10px var(--sun); animation:pulse 1.6s infinite}
+.status.soon i{background:var(--tomato)} .status.wip i{background:var(--mint)}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:.4}}
+.body{padding:20px; display:flex; flex-direction:column; gap:12px; flex:1}
+.body h3{font-size:1.25rem; font-weight:800}
+.body p{margin:0; color:var(--muted); font-weight:600; font-size:.95rem}
+.tags{display:flex; gap:6px; flex-wrap:wrap}
+.tag{font-size:.72rem; font-weight:800; padding:5px 10px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); letter-spacing:.02em}
+.feats{margin:0; padding:0 0 0 18px; color:var(--muted); font-weight:600; font-size:.9rem; display:none}
+.card.open .feats{display:block}
+.body .row{display:flex; gap:8px; margin-top:auto; flex-wrap:wrap; align-items:center}
+.body .row .more{margin-left:auto; color:var(--muted); font-weight:800; font-size:.85rem}
+.path{font-family:ui-monospace,monospace; font-size:.78rem; color:var(--muted); background:var(--panel2); padding:3px 8px; border-radius:8px; border:1px solid var(--line)}
+
+.two{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+@media (max-width:860px){ .two{grid-template-columns:1fr} }
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; backdrop-filter:blur(14px)}
+.panel h3{font-size:1.15rem; margin-bottom:10px}
+.panel p,.panel li{color:var(--muted); font-weight:600}
+.panel ul{margin:0; padding-left:18px}
+.log{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px}
+.log li{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:10px 12px; border-radius:14px; background:var(--panel2); border:1px solid var(--line)}
+.log time{font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--sun); padding-top:3px; white-space:nowrap}
+.log b{color:var(--ink)}
+.stack{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.stack span{padding:8px 12px; border-radius:12px; background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.85rem}
+
+footer{text-align:center; color:var(--muted); font-weight:600; font-size:.9rem; margin-top:50px; padding-top:24px; border-top:1px solid var(--line)}
+footer a{color:var(--ink); text-decoration:none; font-weight:800}
+.toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#14141F; color:var(--ink); border:1px solid var(--sun); padding:12px 20px; border-radius:999px; font-weight:800; z-index:31; box-shadow:0 0 30px -6px var(--sun)}
+
+/* light theme (sticker style, same as the apps) */
+:root[data-theme="light"] .panel,:root[data-theme="light"] .card,:root[data-theme="light"] .stat,:root[data-theme="light"] .nav,:root[data-theme="light"] .welcome{border:2px solid var(--line); box-shadow:var(--shadow); backdrop-filter:none; border-radius:20px}
+:root[data-theme="light"] .nav{border-radius:999px} :root[data-theme="light"] .nav a{color:var(--ink)}
+:root[data-theme="light"] .card:hover:not(.tilting),:root[data-theme="light"] .card.tilting{transform:translate(-2px,-2px); box-shadow:var(--glow)}
+:root[data-theme="light"] .card::after{display:none}
+:root[data-theme="light"] .btn,:root[data-theme="light"] .filter,:root[data-theme="light"] .tag,:root[data-theme="light"] .log li,:root[data-theme="light"] .stack span,:root[data-theme="light"] .path{border:2px solid var(--line); background:#fff}
+:root[data-theme="light"] .btn{box-shadow:2px 2px 0 var(--line)} :root[data-theme="light"] .btn.lime{background:var(--sun); color:var(--ink)} :root[data-theme="light"] .btn.berry{background:var(--berry); color:#fff}
+:root[data-theme="light"] .filter{color:var(--ink)} :root[data-theme="light"] .filter[aria-pressed="true"]{background:var(--ink); color:#fff; box-shadow:2px 2px 0 var(--sun)}
+:root[data-theme="light"] .hero h1 span{background:none; color:var(--tomato); -webkit-text-fill-color:var(--tomato)}
+:root[data-theme="light"] .status{background:var(--ink)} :root[data-theme="light"] .log time{color:#5A8A00}
+:root[data-theme="light"] .logo .mark{border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)}
+:root[data-theme="light"] .toast{background:var(--sun); color:var(--ink); border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)}
+</style>
+</head>
+<body>
+<div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="./"><div class="mark">✦</div><b>My Work</b></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#projects">🚀 <span>Projects</span></a>
+      <a href="#about">👋 <span>About</span></a>
+      <a href="#log">🗓️ <span>Updates</span></a>
+      <button id="themeBtn" title="Switch theme" aria-label="Switch theme">🌙</button>
+    </nav>
+  </header>
+
+  <section class="hero" style="padding-top:40px">
+    <div class="eyebrow">My project showcase</div>
+    <h1>Ideas turned into <span>things you can use</span></h1>
+    <p>Websites, apps and experiments I've built — every one of them lives here and works right in your browser. Pick one and try it.</p>
+    <div class="hero-emoji" aria-hidden="true"><span>🧊</span><span>🍳</span><span>🔥</span><span>🥗</span><span>✨</span></div>
+    <div class="cta">
+      <a class="btn lime" href="#projects">Explore my work ↓</a>
+      <a class="btn" href="#about">About me</a>
+    </div>
+    <div class="welcome" id="welcome" hidden></div>
+    <div class="stats" id="stats">
+      <div class="stat"><b id="stProjects">0</b><small>Projects</small></div>
+      <div class="stat"><b id="stLive">0</b><small>Live now</small></div>
+      <div class="stat"><b>100%</b><small>Free & open</small></div>
+      <div class="stat"><b>∞</b><small>More coming</small></div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="sec-head">
+      <div><div class="eyebrow">Featured work</div><h2>Pick a project and try it</h2><p>Tap a card for details, or jump straight into the live site.</p></div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="about">
+    <div class="sec-head"><div><div class="eyebrow">About</div><h2>How I build</h2></div></div>
+    <div class="two">
+      <div class="panel">
+        <h3>💡 Ideas first</h3>
+        <p>Every project starts with a small everyday problem — "what can I cook with what's in the fridge?" — and turns it into something people can actually open and use, not just a mockup.</p>
+        <h3 style="margin-top:18px">🧰 Built simple, on purpose</h3>
+        <p>Everything here is plain HTML, CSS and JavaScript in a single file per project. No servers, no accounts, no trackers. Your data stays in your own browser.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>GitHub Pages</span><span>PWA-ready</span></div>
+      </div>
+      <div class="panel">
+        <h3>🔗 They work together</h3>
+        <ul>
+          <li>Fridge Chef and Calorie Chef share the same chef profiles — pick a name once, it follows you.</li>
+          <li>Finish a recipe in Fridge Chef, tap <b>log this meal</b>, and it lands in Calorie Chef with the calories filled in.</li>
+          <li>Dark / light theme is set once and every project follows it — including this page.</li>
+        </ul>
+        <h3 style="margin-top:18px">📱 Add to your home screen</h3>
+        <p>On a phone, open any project → browser menu → <b>Add to Home Screen</b>. It opens full-screen like an app.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="log">
+    <div class="sec-head"><div><div class="eyebrow">Updates</div><h2>What's new</h2></div></div>
+    <div class="two">
+      <div class="panel">
+        <ul class="log" id="changelog"></ul>
+      </div>
+      <div class="panel">
+        <h3>🧪 Next experiment</h3>
+        <p>This slot is reserved for whatever comes next — a game, a tool, an AI experiment. Ideas on the shortlist:</p>
+        <ul>
+          <li>🎲 Fridge Roulette — a friend picks 5 ingredients, you have to cook with them</li>
+          <li>🍹 Mocktail mixer — drinks from what's on the shelf</li>
+          <li>👕 Outfit picker — same idea as Fridge Chef, for your wardrobe</li>
+        </ul>
+        <p style="margin-top:14px">Have an idea? <a href="#" id="ideaBtn" style="font-weight:800">Suggest one →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Made with 🧊 and too much ☕ · <a href="./fridgechef/">Fridge Chef</a> · <a href="./calorietracker/">Calorie Chef</a> · <span id="year"></span>
+  </footer>
+</div>
+
+<script>
+/* ===== Add projects here. Path is the folder name in the repo. ===== */
+const PROJECTS=[
+  {slug:"fridgechef", name:"Fridge Chef", emoji:["🧊","🍳"], status:"live", cat:"food", c1:"rgba(94,69,214,.5)", c2:"rgba(158,219,31,.35)",
+   blurb:"Tap what's in your fridge, see what you can cook right now. Made for kids, with a safety quiz, cook mode, badges and a Hindi UI.",
+   tags:["Recipes","Kids","Cook mode","Badges"],
+   feats:["Recipes you can make now, and ones you're 1–2 items away from","Swaps like \"no curd? use milk + lemon\"","Cook mode: one giant step at a time, read aloud, timers","Meal planner, shopping list, photo diary","Grown-up settings behind a PIN"]},
+  {slug:"calorietracker", name:"Calorie Chef", emoji:["🔥","🥗"], status:"live", cat:"health", c1:"rgba(224,32,122,.45)", c2:"rgba(31,201,216,.35)",
+   blurb:"A simple, friendly calorie log. Tap common Indian foods, sort by meal, watch the ring fill up. Shares profiles with Fridge Chef.",
+   tags:["Calories","Health","Tracker"],
+   feats:["Progress ring, remaining calories and a 7-day chart","48 Indian-kitchen foods with calories, plus custom entries","Auto-picks breakfast / lunch / snack / dinner by time","Streak counter and confetti when you hit the goal","\"Log this meal\" handoff from Fridge Chef recipes"]},
+  {slug:"", name:"Next Experiment", emoji:["🧪","✨"], status:"soon", cat:"experiments", c1:"rgba(31,201,216,.35)", c2:"rgba(138,63,224,.4)",
+   blurb:"A space for the next website, tool, game or experiment. Something's cooking.",
+   tags:["Experiment","Coming soon"],
+   feats:["Replace this card in the PROJECTS list at the top of index.html","Set slug to the folder name and status to \"live\""]},
+];
+const CATS={all:"All",food:"🍳 Food",health:"🔥 Health",experiments:"🧪 Experiments"};
+const CHANGELOG=[
+  ["19 Sep","<b>Home page</b> launched — one place for every project."],
+  ["19 Sep","<b>Calorie Chef</b> moved in next to Fridge Chef and now shares chef profiles + theme."],
+  ["18 Sep","Fridge Chef: <b>cook mode</b>, read-aloud steps, servings, favourites, Hindi UI, sound packs, 3D effects."],
+  ["18 Sep","Fridge Chef: grown-up settings locked with a <b>PIN</b>, light theme redesigned."],
+  ["18 Sep","Fridge Chef <b>v1</b> — first version live."],
+];
+
+/* ===== theme: shared with the apps via localStorage ===== */
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const FC=LS.get("fc_global")||{};
+const sysDark=matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(){ const t=FC.theme||"dark"; const dark=t==="auto"?sysDark.matches:t!=="light"; document.documentElement.dataset.theme=dark?"dark":"light"; document.getElementById("themeBtn").textContent={dark:"🌙",light:"☀️",auto:"🌗"}[t]; document.querySelector('meta[name="theme-color"]').content=dark?"#07070D":"#FFFDF6"; }
+document.getElementById("themeBtn").addEventListener("click",()=>{ FC.theme={dark:"light",light:"auto",auto:"dark"}[FC.theme||"dark"]; LS.set("fc_global",FC); applyTheme(); toast({dark:"dark mode 🌙",light:"light mode ☀️",auto:"auto — follows your device 🌗"}[FC.theme]); });
+sysDark.addEventListener("change",applyTheme); applyTheme();
+
+/* ===== welcome back (reads the active Fridge Chef profile) ===== */
+{ const p=(FC.profiles||[]).find(x=>x.id===FC.active);
+  if(p){ const d=LS.get("fc_p_"+p.id)||{}; const cooked=(d.cooked||[]).length, badges=(d.badges||[]).length;
+    const w=document.getElementById("welcome"); w.hidden=false;
+    w.innerHTML=`<span class="av">${p.avatar}</span><div><b>welcome back, ${p.name} 👋</b><small>${cooked} recipe${cooked===1?"":"s"} cooked · ${badges} badge${badges===1?"":"s"}</small></div><a class="btn sm lime" href="./fridgechef/">keep cooking →</a>`; } }
+
+/* ===== projects ===== */
+let cat="all";
+const fl=document.getElementById("filters");
+fl.innerHTML=Object.keys(CATS).map(k=>`<button class="filter" data-c="${k}" aria-pressed="${k===cat}">${CATS[k]}</button>`).join("");
+fl.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{ cat=b.dataset.c; fl.querySelectorAll(".filter").forEach(x=>x.setAttribute("aria-pressed",x===b)); render(); }));
+const STATUS={live:["live","Live"],soon:["soon","Coming soon"],wip:["wip","In progress"]};
+function render(){
+  const g=document.getElementById("grid"); g.innerHTML="";
+  PROJECTS.filter(p=>cat==="all"||p.cat===cat).forEach(p=>{
+    const live=p.status==="live"&&p.slug;
+    const el=document.createElement(live?"a":"div"); el.className="card"; if(live) el.href=`./${p.slug}/`;
+    el.style.setProperty("--c1",p.c1); el.style.setProperty("--c2",p.c2);
+    el.innerHTML=`
+      <div class="art"><span>${p.emoji[0]}</span><span>${p.emoji[1]}</span><div class="status ${STATUS[p.status][0]}" data-slug="${p.slug}"><i></i>${STATUS[p.status][1]}</div></div>
+      <div class="body">
+        <h3>${p.name}</h3><p>${p.blurb}</p>
+        <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+        <ul class="feats">${p.feats.map(f=>`<li>${f}</li>`).join("")}</ul>
+        <div class="row">
+          ${live?`<span class="btn sm lime">Open project ↗</span><span class="path">/${p.slug}/</span>`:`<span class="btn sm dis">Coming soon</span>`}
+          <button class="more" type="button" aria-expanded="false">what it does ▾</button>
+        </div>
+      </div>`;
+    el.querySelector(".more").addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation(); const o=el.classList.toggle("open"); e.currentTarget.textContent=o?"less ▴":"what it does ▾"; e.currentTarget.setAttribute("aria-expanded",o); });
+    g.appendChild(el);
+  });
+  document.getElementById("stProjects").textContent=PROJECTS.length;
+  document.getElementById("stLive").textContent=PROJECTS.filter(p=>p.status==="live").length;
+  tilt(g);
+}
+render();
+
+/* live check: same-origin HEAD request, flips the badge red if a folder is missing (only works once hosted) */
+if(location.protocol.startsWith("http")){
+  PROJECTS.filter(p=>p.status==="live"&&p.slug).forEach(async p=>{
+    try{ const r=await fetch(`./${p.slug}/`,{method:"HEAD",cache:"no-store"}); if(!r.ok) throw 0; }
+    catch(e){ document.querySelectorAll(`.status[data-slug="${p.slug}"]`).forEach(s=>{ s.className="status soon"; s.innerHTML="<i></i>Not found"; }); }
+  });
+}
+
+/* card tilt (mouse/pen only) */
+function tilt(root){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  root.addEventListener("pointermove",e=>{ if(e.pointerType==="touch") return; const c=e.target.closest(".card"); if(!c) return;
+    const r=c.getBoundingClientRect(), px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+    c.classList.add("tilting"); c.style.setProperty("--ry",((px-.5)*12)+"deg"); c.style.setProperty("--rx",((.5-py)*10)+"deg"); c.style.setProperty("--mx",px*100+"%"); c.style.setProperty("--my",py*100+"%"); });
+  root.addEventListener("pointerout",e=>{ const c=e.target.closest(".card"); if(c&&!c.contains(e.relatedTarget)) c.classList.remove("tilting"); });
+}
+
+/* changelog + misc */
+document.getElementById("changelog").innerHTML=CHANGELOG.map(([d,t])=>`<li><time>${d}</time><span>${t}</span></li>`).join("");
+document.getElementById("year").textContent=new Date().getFullYear();
+document.getElementById("ideaBtn").addEventListener("click",e=>{ e.preventDefault(); const idea=prompt("What should I build next?"); if(idea){ const ideas=LS.get("mw_ideas")||[]; ideas.push({idea,ts:Date.now()}); LS.set("mw_ideas",ideas); toast("Saved on this device — thanks! 💡"); } });
+let tt; function toast(m){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); } t.textContent=m; t.hidden=false; clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2600); }
+</script>
+</body>
+</html>
