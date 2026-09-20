@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Money Counter</title>
+<meta name="description" content="Pocket money, saving goals and how money grows. Made for kids. Part of Myself Company.">
+<meta name="theme-color" content="#07070D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,700;0,9..40,800&display=swap">
+<style>
+:root, :root[data-theme="dark"]{
+  --bg:#07070D; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
+  --ink:#E6E3F5; --muted:#7E7B9C; --line:rgba(255,255,255,.09);
+  --sun:#9EDB1F; --tomato:#E0207A; --mint:#1FC9D8; --berry:#5E45D6; --grape:#8A3FE0; --gold:#FFC93C;
+  --ok-bg:rgba(31,201,216,.12); --ok-ink:#6FDCE6; --warn-bg:rgba(224,32,122,.14); --warn-ink:#F07AB4;
+  --shadow:0 12px 30px -12px rgba(0,0,0,.8); --glow:0 0 0 1px rgba(255,255,255,.07), 0 0 40px -12px rgba(94,69,214,.5);
+  --radius:26px; --body-font:"DM Sans",system-ui,sans-serif; --display-font:"Unbounded","DM Sans",system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#FFFDF6; --panel:#FFFFFF; --panel2:#FFF6D6; --ink:#141320; --muted:#5B5870; --line:#141320;
+  --sun:#C9F55A; --tomato:#FF4D8D; --mint:#5FD4FF; --berry:#7B61FF; --grape:#B48CFF; --gold:#FFC93C;
+  --ok-bg:#D9F3FF; --ok-ink:#141320; --warn-bg:#FFD9E6; --warn-ink:#141320;
+  --shadow:4px 4px 0 #141320; --glow:6px 6px 0 #141320; color-scheme:light;
+}
+*{box-sizing:border-box} [hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body-font); font-size:17px; line-height:1.45; padding-inline:16px; padding-block:0 40px; position:relative; overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--display-font); line-height:1.05; margin:0; letter-spacing:-.02em; text-wrap:balance}
+button{font:inherit; color:inherit; cursor:pointer; border:0; background:none}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--berry); outline-offset:3px}
+input,select{font:inherit; color:var(--ink); background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:12px 14px; width:100%; font-weight:600}
+input::placeholder{color:var(--muted)}
+.blobs{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none}
+.blob{position:absolute; width:55vmax; height:55vmax; border-radius:50%; filter:blur(100px); opacity:.28; mix-blend-mode:screen; animation:drift 26s ease-in-out infinite alternate}
+.blob.b1{background:#4A2FBF; top:-20vmax; left:-15vmax} .blob.b2{background:#B0185F; bottom:-25vmax; right:-10vmax; animation-delay:-8s} .blob.b3{background:#158FA0; top:30vh; left:55vw; width:35vmax; height:35vmax; opacity:.16}
+@keyframes drift{from{transform:translate(0,0) scale(1)} to{transform:translate(8vw,6vh) scale(1.15)}}
+:root[data-theme="light"] .blobs{display:none}
+:root[data-theme="light"] body{background:var(--bg) radial-gradient(#141320 1px, transparent 1.2px) 0 0/22px 22px; background-attachment:fixed}
+:root[data-theme="light"] body::before{content:""; position:fixed; inset:0; z-index:-1; background:var(--bg); opacity:.86}
+@media (prefers-reduced-motion: reduce){ .blob{animation:none} }
+
+.top{max-width:1180px; margin:0 auto; padding-block:22px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.logo{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
+.logo .flame{width:46px; height:46px; border-radius:14px; background:var(--gold); display:grid; place-items:center; font-size:1.5rem; box-shadow:0 0 30px -6px var(--gold); transform:rotate(-6deg)}
+.logo h1{font-size:1.7rem; font-weight:900; text-transform:uppercase; letter-spacing:-.03em}
+.logo h1 span{color:var(--gold)}
+.head-right{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.pillbtn{display:flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(14px); border-radius:999px; padding:8px 14px; font-weight:800; text-decoration:none; color:inherit}
+.pillbtn b{font-family:var(--display-font); font-size:1rem; color:var(--gold)}
+.nav{max-width:1180px; margin:0 auto 20px; display:flex; gap:6px; background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(20px); border-radius:999px; padding:6px; box-shadow:var(--shadow); position:sticky; top:calc(8px + env(safe-area-inset-top,0px)); z-index:5}
+.navbtn{flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:11px 8px; border-radius:999px; font-weight:800; color:var(--muted)}
+.navbtn[aria-current="page"]{background:var(--gold); color:#07070D; box-shadow:0 0 24px -6px var(--gold)}
+@media (max-width:600px){ body{padding-bottom:96px} .nav{position:fixed; left:12px; right:12px; bottom:calc(10px + env(safe-area-inset-bottom,0px)); top:auto; margin:0; max-width:none; background:color-mix(in srgb,var(--bg) 88%,transparent)} .navbtn{flex-direction:column; gap:2px; font-size:.75rem; padding:8px 4px} .navbtn .ni{font-size:1.4rem} }
+.wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; position:relative; z-index:1}
+@media (max-width:860px){ .wrap{grid-template-columns:1fr} }
+.wrap.one{grid-template-columns:1fr}
+.view[hidden]{display:none}
+.panel{background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(18px); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; min-width:0}
+.panel.hero{background:linear-gradient(160deg,rgba(255,201,60,.22),rgba(255,255,255,.03))}
+.panel.wide{grid-column:1/-1}
+.eyebrow{text-transform:uppercase; letter-spacing:.14em; font-weight:800; font-size:.72rem; color:var(--muted); margin-bottom:6px}
+.panel h2{font-size:1.5rem; font-weight:800}
+.sub{color:var(--muted); font-weight:600; font-size:.95rem; margin:6px 0 0}
+.head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; font-weight:800; font-size:.93rem; background:var(--panel2); color:var(--ink); border:1px solid var(--line); transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.btn:hover{transform:translateY(-2px)} .btn:active{transform:scale(.96)}
+.btn.gold{background:var(--gold); color:#2A1D00; border-color:transparent; box-shadow:0 8px 24px -8px var(--gold)}
+.btn.lime{background:var(--sun); color:#07070D; border-color:transparent; box-shadow:0 8px 24px -8px var(--sun)}
+.btn.mint{background:var(--mint); color:#062A33; border-color:transparent; box-shadow:0 8px 24px -8px var(--mint)}
+.btn.pink{background:transparent; color:var(--warn-ink)}
+.btn.sm{padding:7px 13px; font-size:.82rem}
+.btn.big{padding:16px 22px; font-size:1.05rem; flex:1; justify-content:center}
+.btn:disabled{opacity:.5; transform:none; cursor:not-allowed}
+.actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+
+/* big balance */
+.bal{text-align:center; margin:14px 0 4px}
+.bal b{font-family:var(--display-font); font-size:clamp(2.8rem,13vw,4.2rem); display:block; line-height:1; font-variant-numeric:tabular-nums; color:var(--gold); text-shadow:0 0 50px rgba(255,201,60,.35)}
+.bal small{color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.14em; font-size:.72rem}
+.twobtn{display:flex; gap:10px; margin-top:16px}
+@media (max-width:420px){ .twobtn{flex-direction:column} }
+
+/* jars */
+.jars{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px}
+@media (max-width:520px){ .jars{grid-template-columns:1fr 1fr} }
+.jar{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:12px 10px; text-align:center; position:relative; overflow:hidden; transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.jar:hover{transform:translateY(-2px)}
+.jar .je{font-size:1.6rem; display:block; line-height:1.2}
+.jar small{display:block; color:var(--muted); font-weight:800; font-size:.75rem; margin-top:2px}
+.jar b{font-family:var(--display-font); font-size:1.1rem; font-variant-numeric:tabular-nums; display:block; margin-top:2px}
+.jar .lvl{position:absolute; left:0; right:0; bottom:0; background:linear-gradient(0deg,rgba(255,201,60,.3),rgba(255,201,60,.05)); transition:height .5s cubic-bezier(.34,1.3,.64,1); pointer-events:none}
+.jar.locked{opacity:.85; cursor:default}
+
+.stat{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:14px 16px}
+.stat small{display:block; color:var(--muted); font-weight:700; font-size:.82rem}
+.stat b{font-family:var(--display-font); font-size:1.4rem; font-variant-numeric:tabular-nums}
+.stat b.lime{color:var(--sun)} .stat b.mint{color:var(--mint)} .stat b.pink{color:var(--tomato)} .stat b.gold{color:var(--gold)}
+.tiles3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px}
+@media (max-width:520px){ .tiles3{grid-template-columns:1fr 1fr} }
+
+/* timeline */
+.tl{list-style:none; padding:0; margin:14px 0 0; display:flex; flex-direction:column; gap:8px; position:relative}
+.tl li{display:flex; align-items:center; gap:12px; background:var(--panel2); border:1px solid var(--line); border-radius:16px; padding:11px 14px; font-weight:700}
+.tl li .te{font-size:1.4rem; width:34px; text-align:center; flex:none}
+.tl li .tn{flex:1; min-width:0}
+.tl li .tn b{display:block; font-family:var(--body-font); font-size:.98rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.tl li .tn small{color:var(--muted); font-weight:700; font-size:.78rem}
+.tl li .tv{font-family:var(--display-font); font-variant-numeric:tabular-nums; font-size:1.05rem; flex:none}
+.tl li.in .tv{color:var(--sun)} .tl li.out .tv{color:var(--tomato)} .tl li.move .tv{color:var(--muted)} .tl li.goal .tv{color:var(--grape)}
+.tl li .del{color:var(--muted); font-weight:900; padding:2px 6px; flex:none; border-radius:8px}
+.tl li .del:hover{color:var(--tomato); background:var(--warn-bg)}
+.none{color:var(--muted); font-weight:600; margin-top:12px; font-size:.95rem}
+.daysep{color:var(--muted); font-weight:800; font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; margin:8px 0 2px}
+
+/* goals */
+.goals{display:flex; flex-direction:column; gap:12px; margin-top:14px}
+.goalcard{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:center; background:var(--panel2); border:1px solid var(--line); border-radius:20px; padding:14px; width:100%; text-align:left; transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.goalcard:hover{transform:translateY(-2px)}
+.goalcard.done{border-color:var(--sun)}
+.gring{width:76px; height:76px; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--gold) calc(var(--p,0)*1%), var(--panel) 0); flex:none}
+.gring::before{content:""; position:absolute; inset:7px; border-radius:50%; background:var(--bg)}
+.gring span{position:relative; font-size:1.7rem; line-height:1}
+.goalcard.done .gring{background:conic-gradient(var(--sun) 100%,var(--sun) 0)}
+.gtext b{font-family:var(--display-font); font-size:1.15rem; display:block}
+.gtext .amt{font-weight:800; font-variant-numeric:tabular-nums; margin-top:3px}
+.gtext .amt i{color:var(--muted); font-style:normal; font-weight:700}
+.gtext small{display:block; color:var(--muted); font-weight:700; font-size:.82rem; margin-top:3px}
+.ring{width:150px; height:150px; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--gold) calc(var(--p,0)*1%), var(--panel2) 0); box-shadow:0 0 40px -12px var(--gold); margin:0 auto}
+.ring::before{content:""; position:absolute; inset:12px; border-radius:50%; background:var(--bg)}
+.ring div{position:relative; text-align:center; line-height:1.1}
+.ring b{font-family:var(--display-font); font-size:1.7rem; display:block; font-variant-numeric:tabular-nums}
+.ring small{color:var(--muted); font-weight:700; font-size:.78rem}
+
+/* sliders */
+.sl{margin-top:16px}
+.sl .slhead{display:flex; justify-content:space-between; align-items:baseline; font-weight:800; margin-bottom:6px}
+.sl .slhead b{font-family:var(--display-font); font-size:1.2rem; color:var(--gold); font-variant-numeric:tabular-nums}
+.sl .slhead small{color:var(--muted); font-weight:700; font-size:.85rem}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:32px; background:transparent; padding:0; border:0; margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:12px; border-radius:999px; background:var(--panel2); border:1px solid var(--line)}
+input[type=range]::-moz-range-track{height:12px; border-radius:999px; background:var(--panel2); border:1px solid var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:30px; height:30px; margin-top:-10px; border-radius:50%; background:var(--gold); border:3px solid var(--bg); box-shadow:0 0 18px -4px var(--gold); cursor:grab}
+input[type=range]::-moz-range-thumb{width:26px; height:26px; border-radius:50%; background:var(--gold); border:3px solid var(--bg); cursor:grab}
+
+/* split rows */
+.splitrow{display:grid; grid-template-columns:110px 1fr 56px; gap:10px; align-items:center; margin-top:10px; font-weight:800}
+.splitrow .k{white-space:nowrap} .splitrow .v{text-align:right; font-variant-numeric:tabular-nums; color:var(--gold)}
+.splitwarn{color:var(--tomato); font-weight:800; margin-top:8px; font-size:.9rem}
+
+/* chart */
+.chart{width:100%; height:200px; margin-top:16px; overflow:visible}
+.chart .gl{stroke:var(--line); stroke-width:1}
+.chart text{fill:var(--muted); font-size:11px; font-weight:700; font-family:var(--body-font)}
+.legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:10px; font-weight:800; font-size:.85rem}
+.legend i{width:14px; height:14px; border-radius:5px; display:inline-block; vertical-align:-2px; margin-right:6px}
+.kv{display:grid; grid-template-columns:1fr auto; gap:8px 14px; margin-top:14px; font-weight:800}
+.kv .k{color:var(--muted)} .kv .v{font-variant-numeric:tabular-nums; font-family:var(--display-font)}
+.kv .v.big{font-size:1.3rem; color:var(--gold)}
+.vs{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px}
+.vs .card{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:14px; text-align:center}
+.vs .card small{display:block; color:var(--muted); font-weight:800; font-size:.78rem}
+.vs .card b{font-family:var(--display-font); font-size:1.4rem; display:block; margin-top:4px; font-variant-numeric:tabular-nums}
+.vs .card.win b{color:var(--sun)}
+
+/* learn cards */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-top:14px}
+.lc{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:16px; text-align:left; min-height:118px; display:flex; flex-direction:column; gap:6px; transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.lc:hover{transform:translateY(-3px) rotate(-.6deg)}
+.lc .le{font-size:1.7rem}
+.lc b{font-family:var(--display-font); font-size:1rem}
+.lc p{margin:0; font-size:.88rem; color:var(--muted); font-weight:600}
+.lc.read{border-color:var(--sun)}
+.lc.read b::after{content:" ✓"; color:var(--sun)}
+
+/* badges */
+.bgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:10px; margin-top:14px}
+.bcard{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:12px 8px; text-align:center; opacity:.42; filter:grayscale(1)}
+.bcard.on{opacity:1; filter:none; border-color:var(--gold); box-shadow:0 0 22px -10px var(--gold)}
+.bcard .be{font-size:1.9rem; line-height:1.1}
+.bcard b{display:block; font-family:var(--body-font); font-size:.82rem; font-weight:800; margin-top:4px}
+.bcard small{display:block; color:var(--muted); font-size:.72rem; font-weight:700; margin-top:2px}
+
+/* needs vs wants */
+.nw{margin-top:14px; display:flex; flex-direction:column; gap:10px}
+.nwrow{display:grid; grid-template-columns:86px 1fr 78px; gap:10px; align-items:center; font-weight:800; font-size:.94rem}
+.nwrow .track{height:14px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); overflow:hidden}
+.nwrow .fill{height:100%; border-radius:999px; width:0; transition:width .5s}
+.nwrow .fill.need{background:linear-gradient(90deg,var(--mint),var(--berry))}
+.nwrow .fill.want{background:linear-gradient(90deg,var(--gold),var(--tomato))}
+.nwrow .k{text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; font-size:.86rem}
+
+/* rows / settings */
+.row{display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row b{display:block} .row small{color:var(--muted); font-weight:600; display:block; font-size:.85rem}
+.row input,.row select{width:132px; text-align:center}
+.tip{margin-top:14px; padding:12px 14px; border-radius:16px; background:linear-gradient(120deg,rgba(255,201,60,.16),rgba(94,69,214,.14)); border:1px solid var(--line); font-weight:600}
+.note{margin-top:14px; padding:12px 14px; border-radius:16px; background:var(--panel2); border:1px solid var(--line); font-weight:600; font-size:.9rem; color:var(--muted)}
+.chal{margin-top:14px; padding:16px; border-radius:20px; background:linear-gradient(140deg,rgba(94,69,214,.28),rgba(255,201,60,.12)); border:1px solid var(--line)}
+.chal .ce{font-size:2rem} .chal b{display:block; font-family:var(--display-font); font-size:1.15rem; margin-top:4px}
+.chal p{margin:4px 0 0; color:var(--muted); font-weight:600; font-size:.9rem}
+.chal.done{border-color:var(--sun)}
+
+/* chips */
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.chip{display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.93rem; transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.chip:hover{transform:translateY(-2px) rotate(-1deg)} .chip:active{transform:scale(.94)}
+.chip[aria-pressed="true"]{background:var(--gold); color:#2A1D00; border-color:transparent}
+.segs{display:flex; gap:8px; margin-top:12px; background:var(--panel2); border:1px solid var(--line); border-radius:999px; padding:5px}
+.segs button{flex:1; padding:10px 8px; border-radius:999px; font-weight:800; color:var(--muted); font-size:.9rem}
+.segs button[aria-pressed="true"]{background:var(--gold); color:#2A1D00}
+.emojipick{display:grid; grid-template-columns:repeat(auto-fill,minmax(50px,1fr)); gap:8px; margin-top:12px; max-height:180px; overflow:auto}
+.emojipick button{font-size:1.6rem; padding:8px 0; border-radius:14px; background:var(--panel2); border:1px solid var(--line)}
+.emojipick button[aria-pressed="true"]{background:var(--gold); border-color:transparent}
+.fields{display:grid; gap:10px; margin-top:14px}
+.fields label{font-weight:800; font-size:.88rem; color:var(--muted); display:block; margin-bottom:5px}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+@media (max-width:460px){ .two{grid-template-columns:1fr} }
+
+/* modal + sheet */
+.modal[hidden]{display:none}
+.modal{position:fixed; inset:0; z-index:20; display:grid; place-items:end center; padding:0}
+.modal .backdrop{position:absolute; inset:0; background:rgba(5,5,12,.7); backdrop-filter:blur(6px)}
+.sheet{position:relative; width:min(680px,100%); max-height:92vh; overflow:auto; background:var(--bg); border:1px solid var(--line); border-radius:28px 28px 0 0; padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px)); animation:up .3s cubic-bezier(.34,1.3,.64,1); box-shadow:0 -20px 80px -20px rgba(255,201,60,.4)}
+.sheet::before{content:""; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--gold),var(--sun),var(--mint),var(--berry)); border-radius:28px 28px 0 0}
+@keyframes up{from{transform:translateY(40px); opacity:0} to{transform:none; opacity:1}}
+@media (prefers-reduced-motion: reduce){ .sheet{animation:none} }
+.sheet-head{display:flex; gap:14px; align-items:flex-start}
+.sheet-head .emoji{font-size:3rem; line-height:1; transform:rotate(-8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.sheet-head h2{font-size:1.4rem}
+.sheet-head .close{margin-left:auto; font-size:1.3rem; font-weight:900; color:var(--muted); padding:6px 10px; border-radius:12px; flex:none}
+.sheet-head .close:hover{background:var(--panel2); color:var(--ink)}
+
+/* pin pad */
+.pinbox{display:flex; gap:14px; justify-content:center; margin:22px 0 6px}
+.pinbox span{width:18px; height:18px; border-radius:50%; border:2px solid var(--line); background:var(--panel2)}
+.pinbox span.on{background:var(--gold); border-color:transparent; box-shadow:0 0 16px -3px var(--gold)}
+.pinbox.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+.pinmsg{text-align:center; font-weight:800; min-height:24px; color:var(--muted); font-size:.9rem}
+.pinmsg.err{color:var(--tomato)}
+.pad{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:8px; max-width:330px; margin-inline:auto}
+.pad button{padding:16px 0; border-radius:18px; background:var(--panel2); border:1px solid var(--line); font-family:var(--display-font); font-size:1.4rem; font-weight:800}
+.pad button.soft{font-family:var(--body-font); font-size:.95rem; color:var(--muted)}
+.pad button:active{transform:scale(.94); background:var(--gold); color:#2A1D00}
+
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:#14141F; color:var(--ink); border:1px solid var(--gold); padding:12px 20px; border-radius:999px; font-weight:800; z-index:31; box-shadow:0 0 30px -6px var(--gold); max-width:calc(100% - 32px); text-align:center}
+@media (max-width:600px){ .toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))} }
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:30}
+
+/* light theme touches */
+:root[data-theme="light"] .panel,:root[data-theme="light"] .nav,:root[data-theme="light"] .pillbtn,:root[data-theme="light"] .sheet{border:2px solid var(--line); backdrop-filter:none; border-radius:20px}
+:root[data-theme="light"] .nav,:root[data-theme="light"] .pillbtn{border-radius:999px}
+:root[data-theme="light"] .sheet{border-radius:24px 24px 0 0; box-shadow:none}
+:root[data-theme="light"] .panel.hero{background:var(--panel2)}
+:root[data-theme="light"] .navbtn{color:var(--ink)} :root[data-theme="light"] .navbtn[aria-current="page"]{background:var(--ink); color:#fff; box-shadow:none}
+:root[data-theme="light"] .chip,:root[data-theme="light"] .btn,:root[data-theme="light"] .stat,:root[data-theme="light"] .jar,:root[data-theme="light"] .goalcard,:root[data-theme="light"] .tl li,:root[data-theme="light"] .lc,:root[data-theme="light"] .bcard,:root[data-theme="light"] .vs .card,:root[data-theme="light"] input,:root[data-theme="light"] select,:root[data-theme="light"] .pad button,:root[data-theme="light"] .nwrow .track{border:2px solid var(--line); background:#fff}
+:root[data-theme="light"] .chip,:root[data-theme="light"] .btn{box-shadow:2px 2px 0 var(--line)}
+:root[data-theme="light"] .btn.gold{background:var(--gold); color:var(--ink)} :root[data-theme="light"] .btn.lime{background:var(--sun); color:var(--ink)} :root[data-theme="light"] .btn.mint{background:var(--mint); color:var(--ink)}
+:root[data-theme="light"] .gring::before,:root[data-theme="light"] .ring::before{background:#fff}
+:root[data-theme="light"] .ring{box-shadow:none; border:2px solid var(--line)}
+:root[data-theme="light"] .bal b{color:#8A6A00; text-shadow:none}
+:root[data-theme="light"] .jar b,:root[data-theme="light"] .sl .slhead b,:root[data-theme="light"] .kv .v.big,:root[data-theme="light"] .splitrow .v{color:#8A6A00}
+:root[data-theme="light"] .tl li.in .tv{color:#4A7A00} :root[data-theme="light"] .stat b.lime{color:#5A8A00} :root[data-theme="light"] .stat b.gold{color:#8A6A00}
+:root[data-theme="light"] .toast{background:var(--gold); color:var(--ink); border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)}
+:root[data-theme="light"] .logo .flame{border:2px solid var(--line); box-shadow:3px 3px 0 var(--line)} :root[data-theme="light"] .logo h1 span{color:var(--tomato)}
+:root[data-theme="light"] .tip,:root[data-theme="light"] .chal{background:var(--panel2)}
+:root[data-theme="light"] .bcard.on{box-shadow:3px 3px 0 var(--line)}
+</style>
+</head>
+<body>
+<div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<header class="top">
+  <a class="logo" href="../"><div class="flame">🪙</div><h1>Money<span>Counter</span></h1></a>
+  <div class="head-right">
+    <a class="pillbtn" href="../" title="Home">🏠</a>
+    <a class="pillbtn" href="../fridgechef/" title="Fridge Chef"><span id="chefName">🍳 Fridge Chef</span></a>
+    <button class="pillbtn" id="langBtn" title="Language">🌐 <span id="langSmall">English · हिंदी</span></button>
+    <button class="pillbtn" id="themeBtn" title="Theme">🌗</button>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <button class="navbtn" data-view="money" aria-current="page"><span class="ni">💰</span><span data-i18n="nav_money">Money</span></button>
+  <button class="navbtn" data-view="goals"><span class="ni">🎯</span><span data-i18n="nav_goals">Goals</span></button>
+  <button class="navbtn" data-view="grow"><span class="ni">📈</span><span data-i18n="nav_grow">Grow</span></button>
+  <button class="navbtn" data-view="more"><span class="ni">⚙️</span><span data-i18n="nav_more">More</span></button>
+</nav>
+
+<!-- ============ MONEY ============ -->
+<main class="wrap view" data-view="money">
+  <section class="panel hero">
+    <div class="eyebrow" data-i18n="eb_have">Money you have</div>
+    <div class="bal"><b id="balance">₹0</b><small data-i18n="bal_sub">in all your jars</small></div>
+    <div class="twobtn">
+      <button class="btn big lime" id="btnIn">➕ <span data-i18n="btn_in">Got money</span></button>
+      <button class="btn big pink" id="btnOut" style="background:var(--warn-bg); color:var(--warn-ink); border-color:var(--line)">➖ <span data-i18n="btn_out">Spent money</span></button>
+    </div>
+    <div class="jars" id="jars"></div>
+    <p class="sub" style="margin-top:12px" data-i18n="jars_help">Tap a jar to move money into another jar.</p>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow" data-i18n="eb_week">This week</div>
+    <h2 data-i18n="week_h">How you're doing</h2>
+    <div class="tiles3">
+      <div class="stat"><small data-i18n="s_in">Came in</small><b class="lime" id="sIn">₹0</b></div>
+      <div class="stat"><small data-i18n="s_out">Went out</small><b class="pink" id="sOut">₹0</b></div>
+      <div class="stat"><small data-i18n="s_saved">Saved</small><b class="gold" id="sSaved">₹0</b></div>
+      <div class="stat"><small data-i18n="s_streak">Saving streak</small><b class="mint" id="sStreak">0</b></div>
+      <div class="stat"><small data-i18n="s_nospend">No-spend days</small><b class="mint" id="sNoSpend">0</b></div>
+      <div class="stat"><small data-i18n="s_badges">Badges</small><b class="gold" id="sBadges">0</b></div>
+    </div>
+    <div class="tip" id="tipBox">💡</div>
+  </section>
+
+  <section class="panel wide">
+    <div class="head">
+      <div><div class="eyebrow" data-i18n="eb_tl">Everything that happened</div><h2 data-i18n="tl_h">Your money timeline</h2><p class="sub" data-i18n="tl_sub">Newest first. Tap ✕ to undo a mistake.</p></div>
+      <button class="btn sm" id="tlMore" hidden data-i18n="tl_more">Show all</button>
+    </div>
+    <ul class="tl" id="timeline"></ul>
+  </section>
+</main>
+
+<!-- ============ GOALS ============ -->
+<main class="wrap view one" data-view="goals" hidden>
+  <section class="panel">
+    <div class="head">
+      <div><div class="eyebrow" data-i18n="eb_goals">Things you're saving for</div><h2 data-i18n="goals_h">Your goals</h2><p class="sub" data-i18n="goals_sub">Pick something you want. Watch the ring fill up.</p></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn sm mint" id="affordBtn">🤔 <span data-i18n="btn_afford">Can I afford it?</span></button>
+        <button class="btn sm gold" id="newGoal">＋ <span data-i18n="btn_newgoal">New goal</span></button>
+      </div>
+    </div>
+    <div class="goals" id="goalList"></div>
+  </section>
+</main>
+
+<!-- ============ GROW ============ -->
+<main class="wrap view" data-view="grow" hidden>
+  <section class="panel hero">
+    <div class="eyebrow" data-i18n="eb_grow">If you save every month</div>
+    <h2 data-i18n="grow_h">Watch money grow</h2>
+    <p class="sub" data-i18n="grow_sub">Move the sliders. See what happens if you leave money alone for years.</p>
+
+    <div class="sl">
+      <div class="slhead"><span data-i18n="sl_month">Save each month</span><b id="vMonth">₹500</b></div>
+      <input type="range" id="rMonth" min="100" max="5000" step="100" value="500" aria-label="Save each month">
+    </div>
+    <div class="sl">
+      <div class="slhead"><span data-i18n="sl_years">For how many years</span><b id="vYears">5</b></div>
+      <input type="range" id="rYears" min="1" max="30" step="1" value="5" aria-label="Number of years">
+    </div>
+    <div class="sl">
+      <div class="slhead"><span data-i18n="sl_rate">Growth each year</span><b id="vRate">8%</b></div>
+      <input type="range" id="rRate" min="0" max="15" step="1" value="8" aria-label="Growth each year">
+    </div>
+
+    <svg class="chart" id="growChart" viewBox="0 0 320 200" preserveAspectRatio="none" role="img" aria-label="Chart of money growing over time"></svg>
+    <div class="legend">
+      <span><i style="background:var(--berry)"></i><span data-i18n="lg_put">Money you put in</span></span>
+      <span><i style="background:var(--gold)"></i><span data-i18n="lg_grow">Extra from growth</span></span>
+    </div>
+
+    <div class="kv">
+      <span class="k" data-i18n="kv_put">You put in</span><span class="v" id="kPut">₹0</span>
+      <span class="k" data-i18n="kv_grow">It grew by</span><span class="v" id="kGrow">₹0</span>
+      <span class="k" data-i18n="kv_total">You end up with</span><span class="v big" id="kTotal">₹0</span>
+    </div>
+    <div class="note" data-i18n="grow_note">⚠️ This is a guess, not a promise. Real investments go up <b>and down</b>. Nobody can tell you what you'll actually get.</div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow" data-i18n="eb_early">The best trick in money</div>
+    <h2 data-i18n="early_h">Starting early wins</h2>
+    <p class="sub" data-i18n="early_sub">Same amount every month, same growth, both stop at age 30.</p>
+    <div class="vs">
+      <div class="card win"><small data-i18n="early_13">Start at 13</small><b id="early13">₹0</b><small id="early13y">17 years</small></div>
+      <div class="card"><small data-i18n="early_18">Start at 18</small><b id="early18">₹0</b><small id="early18y">12 years</small></div>
+    </div>
+    <div class="tip" id="earlyTip"></div>
+  </section>
+
+  <section class="panel wide">
+    <div class="head"><div><div class="eyebrow" data-i18n="eb_learn">30 seconds each</div><h2 data-i18n="learn_h">Money words, explained</h2><p class="sub" data-i18n="learn_sub">Tap a card to read it. Read them all for a badge.</p></div><b class="pillbtn" id="learnCount">0/10</b></div>
+    <div class="cards" id="learnCards"></div>
+  </section>
+</main>
+
+<!-- ============ MORE ============ -->
+<main class="wrap view" data-view="more" hidden>
+  <section class="panel">
+    <div class="eyebrow" data-i18n="eb_chal">This week's challenge</div>
+    <h2 data-i18n="chal_h">Try this</h2>
+    <div class="chal" id="chalBox"></div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow" data-i18n="eb_nw">Where your money went</div>
+    <h2 data-i18n="nw_h">Needs vs wants</h2>
+    <p class="sub" data-i18n="nw_sub">This month. Wants aren't bad — this is just so you can see it.</p>
+    <div class="nw" id="nwBox"></div>
+  </section>
+
+  <section class="panel wide">
+    <div class="head"><div><div class="eyebrow" data-i18n="eb_badges">Stuff you've earned</div><h2 data-i18n="badges_h">Badges</h2></div><b class="pillbtn" id="badgeCount">0 / 12</b></div>
+    <div class="bgrid" id="badgeGrid"></div>
+  </section>
+
+  <section class="panel">
+    <div class="head"><div><div class="eyebrow" data-i18n="eb_parent">Grown-ups only</div><h2 data-i18n="parent_h">Parent mode</h2><p class="sub" id="parentSub"></p></div></div>
+    <div class="actions">
+      <button class="btn gold" id="unlockBtn" data-i18n="btn_unlock">🔑 Unlock</button>
+      <button class="btn" id="lockBtn" hidden data-i18n="btn_lock">🔒 Lock again</button>
+      <button class="btn sm" id="changePinBtn" hidden data-i18n="btn_changepin">Change PIN</button>
+    </div>
+    <div id="parentBody" hidden>
+      <div class="row"><div><b data-i18n="allow_t">Pocket money</b><small data-i18n="allow_s">Added automatically. 0 to turn off.</small></div><input id="allowAmt" type="number" inputmode="numeric" min="0" max="100000" value="0"></div>
+      <div class="row"><div><b data-i18n="allow_how">How often</b><small data-i18n="allow_how_s">When it gets added</small></div>
+        <select id="allowEvery"><option value="week" data-i18n="every_week">Every week</option><option value="month" data-i18n="every_month">Every month</option></select></div>
+      <div class="row"><div><b data-i18n="chores_t">Paid jobs</b><small data-i18n="chores_s">Jobs they can do for money</small></div><button class="btn sm gold" id="addChore" data-i18n="btn_addjob">＋ Add job</button></div>
+      <div id="choreAdmin"></div>
+      <div class="row"><div><b data-i18n="approve_t">Waiting for you</b><small data-i18n="approve_s">Jobs they say they've finished</small></div><b class="pillbtn" id="pendCount">0</b></div>
+      <div id="pendList"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="eyebrow" data-i18n="eb_jobs">Earn some money</div>
+    <h2 data-i18n="jobs_h">Paid jobs</h2>
+    <p class="sub" data-i18n="jobs_sub">Do a job, tap it, and a grown-up says yes before the money lands.</p>
+    <div id="choreList"></div>
+  </section>
+
+  <section class="panel wide">
+    <div class="eyebrow" data-i18n="eb_set">Settings</div>
+    <h2 data-i18n="set_h">Your setup</h2>
+    <div class="row"><div><b data-i18n="set_cur">Money symbol</b><small data-i18n="set_cur_s">Shown in front of every number</small></div>
+      <select id="curSel"><option>₹</option><option>$</option><option>£</option><option>€</option><option>¥</option><option>A$</option></select></div>
+    <div class="row"><div><b data-i18n="set_split">Splitting rule</b><small id="splitNow">50% save · 40% spend · 10% give</small></div><button class="btn sm" id="editSplit" data-i18n="btn_change">Change</button></div>
+    <div class="row"><div><b data-i18n="set_sound">Sounds</b><small data-i18n="set_sound_s">Shared with the other apps</small></div><button class="btn sm" id="muteBtn">🔊</button></div>
+    <div class="row"><div><b data-i18n="set_reset">Start over</b><small data-i18n="set_reset_s">Deletes only Money Counter, only for this chef</small></div><button class="btn sm pink" id="resetBtn" data-i18n="btn_reset">Reset</button></div>
+    <div class="note" data-i18n="set_note">This app holds no real money and isn't connected to any bank. It's a notebook that does the maths for you.</div>
+  </section>
+</main>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="backdrop" id="backdrop"></div>
+  <div class="sheet" id="sheet"></div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<script>
+"use strict";
+/* =====================================================================
+   1. WORDS  (English + Hindi, English is the fallback)
+   ===================================================================== */
+const STR={
+ en:{
+  nav_money:"Money",nav_goals:"Goals",nav_grow:"Grow",nav_more:"More",
+  eb_have:"Money you have",bal_sub:"in all your jars",btn_in:"Got money",btn_out:"Spent money",
+  jars_help:"Tap a jar to move money into another jar.",
+  eb_week:"This week",week_h:"How you're doing",s_in:"Came in",s_out:"Went out",s_saved:"Saved",
+  s_streak:"Saving streak",s_nospend:"No-spend days",s_badges:"Badges",
+  eb_tl:"Everything that happened",tl_h:"Your money timeline",tl_sub:"Newest first. Tap ✕ to undo a mistake.",tl_more:"Show all",
+  eb_goals:"Things you're saving for",goals_h:"Your goals",goals_sub:"Pick something you want. Watch the ring fill up.",
+  btn_afford:"Can I afford it?",btn_newgoal:"New goal",
+  eb_grow:"If you save every month",grow_h:"Watch money grow",grow_sub:"Move the sliders. See what happens if you leave money alone for years.",
+  sl_month:"Save each month",sl_years:"For how many years",sl_rate:"Growth each year",
+  lg_put:"Money you put in",lg_grow:"Extra from growth",kv_put:"You put in",kv_grow:"It grew by",kv_total:"You end up with",
+  grow_note:"⚠️ This is a guess, not a promise. Real investments go up <b>and down</b>. Nobody can tell you what you'll actually get.",
+  eb_early:"The best trick in money",early_h:"Starting early wins",early_sub:"Same amount every month, same growth, both stop at age 30.",
+  early_13:"Start at 13",early_18:"Start at 18",
+  eb_learn:"30 seconds each",learn_h:"Money words, explained",learn_sub:"Tap a card to read it. Read them all for a badge.",
+  eb_chal:"This week's challenge",chal_h:"Try this",
+  eb_nw:"Where your money went",nw_h:"Needs vs wants",nw_sub:"This month. Wants aren't bad — this is just so you can see it.",
+  eb_badges:"Stuff you've earned",badges_h:"Badges",
+  eb_parent:"Grown-ups only",parent_h:"Parent mode",btn_unlock:"🔑 Unlock",btn_lock:"🔒 Lock again",btn_changepin:"Change PIN",
+  allow_t:"Pocket money",allow_s:"Added automatically. 0 to turn off.",allow_how:"How often",allow_how_s:"When it gets added",
+  every_week:"Every week",every_month:"Every month",
+  chores_t:"Paid jobs",chores_s:"Jobs they can do for money",btn_addjob:"＋ Add job",
+  approve_t:"Waiting for you",approve_s:"Jobs they say they've finished",
+  eb_jobs:"Earn some money",jobs_h:"Paid jobs",jobs_sub:"Do a job, tap it, and a grown-up says yes before the money lands.",
+  eb_set:"Settings",set_h:"Your setup",set_cur:"Money symbol",set_cur_s:"Shown in front of every number",
+  set_split:"Splitting rule",btn_change:"Change",set_sound:"Sounds",set_sound_s:"Shared with the other apps",
+  set_reset:"Start over",set_reset_s:"Deletes only Money Counter, only for this chef",btn_reset:"Reset",
+  set_note:"This app holds no real money and isn't connected to any bank. It's a notebook that does the maths for you.",
+  j_save:"Savings",j_spend:"Spending",j_give:"Giving",j_goals:"Goals",
+  in_t:"Money came in!",in_s:"How much did you get?",out_t:"What did you spend on?",out_s:"Take it out of a jar.",
+  amount:"How much?",from_where:"Where from?",what_for:"What for?",note_ph:"Anything to remember? (optional)",
+  split_it:"Split it",all_spend:"All to spending",add_it:"Add it",take_it:"Take it out",
+  need:"Need",want:"Want",skipnw:"Not sure",
+  cat_allow:"Pocket money",cat_gift:"Gift",cat_job:"Job",cat_found:"Found it",cat_other:"Other",
+  c_snack:"Snack",c_game:"Game",c_toy:"Toy",c_book:"Book",c_out:"Going out",c_gift:"Gift",c_travel:"Travel",c_other:"Other",
+  goal_new:"New goal",goal_new_s:"What are you saving for?",goal_name:"What is it?",goal_target:"How much does it cost?",
+  goal_pick:"Pick a picture",goal_due:"Want it by (optional)",goal_save:"Make goal",goal_del:"Delete goal",
+  goal_add:"Put money in",goal_bought:"I bought it! 🎉",goal_whatif:"What if?",
+  afford_t:"Can I afford it?",afford_s:"Type what it costs. I'll do the maths.",price:"What does it cost?",
+  need_more:"You need",weeks_word:"weeks",week_word:"week",about:"about",ready_by:"Ready around",
+  buy_now:"Buy it now",buy_now_ok:"You can! You'd have %s left.",buy_now_no:"Not yet — you're %s short.",
+  keep_saving:"Keep saving %s a week",faster:"That's %s sooner",
+  extra_week:"Save extra each week",skip_week:"Skip something each week",
+  move_t:"Move money",move_s:"Take from one jar, put in another.",move_to:"Move it to",move_do:"Move it",
+  split_t:"Your splitting rule",split_s:"When money comes in, this is how it gets shared out.",split_must:"The three must add up to 100%. Right now they make",
+  pin_enter:"Grown-ups only",pin_new:"Set a grown-up PIN",pin_conf:"Type it once more",
+  pin_enter_s:"Enter the 4-digit PIN.",pin_new_s:"Pick 4 digits only a grown-up knows.",pin_conf_s:"Same 4 digits again to confirm.",
+  job_new:"New paid job",job_name:"What's the job?",job_pay:"How much does it pay?",job_save:"Add job",
+  job_claim:"I did it",job_wait:"Waiting for a grown-up",approve:"Pay it",reject:"Not done",
+  lang_title:"Language",lang_sub:"Buttons and headings change.",
+  learned_all:"You read every card 🧠",
+  err_amount:"Type a number bigger than 0.",err_jar:"That jar only has %s in it.",err_name:"Give it a name first.",
+  err_target:"How much does it cost?",done_word:"Done!",left_word:"left",of_word:"of",
+  nothing_yet:"Nothing here yet. Tap “Got money” to start.",no_goals:"No goals yet. Tap “New goal” and pick something you want.",
+  no_jobs:"No paid jobs yet. A grown-up can add some in Parent mode.",
+  no_spend_month:"You haven't spent anything this month.",
+  chal_done_btn:"I did it!",chal_done:"Done this week ✅",chal_auto:"This one ticks itself.",
+  today:"Today",yesterday:"Yesterday"
+ },
+ hi:{
+  nav_money:"पैसे",nav_goals:"लक्ष्य",nav_grow:"बढ़ाओ",nav_more:"और",
+  eb_have:"तुम्हारे पास",bal_sub:"सारे जार मिलाकर",btn_in:"पैसे मिले",btn_out:"पैसे खर्च हुए",
+  jars_help:"जार पर टैप करके पैसे दूसरे जार में डालो।",
+  eb_week:"इस हफ़्ते",week_h:"कैसा चल रहा है",s_in:"आए",s_out:"गए",s_saved:"बचाए",
+  s_streak:"बचत स्ट्रीक",s_nospend:"बिना खर्च वाले दिन",s_badges:"बैज",
+  eb_tl:"अब तक क्या हुआ",tl_h:"पैसों की टाइमलाइन",tl_sub:"नया सबसे ऊपर। गलती हो तो ✕ दबाओ।",tl_more:"सब दिखाओ",
+  eb_goals:"जिनके लिए बचा रहे हो",goals_h:"तुम्हारे लक्ष्य",goals_sub:"कुछ चुनो जो चाहिए। रिंग भरते देखो।",
+  btn_afford:"क्या ख़रीद सकता हूँ?",btn_newgoal:"नया लक्ष्य",
+  eb_grow:"हर महीने बचाओ तो",grow_h:"पैसा बढ़ते देखो",grow_sub:"स्लाइडर घुमाओ। देखो सालों में क्या होता है।",
+  sl_month:"हर महीने बचाओ",sl_years:"कितने साल",sl_rate:"हर साल बढ़त",
+  lg_put:"तुमने डाले",lg_grow:"बढ़त से मिले",kv_put:"तुमने डाले",kv_grow:"बढ़े",kv_total:"कुल मिलेंगे",
+  grow_note:"⚠️ यह सिर्फ़ अंदाज़ा है, वादा नहीं। असली निवेश ऊपर <b>और नीचे</b> दोनों जाते हैं।",
+  eb_early:"पैसों का सबसे बड़ा जुगाड़",early_h:"जल्दी शुरू करना जीतता है",early_sub:"वही रकम, वही बढ़त, दोनों 30 की उम्र पर रुकते हैं।",
+  early_13:"13 से शुरू",early_18:"18 से शुरू",
+  eb_learn:"हर एक 30 सेकंड",learn_h:"पैसों के शब्द, आसान भाषा में",learn_sub:"कार्ड पर टैप करो। सब पढ़ो तो बैज मिलेगा।",
+  eb_chal:"इस हफ़्ते की चुनौती",chal_h:"ये करके देखो",
+  eb_nw:"पैसे कहाँ गए",nw_h:"ज़रूरत बनाम शौक",nw_sub:"इस महीने। शौक बुरे नहीं — बस दिख जाए।",
+  eb_badges:"जो तुमने कमाया",badges_h:"बैज",
+  eb_parent:"सिर्फ़ बड़ों के लिए",parent_h:"पेरेंट मोड",btn_unlock:"🔑 खोलो",btn_lock:"🔒 फिर लॉक करो",btn_changepin:"PIN बदलो",
+  allow_t:"जेबखर्च",allow_s:"अपने आप जुड़ेगा। बंद करने के लिए 0।",allow_how:"कितनी बार",allow_how_s:"कब जुड़ेगा",
+  every_week:"हर हफ़्ते",every_month:"हर महीने",
+  chores_t:"पैसे वाले काम",chores_s:"जो काम करके पैसे मिलेंगे",btn_addjob:"＋ काम जोड़ो",
+  approve_t:"तुम्हारा इंतज़ार",approve_s:"जो काम बच्चा कहता है पूरा हो गया",
+  eb_jobs:"कुछ कमाओ",jobs_h:"पैसे वाले काम",jobs_sub:"काम करो, टैप करो, बड़े हाँ कहेंगे तब पैसे आएँगे।",
+  eb_set:"सेटिंग्स",set_h:"तुम्हारा सेटअप",set_cur:"पैसों का चिन्ह",set_cur_s:"हर नंबर के आगे दिखेगा",
+  set_split:"बाँटने का नियम",btn_change:"बदलो",set_sound:"आवाज़",set_sound_s:"बाकी ऐप्स के साथ शेयर",
+  set_reset:"नए सिरे से",set_reset_s:"सिर्फ़ Money Counter, सिर्फ़ इस शेफ़ का",btn_reset:"रीसेट",
+  set_note:"इस ऐप में असली पैसे नहीं हैं और यह किसी बैंक से जुड़ा नहीं है। यह बस हिसाब रखने वाली कॉपी है।",
+  j_save:"बचत",j_spend:"खर्च",j_give:"दान",j_goals:"लक्ष्य",
+  in_t:"पैसे आए!",in_s:"कितने मिले?",out_t:"किस पर खर्च हुआ?",out_s:"किस जार से निकालें?",
+  amount:"कितने?",from_where:"कहाँ से?",what_for:"किस लिए?",note_ph:"कुछ याद रखना है? (ज़रूरी नहीं)",
+  split_it:"बाँट दो",all_spend:"सब खर्च वाले जार में",add_it:"जोड़ो",take_it:"निकालो",
+  need:"ज़रूरत",want:"शौक",skipnw:"पता नहीं",
+  cat_allow:"जेबखर्च",cat_gift:"गिफ़्ट",cat_job:"काम",cat_found:"मिल गए",cat_other:"और",
+  c_snack:"स्नैक",c_game:"गेम",c_toy:"खिलौना",c_book:"किताब",c_out:"घूमना",c_gift:"गिफ़्ट",c_travel:"सफ़र",c_other:"और",
+  goal_new:"नया लक्ष्य",goal_new_s:"किसके लिए बचा रहे हो?",goal_name:"क्या चाहिए?",goal_target:"कितने का है?",
+  goal_pick:"तस्वीर चुनो",goal_due:"कब तक चाहिए (ज़रूरी नहीं)",goal_save:"लक्ष्य बनाओ",goal_del:"लक्ष्य हटाओ",
+  goal_add:"पैसे डालो",goal_bought:"खरीद लिया! 🎉",goal_whatif:"अगर ऐसा करें तो?",
+  afford_t:"क्या ख़रीद सकता हूँ?",afford_s:"दाम लिखो। हिसाब मैं कर दूँगा।",price:"कितने का है?",
+  need_more:"और चाहिए",weeks_word:"हफ़्ते",week_word:"हफ़्ता",about:"लगभग",ready_by:"तैयार होगा",
+  buy_now:"अभी ख़रीदो",buy_now_ok:"हाँ! फिर %s बचेंगे।",buy_now_no:"अभी नहीं — %s कम हैं।",
+  keep_saving:"हर हफ़्ते %s बचाते रहो",faster:"यानी %s पहले",
+  extra_week:"हर हफ़्ते इतना ज़्यादा बचाओ",skip_week:"हर हफ़्ते इतना छोड़ो",
+  move_t:"पैसे इधर-उधर",move_s:"एक जार से निकालो, दूसरे में डालो।",move_to:"कहाँ डालें",move_do:"भेजो",
+  split_t:"बाँटने का नियम",split_s:"जब पैसे आएँ, ऐसे बँटेंगे।",split_must:"तीनों मिलाकर 100% होने चाहिए। अभी बन रहे हैं",
+  pin_enter:"सिर्फ़ बड़ों के लिए",pin_new:"बड़ों वाला PIN बनाओ",pin_conf:"एक बार और लिखो",
+  pin_enter_s:"4 अंकों का PIN डालो।",pin_new_s:"4 अंक जो सिर्फ़ बड़े जानते हों।",pin_conf_s:"पक्का करने के लिए वही 4 अंक।",
+  job_new:"नया काम",job_name:"कौन सा काम?",job_pay:"कितने पैसे मिलेंगे?",job_save:"काम जोड़ो",
+  job_claim:"मैंने कर लिया",job_wait:"बड़ों का इंतज़ार",approve:"पैसे दो",reject:"नहीं हुआ",
+  lang_title:"भाषा / Language",lang_sub:"बटन और हेडिंग बदलेंगे।",
+  learned_all:"तुमने सारे कार्ड पढ़ लिए 🧠",
+  err_amount:"0 से बड़ा नंबर लिखो।",err_jar:"उस जार में सिर्फ़ %s हैं।",err_name:"पहले नाम लिखो।",
+  err_target:"कितने का है?",done_word:"हो गया!",left_word:"बाकी",of_word:"में से",
+  nothing_yet:"अभी कुछ नहीं। शुरू करने के लिए “पैसे मिले” दबाओ।",no_goals:"अभी कोई लक्ष्य नहीं। “नया लक्ष्य” दबाओ।",
+  no_jobs:"अभी कोई काम नहीं। पेरेंट मोड में बड़े जोड़ सकते हैं।",
+  no_spend_month:"इस महीने कुछ खर्च नहीं हुआ।",
+  chal_done_btn:"कर लिया!",chal_done:"इस हफ़्ते हो गया ✅",chal_auto:"यह अपने आप टिक हो जाएगा।",
+  today:"आज",yesterday:"कल"
+ }
+};
+let LANG="en";
+const t=k=>(STR[LANG]&&STR[LANG][k])??STR.en[k]??k;
+const tf=(k,...a)=>{ let s=t(k); a.forEach(v=>s=s.replace("%s",v)); return s; };
+
+/* =====================================================================
+   2. CONTENT
+   ===================================================================== */
+const JARS=[
+  {k:"save", e:"💰", n:"j_save"},
+  {k:"spend",e:"🍿", n:"j_spend"},
+  {k:"give", e:"🎁", n:"j_give"},
+  {k:"goals",e:"🎯", n:"j_goals", derived:true}
+];
+const IN_CATS=[["🪙","cat_allow"],["🎁","cat_gift"],["🧹","cat_job"],["🍀","cat_found"],["✨","cat_other"]];
+const OUT_CATS=[["🍫","c_snack"],["🎮","c_game"],["🧸","c_toy"],["📚","c_book"],["🎡","c_out"],["🎁","c_gift"],["🚌","c_travel"],["✨","c_other"]];
+const GOAL_EMOJI=["🎧","🎮","🚲","📱","👟","⌚","🎸","📚","🎨","🏀","⚽","🎒","💻","📷","🛹","🧸","🎁","🍕","✈️","🎫","🖥️","🎹","🐶","🧩","👕","🕶️","💍","🎂","🏕️","🛼"];
+
+const LEARN=[
+ {id:"save",e:"🐷",q:"Why save before spending?",a:"If you spend first and save what's left, there's usually nothing left. If you save first — even ₹20 — the rest is yours to spend with zero guilt.",
+  qh:"पहले बचत क्यों?",ah:"पहले खर्च करोगे तो बचता कुछ नहीं। पहले ₹20 भी अलग रख दो, तो बाकी बिना टेंशन खर्च कर सकते हो।"},
+ {id:"interest",e:"📈",q:"What is interest?",a:"Money paid to you for letting someone else hold your money. Put ₹1,000 in a bank at 5% and after a year you have ₹1,050. You did nothing. The ₹50 is interest.",
+  qh:"ब्याज क्या है?",ah:"तुम्हारे पैसे रखने के बदले तुम्हें मिलने वाला पैसा। ₹1,000 बैंक में 5% पर रखो तो साल बाद ₹1,050। ₹50 ब्याज है।"},
+ {id:"compound",e:"🌱",q:"What is compounding?",a:"Interest on your interest. Year one you earn ₹50. Year two you earn interest on ₹1,050, not ₹1,000. It's slow at first and then surprisingly fast.",
+  qh:"चक्रवृद्धि क्या है?",ah:"ब्याज पर भी ब्याज। पहले साल ₹50 मिले। दूसरे साल ₹1,050 पर ब्याज मिलेगा, ₹1,000 पर नहीं। शुरू में धीमा, फिर तेज़।"},
+ {id:"inflation",e:"🎈",q:"Why does ₹100 buy less later?",a:"Prices slowly go up — that's inflation. A samosa your parents bought for ₹5 costs ₹20 now. Money sitting still quietly loses power.",
+  qh:"₹100 से बाद में कम क्यों आता है?",ah:"दाम धीरे-धीरे बढ़ते हैं — इसे महँगाई कहते हैं। जो समोसा ₹5 का था अब ₹20 का है। रखा हुआ पैसा चुपचाप कमज़ोर होता जाता है।"},
+ {id:"invest",e:"🏗️",q:"What is an investment?",a:"Putting money into something that might grow — a business, a fund, gold. It can go up. It can also go down. That's the deal.",
+  qh:"निवेश क्या है?",ah:"पैसे किसी ऐसी चीज़ में लगाना जो बढ़ सकती है — बिज़नेस, फंड, सोना। ऊपर भी जा सकता है, नीचे भी। यही शर्त है।"},
+ {id:"bank",e:"🏦",q:"What is a bank account?",a:"A safe place that holds your money and gives a little interest. You can ask for it back any time. Most kids need a grown-up to open one with them.",
+  qh:"बैंक खाता क्या है?",ah:"पैसे रखने की सुरक्षित जगह, थोड़ा ब्याज भी। जब चाहो वापस ले सकते हो। बच्चों को खोलने के लिए बड़ों की ज़रूरत होती है।"},
+ {id:"needwant",e:"🏷️",q:"Need or want?",a:"A need is something that goes wrong without it — food, school stuff. A want is nice to have. Wants aren't bad. Knowing which is which is the skill.",
+  qh:"ज़रूरत या शौक?",ah:"ज़रूरत वो जिसके बिना दिक्कत हो — खाना, स्कूल का सामान। शौक अच्छा लगता है। शौक बुरे नहीं — फ़र्क पहचानना हुनर है।"},
+ {id:"budget",e:"📋",q:"What is a budget?",a:"A plan for money you haven't spent yet. Not a punishment — it's deciding in advance instead of wondering later where it all went.",
+  qh:"बजट क्या है?",ah:"जो पैसे अभी खर्च नहीं हुए, उनका प्लान। सज़ा नहीं — पहले से तय कर लेना, बाद में सोचने से बेहतर।"},
+ {id:"emergency",e:"🚨",q:"What is emergency money?",a:"Money you never touch unless something breaks. Grown-ups keep months of it. For you, even ₹500 that you refuse to spend counts.",
+  qh:"इमरजेंसी के पैसे क्या हैं?",ah:"वो पैसे जिन्हें तब तक नहीं छूते जब तक कुछ बिगड़ न जाए। बड़े महीनों का रखते हैं। तुम्हारे लिए ₹500 भी काफ़ी है।"},
+ {id:"scam",e:"🚫",q:"If it sounds too good, it is",a:"Nobody doubles your money in a week. Free game currency, lucky links, \"send ₹100 get ₹1,000\" — all the same trick. Show a grown-up before you tap.",
+  qh:"जो बहुत अच्छा लगे, वो सच नहीं",ah:"कोई हफ़्ते में पैसे दोगुने नहीं करता। फ़्री गेम करेंसी, लकी लिंक, “₹100 भेजो ₹1,000 लो” — सब एक ही चाल है। टैप करने से पहले बड़ों को दिखाओ।"}
+];
+
+const BADGES=[
+ {id:"first", e:"🌱",n:"First entry",  nh:"पहली एंट्री",  d:"Log any money",            dh:"कोई भी पैसा लिखो",     c:s=>s.txCount>=1},
+ {id:"save500",e:"💰",n:"₹500 saved",  nh:"₹500 बचाए",   d:"Put ₹500 into savings",    dh:"₹500 बचत में डालो",   c:s=>s.everSaved>=500},
+ {id:"goal1",  e:"🎯",n:"Goal set",    nh:"लक्ष्य बना",   d:"Make your first goal",     dh:"पहला लक्ष्य बनाओ",     c:s=>s.goalCount>=1},
+ {id:"goaldone",e:"🏆",n:"Goal reached",nh:"लक्ष्य पूरा",  d:"Finish a whole goal",      dh:"पूरा लक्ष्य पूरा करो", c:s=>s.goalsDone>=1},
+ {id:"streak4",e:"🔥",n:"4-week streak",nh:"4 हफ़्ते",     d:"Save 4 weeks in a row",    dh:"लगातार 4 हफ़्ते बचाओ", c:s=>s.streak>=4},
+ {id:"nospend3",e:"🧊",n:"3 quiet days",nh:"3 शांत दिन",  d:"3 no-spend days in a row", dh:"लगातार 3 दिन बिना खर्च",c:s=>s.noSpend>=3},
+ {id:"giver",  e:"🎁",n:"Giver",       nh:"दानी",        d:"Use the Giving jar",       dh:"दान वाला जार इस्तेमाल करो",c:s=>s.everGave>=1},
+ {id:"splitter",e:"⚖️",n:"Splitter",    nh:"बाँटने वाला", d:"Split money 5 times",      dh:"5 बार पैसे बाँटो",     c:s=>s.splits>=5},
+ {id:"chal",   e:"✅",n:"Challenger",  nh:"चैलेंजर",     d:"Finish a weekly challenge",dh:"हफ़्ते की चुनौती पूरी करो",c:s=>s.chalDone>=1},
+ {id:"brain",  e:"🧠",n:"Read it all", nh:"सब पढ़ा",      d:"Read every money card",    dh:"सारे कार्ड पढ़ो",      c:s=>s.learned>=LEARN.length},
+ {id:"worker", e:"🧹",n:"First job",   nh:"पहला काम",    d:"Get paid for a job",       dh:"काम करके पैसे लो",     c:s=>s.jobsPaid>=1},
+ {id:"king",   e:"👑",n:"₹10,000",     nh:"₹10,000",     d:"Save ₹10,000 in total",    dh:"कुल ₹10,000 बचाओ",    c:s=>s.everSaved>=10000}
+];
+
+const CHALS=[
+ {id:"save100", e:"💪",t:"Save ₹100 this week",           th:"इस हफ़्ते ₹100 बचाओ",        d:"Put ₹100 into Savings or any goal.",        dh:"₹100 बचत या किसी लक्ष्य में डालो।",     auto:s=>s.weekSaved>=100},
+ {id:"nospend", e:"🧊",t:"Have one no-spend day",          th:"एक दिन बिना खर्च",          d:"One whole day where nothing goes out.",      dh:"पूरा एक दिन, कुछ खर्च नहीं।",          auto:s=>s.noSpend>=1},
+ {id:"compare", e:"🔍",t:"Compare prices before buying",   th:"ख़रीदने से पहले दाम मिलाओ",  d:"Check two shops or two websites first.",     dh:"पहले दो दुकानें या दो वेबसाइट देखो।",   auto:null},
+ {id:"pct20",   e:"⚖️",t:"Save a fifth of what you get",   th:"जो मिले उसका पाँचवाँ हिस्सा बचाओ",d:"At least 20% of everything that came in.",dh:"जो भी आया उसका कम से कम 20%।",         auto:s=>s.weekIn>0&&s.weekSaved>=Math.round(s.weekIn*0.2)},
+ {id:"label",   e:"🏷️",t:"Label every spend",             th:"हर खर्च पर लेबल लगाओ",       d:"Mark each one a need or a want.",            dh:"हर एक को ज़रूरत या शौक लिखो।",         auto:null},
+ {id:"togoal",  e:"🎯",t:"Put something toward a goal",    th:"लक्ष्य में कुछ डालो",        d:"Any amount. Even ₹10 counts.",               dh:"कितना भी। ₹10 भी चलेगा।",              auto:s=>s.weekGoal>0},
+ {id:"give20",  e:"🎁",t:"Put ₹20 in the Giving jar",      th:"दान जार में ₹20 डालो",       d:"For a gift, a donation, anything kind.",     dh:"गिफ़्ट, दान, कुछ भी अच्छा।",            auto:s=>s.weekGive>=20},
+ {id:"read2",   e:"🧠",t:"Read two money cards",           th:"दो मनी कार्ड पढ़ो",           d:"They're on the Grow tab. 30 seconds each.",  dh:"Grow टैब में हैं। हर एक 30 सेकंड।",     auto:s=>s.learned>=2},
+ {id:"waitday", e:"⏳",t:"Wait one day before buying",     th:"ख़रीदने से पहले एक दिन रुको", d:"Write down what you want. Still want it tomorrow?",dh:"जो चाहिए लिख लो। कल भी चाहिए?",   auto:null},
+ {id:"dojob",   e:"🧹",t:"Do one paid job",                th:"एक पैसे वाला काम करो",       d:"Earn instead of asking.",                    dh:"माँगने की जगह कमाओ।",                  auto:s=>s.weekJobs>=1},
+ {id:"count",   e:"🔢",t:"Count your real cash",           th:"असली पैसे गिनो",             d:"Does the app match your pocket?",            dh:"क्या ऐप और जेब का हिसाब मिलता है?",     auto:null},
+ {id:"skip",    e:"✂️",t:"Skip one thing you'd normally buy",th:"एक चीज़ छोड़ दो",           d:"Put that money in Savings instead.",         dh:"वो पैसे बचत में डाल दो।",              auto:null}
+];
+
+const TIPS=[
+ ["💡","Save first, spend what's left. It's the whole trick.","पहले बचाओ, फिर बचा हुआ खर्च करो। बस यही पूरा जुगाड़ है।"],
+ ["🕐","Want something? Wait one day. Half the time you stop wanting it.","कुछ चाहिए? एक दिन रुको। आधी बार इच्छा अपने आप चली जाती है।"],
+ ["🔍","Check the price in two places before you buy.","ख़रीदने से पहले दो जगह दाम देख लो।"],
+ ["🧊","A no-spend day is easier than it sounds. Try one.","बिना खर्च का दिन जितना मुश्किल लगता है उतना है नहीं। करके देखो।"],
+ ["🎯","Small and boring beats big and never. ₹20 a week is ₹1,040 a year.","थोड़ा-थोड़ा हमेशा, बहुत सारा कभी नहीं से बेहतर है। हफ़्ते के ₹20 = साल के ₹1,040।"],
+ ["🚫","Nobody doubles your money in a week. Nobody.","कोई हफ़्ते में पैसे दोगुने नहीं करता। कोई नहीं।"],
+ ["🎁","Giving a little makes money feel less scary. Try the Giving jar.","थोड़ा देना पैसों का डर कम करता है। दान वाला जार आज़माओ।"],
+ ["📈","Money left alone for years grows way more than money left alone for months.","सालों तक छोड़ा पैसा, महीनों तक छोड़े पैसे से कहीं ज़्यादा बढ़ता है।"]
+];
+
+/* =====================================================================
+   3. STORAGE  — shares fc_global with the other apps, own data in mc_<chef>
+   ===================================================================== */
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+          set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast("Storage is full — couldn't save.");return false}}};
+const FC=LS.get("fc_global")||{};
+/* never overwrite the whole shared object: re-read, change one field, write back */
+function patchGlobal(fields){
+  const cur=LS.get("fc_global")||{};
+  Object.assign(cur,fields); LS.set("fc_global",cur); Object.assign(FC,fields);
+}
+const chef=(FC.profiles||[]).find(p=>p.id===FC.active)||null;
+const KEY="mc_"+(chef?chef.id:"solo");
+
+const D=Object.assign({v:1,cur:"₹",tx:[],goals:[],chores:[],claims:[],badges:[],learned:[],seen:false},LS.get(KEY)||{});
+D.jars =Object.assign({save:0,spend:0,give:0},D.jars);
+D.split=Object.assign({save:50,spend:40,give:10},D.split);
+D.allow=Object.assign({amt:0,every:"week",last:null},D.allow);
+D.chal =Object.assign({week:null,done:false},D.chal);
+["tx","goals","chores","claims","badges","learned"].forEach(k=>{ if(!Array.isArray(D[k])) D[k]=[]; });
+const save=()=>LS.set(KEY,D);
+LANG=(FC.lang==="hi")?"hi":"en";
+
+/* =====================================================================
+   4. THE MONEY MODEL
+   Every transaction carries `d` — exactly which buckets moved and by how
+   much. Jars and goal pots are never stored as truth: they are rebuilt by
+   adding up every `d`. That means they can never drift out of sync, and
+   deleting a transaction undoes it perfectly.
+   Bucket keys: "save" | "spend" | "give" | "g:<goalId>"
+   ===================================================================== */
+const R=n=>{ n=Math.round(Number(n)); return Number.isFinite(n)?n:0; };        // whole units only
+const POS=n=>Math.max(0,R(n));
+const money=n=>D.cur+R(n).toLocaleString("en-IN");
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const goalPot=id=>{ const g=D.goals.find(x=>x.id===id); return g?g.saved:0; };
+const goalTotal=()=>D.goals.reduce((s,g)=>s+g.saved,0);
+const balance=()=>D.jars.save+D.jars.spend+D.jars.give+goalTotal();
+
+function recompute(){
+  const j={save:0,spend:0,give:0}, pots={};
+  for(const x of D.tx){
+    for(const k in x.d){
+      const v=R(x.d[k]);
+      if(k.startsWith("g:")){ const id=k.slice(2); pots[id]=(pots[id]||0)+v; }
+      else j[k]=(j[k]||0)+v;
+    }
+  }
+  D.jars=j;
+  D.goals.forEach(g=>{ g.saved=POS(pots[g.id]||0); g.done=g.saved>=g.target; });
+}
+function addTx(o){ D.tx.push(Object.assign({id:uid("t"),ts:Date.now()},o)); recompute(); }
+function delTx(id){ const i=D.tx.findIndex(x=>x.id===id); if(i<0) return false; D.tx.splice(i,1); recompute(); return true; }
+/* undoing an old entry can leave a jar owing money it already spent — check first */
+function wouldGoNegative(id){
+  const buckets={};
+  for(const x of D.tx){
+    if(x.id===id) continue;
+    for(const k in x.d) buckets[k]=(buckets[k]||0)+R(x.d[k]);
+  }
+  return Object.values(buckets).some(v=>v<0);
+}
+
+/* split an amount across the three jars so the parts always add up exactly */
+function splitAmount(amt){
+  const s=D.split, tot=(s.save+s.spend+s.give)||100;
+  const sv=Math.round(amt*s.save/tot), gv=Math.round(amt*s.give/tot);
+  return {save:sv, give:gv, spend:amt-sv-gv};
+}
+
+/* ---- dates ---- */
+const DAY=86400000;
+const dayKey=ts=>{ const d=new Date(ts); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+function weekKey(ts){                       // ISO-ish week, Monday start
+  const d=new Date(ts); d.setHours(0,0,0,0);
+  d.setDate(d.getDate()-((d.getDay()+6)%7));  // back to Monday
+  return dayKey(d.getTime());
+}
+const thisWeek=()=>weekKey(Date.now());
+const monthKey=ts=>{ const d=new Date(ts); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); };
+function weekNumber(d=new Date()){
+  const a=new Date(d.getFullYear(),0,1);
+  return Math.floor(((d-a)/DAY + a.getDay())/7);
+}
+const fmtDate=ts=>new Date(ts).toLocaleDateString(LANG==="hi"?"hi-IN":"en-IN",{day:"numeric",month:"short"});
+const fmtDateY=ts=>new Date(ts).toLocaleDateString(LANG==="hi"?"hi-IN":"en-IN",{day:"numeric",month:"short",year:"numeric"});
+
+/* how much a transaction moved into long-term buckets (savings + goals) */
+const longDelta=x=>{ let n=0; for(const k in x.d){ if(k==="save"||k.startsWith("g:")) n+=x.d[k]; } return n; };
+const goalDelta=x=>{ let n=0; for(const k in x.d){ if(k.startsWith("g:")) n+=x.d[k]; } return n; };
+
+/* =====================================================================
+   5. STATS  — everything derived, nothing stored
+   ===================================================================== */
+function stats(){
+  const wk=thisWeek(), mo=monthKey(Date.now());
+  const s={txCount:D.tx.length, weekIn:0, weekOut:0, weekSaved:0, weekGoal:0, weekGive:0, weekJobs:0,
+           everSaved:0, everGave:0, splits:0, jobsPaid:0,
+           needs:0, wants:0, goalCount:D.goals.length,
+           goalsDone:D.goals.filter(g=>g.done).length,
+           learned:D.learned.length, chalDone:D.chal.done?1:0, streak:0, noSpend:0};
+  for(const x of D.tx){
+    const w=weekKey(x.ts), ld=longDelta(x);
+    if(ld>0) s.everSaved+=ld;
+    if(x.d.give>0) s.everGave+=x.d.give;
+    if(x.dir==="in"&&x.split) s.splits++;
+    if(x.cat==="cat_job"&&x.dir==="in") s.jobsPaid++;
+    if(w===wk){
+      if(x.dir==="in") s.weekIn+=x.amt;
+      if(x.dir==="out") s.weekOut+=x.amt;
+      s.weekSaved+=ld;
+      s.weekGoal+=Math.max(0,goalDelta(x));
+      if(x.d.give>0) s.weekGive+=x.d.give;
+      if(x.cat==="cat_job"&&x.dir==="in") s.weekJobs++;
+    }
+    if(x.dir==="out"&&monthKey(x.ts)===mo){
+      if(x.nw==="need") s.needs+=x.amt; else if(x.nw==="want") s.wants+=x.amt;
+    }
+  }
+  s.weekSaved=Math.max(0,s.weekSaved);
+  s.streak=savingStreak(); s.noSpend=noSpendDays();
+  return s;
+}
+/* consecutive weeks (ending with this one, or last one if this week is still empty) with money going in */
+function savingStreak(){
+  const byWeek={};
+  D.tx.forEach(x=>{ const w=weekKey(x.ts); byWeek[w]=(byWeek[w]||0)+longDelta(x); });
+  let n=0, cur=new Date(); cur.setHours(0,0,0,0);
+  let k=weekKey(cur.getTime());
+  if(!(byWeek[k]>0)){ cur.setDate(cur.getDate()-7); k=weekKey(cur.getTime()); }  // this week not done yet — don't break the run
+  for(let i=0;i<260;i++){
+    if(byWeek[k]>0){ n++; cur.setDate(cur.getDate()-7); k=weekKey(cur.getTime()); }
+    else break;
+  }
+  return n;
+}
+/* days in a row, counting back from today, with nothing logged going out */
+function noSpendDays(){
+  if(!D.tx.length) return 0;
+  const spent=new Set(D.tx.filter(x=>x.dir==="out").map(x=>dayKey(x.ts)));
+  const first=Math.min(...D.tx.map(x=>x.ts));
+  let n=0, d=new Date(); d.setHours(0,0,0,0);
+  for(let i=0;i<400;i++){
+    if(d.getTime()<new Date(first).setHours(0,0,0,0)) break;
+    if(spent.has(dayKey(d.getTime()))) break;
+    n++; d.setDate(d.getDate()-1);
+  }
+  return n;
+}
+/* average put away per week over the last 4 full weeks — used by the planner maths */
+function weeklyRate(){
+  const byWeek={};
+  D.tx.forEach(x=>{ const w=weekKey(x.ts); byWeek[w]=(byWeek[w]||0)+longDelta(x); });
+  let total=0, d=new Date();
+  for(let i=1;i<=4;i++){ d.setDate(d.getDate()-7); total+=Math.max(0,byWeek[weekKey(d.getTime())]||0); }
+  const avg=Math.round(total/4);
+  return avg>0?avg:(D.allow.amt>0?Math.round(D.allow.amt*(D.allow.every==="month"?12/52:1)*D.split.save/100):100);
+}
+
+/* =====================================================================
+   6. SMALL UI HELPERS
+   ===================================================================== */
+function applyTheme(){
+  const th=FC.theme||"dark";
+  const dark=th==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:th!=="light";
+  document.documentElement.dataset.theme=dark?"dark":"light";
+}
+applyTheme();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ if((FC.theme||"dark")==="auto") applyTheme(); });
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const next={dark:"light",light:"auto",auto:"dark"}[FC.theme||"dark"];
+  patchGlobal({theme:next}); applyTheme(); sfx.pop();
+  toast({dark:"dark mode 🌙",light:"light mode ☀️",auto:"auto — follows your device 🌗"}[next]);
+});
+
+let actx=null;
+function tone(f,d,type="sine",v=.15,to=null){
+  try{
+    if(FC.muted) return;
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,actx.currentTime);
+    if(to) o.frequency.exponentialRampToValueAtTime(to,actx.currentTime+d);
+    g.gain.setValueAtTime(v,actx.currentTime); g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);
+    o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+const sfx={
+  pop:()=>tone(520,.09,"sine",.18,180),
+  tick:()=>tone(880,.12,"triangle",.1),
+  coin:()=>{ tone(988,.09,"square",.09); setTimeout(()=>tone(1319,.22,"square",.09),80); },
+  down:()=>tone(300,.18,"sine",.12,140),
+  wrong:()=>tone(160,.25,"sawtooth",.1),
+  fanfare:()=>[523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.25,"triangle",.12),i*90))
+};
+
+var tt; function toast(m){ const el=document.getElementById("toast"); if(!el) return; el.textContent=m; el.hidden=false; clearTimeout(tt); tt=setTimeout(()=>el.hidden=true,2800); }
+
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c=document.getElementById("confetti"), x=c.getContext("2d");
+  c.width=innerWidth; c.height=innerHeight;
+  const cs=["#FFC93C","#9EDB1F","#1FC9D8","#5E45D6","#E0207A"];
+  const b=Array.from({length:130},()=>({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*18,vy:-Math.random()*18-4,r:Math.random()*8+4,c:cs[Math.random()*5|0],a:Math.random()*6,s:(Math.random()-.5)*.3}));
+  let f=0;
+  (function loop(){
+    x.clearRect(0,0,c.width,c.height);
+    b.forEach(p=>{ p.vy+=.45; p.x+=p.vx; p.y+=p.vy; p.a+=p.s;
+      x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.fillStyle=p.c; x.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6); x.restore(); });
+    if(++f<110) requestAnimationFrame(loop); else x.clearRect(0,0,c.width,c.height);
+  })();
+}
+
+/* ---- sheets ---- */
+const modal=document.getElementById("modal"), sheet=document.getElementById("sheet");
+let lastFocus=null;
+function openSheet(html){
+  lastFocus=document.activeElement; sheet.innerHTML=html; modal.hidden=false;
+  document.body.style.overflow="hidden"; sheet.scrollTop=0;
+  const c=document.getElementById("closeBtn"); if(c){ c.addEventListener("click",closeSheet); c.focus(); }
+}
+function closeSheet(){
+  modal.hidden=true; document.body.style.overflow="";
+  if(lastFocus&&document.contains(lastFocus)) lastFocus.focus({preventScroll:true});
+}
+document.getElementById("backdrop").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) closeSheet(); });
+const head=(emoji,title,sub="")=>`<div class="sheet-head"><div class="emoji">${emoji}</div><div><h2 id="sheetTitle">${title}</h2>${sub?`<p class="sub">${sub}</p>`:""}</div><button class="close" id="closeBtn" aria-label="Close">✕</button></div>`;
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+/* ---- views ---- */
+function showView(v){
+  document.querySelectorAll(".view").forEach(m=>m.hidden=m.dataset.view!==v);
+  document.querySelectorAll(".navbtn").forEach(b=>b.dataset.view===v?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+  scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{ showView(b.dataset.view); sfx.pop(); }));
+
+/* ---- language ---- */
+function applyLang(){
+  document.documentElement.lang=LANG==="hi"?"hi":"en";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=t(el.dataset.i18n); if(/<[a-z]/i.test(v)) el.innerHTML=v; else el.textContent=v; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+  document.getElementById("langSmall").textContent=LANG==="hi"?"हिंदी · English":"English · हिंदी";
+}
+document.getElementById("langBtn").addEventListener("click",()=>{
+  openSheet(`${head("🌐",t("lang_title"),t("lang_sub"))}
+    <div class="segs" id="langSegs">
+      <button type="button" data-l="en" aria-pressed="${LANG==="en"}">🇬🇧 English</button>
+      <button type="button" data-l="hi" aria-pressed="${LANG==="hi"}">🇮🇳 हिंदी</button>
+    </div>`);
+  sheet.querySelectorAll("#langSegs button").forEach(b=>b.addEventListener("click",()=>{
+    LANG=b.dataset.l; patchGlobal({lang:LANG}); closeSheet(); sfx.pop(); renderAll();
+    toast(LANG==="hi"?"हिंदी चालू 🇮🇳":"English on 🇬🇧");
+  }));
+});
+
+/* =====================================================================
+   7. MONEY TAB
+   ===================================================================== */
+const jarName=k=>{
+  if(k&&k.startsWith("g:")){ const g=D.goals.find(x=>x.id===k.slice(2)); return g?g.emoji+" "+g.name:"🎯"; }
+  const j=JARS.find(x=>x.k===k); return j?j.e+" "+t(j.n):k;
+};
+const jarBal=k=>k&&k.startsWith("g:")?goalPot(k.slice(2)):(D.jars[k]||0);
+
+function renderBalance(){
+  document.getElementById("balance").textContent=money(balance());
+}
+function renderJars(){
+  const box=document.getElementById("jars"), max=Math.max(1,D.jars.save,D.jars.spend,D.jars.give,goalTotal());
+  box.innerHTML=JARS.map(j=>{
+    const v=j.derived?goalTotal():D.jars[j.k];
+    const pct=Math.round(Math.min(1,v/max)*100);
+    return `<button class="jar${j.derived?" locked":""}" data-jar="${j.k}" type="button">
+      <span class="lvl" style="height:${pct}%"></span>
+      <span class="je">${j.e}</span><small>${t(j.n)}</small><b>${money(v)}</b></button>`;
+  }).join("");
+  box.querySelectorAll(".jar").forEach(b=>b.addEventListener("click",()=>{
+    sfx.pop();
+    if(b.dataset.jar==="goals"){ showView("goals"); return; }
+    openMove(b.dataset.jar);
+  }));
+}
+function renderWeek(){
+  const s=stats();
+  document.getElementById("sIn").textContent=money(s.weekIn);
+  document.getElementById("sOut").textContent=money(s.weekOut);
+  document.getElementById("sSaved").textContent=money(s.weekSaved);
+  document.getElementById("sStreak").textContent=s.streak;
+  document.getElementById("sNoSpend").textContent=s.noSpend;
+  document.getElementById("sBadges").textContent=earnedBadges().length;
+  const tip=TIPS[weekNumber()%TIPS.length];
+  document.getElementById("tipBox").innerHTML=tip[0]+" "+esc(LANG==="hi"?tip[2]:tip[1]);
+}
+
+let tlAll=false;
+function txLabel(x){
+  if(x.dir==="in")  return {e:(IN_CATS.find(c=>c[1]===x.cat)||["🪙"])[0],  main:t(x.cat||"cat_other"), sign:"+"};
+  if(x.dir==="out") return {e:(OUT_CATS.find(c=>c[1]===x.cat)||["🧾"])[0], main:t(x.cat||"c_other"),  sign:"−"};
+  /* a goal can be deleted later, so fall back to the name stored on the transaction */
+  const nm=k=>k&&k.startsWith("g:")&&!D.goals.some(g=>"g:"+g.id===k)
+    ? (k===x.to?(x.toName||"🎯"):(x.fromName||"🎯")) : jarName(k);
+  return {e:x.to&&x.to.startsWith("g:")?"🎯":"🔁", main:nm(x.from)+" → "+nm(x.to), sign:""};
+}
+function renderTimeline(){
+  const ul=document.getElementById("timeline");
+  if(!D.tx.length){ ul.innerHTML=`<li class="none" style="background:none;border:0;padding:0">${t("nothing_yet")}</li>`;
+                    document.getElementById("tlMore").hidden=true; return; }
+  const list=[...D.tx].sort((a,b)=>b.ts-a.ts);
+  const show=tlAll?list:list.slice(0,20);
+  const today=dayKey(Date.now()), yday=dayKey(Date.now()-DAY);
+  let out="", lastDay="";
+  for(const x of show){
+    const dk=dayKey(x.ts);
+    if(dk!==lastDay){ lastDay=dk;
+      out+=`<li class="daysep" style="background:none;border:0;padding:8px 4px 0">${dk===today?t("today"):dk===yday?t("yesterday"):fmtDateY(x.ts)}</li>`; }
+    const L=txLabel(x), cls=x.dir==="move"?(x.to&&x.to.startsWith("g:")?"goal":"move"):x.dir;
+    const nw=x.nw?` · ${t(x.nw)}`:"";
+    out+=`<li class="${cls}">
+      <span class="te">${L.e}</span>
+      <span class="tn"><b>${esc(x.note||L.main)}</b><small>${esc(x.note?L.main:"")}${nw}</small></span>
+      <span class="tv">${L.sign}${money(x.amt)}</span>
+      <button class="del" data-del="${x.id}" aria-label="Undo this">✕</button></li>`;
+  }
+  ul.innerHTML=out;
+  ul.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>{
+    if(wouldGoNegative(b.dataset.del)){
+      sfx.wrong();
+      alert(LANG==="hi"
+        ? "इसे अभी नहीं हटा सकते — ये पैसे आगे खर्च हो चुके हैं। पहले नई एंट्री हटाओ।"
+        : "You can't undo this one yet — that money has already been spent further down the list. Undo the newer entries first.");
+      return;
+    }
+    if(!confirm(LANG==="hi"?"इसे हटा दें? पैसे वापस जैसे थे वैसे हो जाएँगे।":"Undo this? Your jars go back to how they were.")) return;
+    delTx(b.dataset.del); save(); sfx.down(); renderAll(); checkBadges(); toast(LANG==="hi"?"हटा दिया":"Undone");
+  }));
+  const more=document.getElementById("tlMore");
+  more.hidden=list.length<=20;
+  more.textContent=tlAll?(LANG==="hi"?"कम दिखाओ":"Show less"):t("tl_more");
+}
+
+/* ---- reusable amount field ---- */
+function amountField(max){
+  const quick=[10,50,100,500].filter(v=>max==null||v<=max);
+  return `<div class="fields">
+    <div><label for="amtIn">${t("amount")}</label>
+      <input id="amtIn" type="number" inputmode="numeric" min="1" step="1" placeholder="0" ${max!=null?`max="${max}"`:""}></div>
+    <div class="chips" id="amtQuick">
+      ${quick.map(v=>`<button class="chip" type="button" data-a="${v}">+${money(v)}</button>`).join("")}
+      ${max!=null&&max>0?`<button class="chip" type="button" data-a="${max}">${LANG==="hi"?"सारे":"all of it"} ${money(max)}</button>`:""}
+    </div></div>`;
+}
+function wireAmount(onChange){
+  const inp=document.getElementById("amtIn");
+  sheet.querySelectorAll("#amtQuick .chip").forEach(b=>b.addEventListener("click",()=>{
+    inp.value=String((Number(inp.value)||0)+Number(b.dataset.a)); sfx.tick(); if(onChange) onChange();
+  }));
+  inp.addEventListener("input",()=>{ if(onChange) onChange(); });
+  setTimeout(()=>inp.focus(),80);
+  return ()=>POS(document.getElementById("amtIn").value);
+}
+function chipRow(id,items,sel){
+  return `<div class="chips" id="${id}">${items.map(([e,k])=>
+    `<button class="chip" type="button" data-k="${k}" aria-pressed="${k===sel}">${e} ${t(k)}</button>`).join("")}</div>`;
+}
+function wireChips(id,onPick){
+  sheet.querySelectorAll("#"+id+" .chip").forEach(b=>b.addEventListener("click",()=>{
+    sheet.querySelectorAll("#"+id+" .chip").forEach(o=>o.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); sfx.tick(); if(onPick) onPick(b.dataset.k);
+  }));
+}
+
+/* ---- money came in ---- */
+function openIn(){
+  let cat="cat_allow";
+  openSheet(`${head("💸",t("in_t"),t("in_s"))}
+    ${amountField(null)}
+    <div class="fields"><div><label>${t("from_where")}</label>${chipRow("inCats",IN_CATS,cat)}</div>
+      <div><input id="noteIn" type="text" maxlength="40" placeholder="${t("note_ph")}"></div></div>
+    <div class="note" id="splitPrev"></div>
+    <div class="actions">
+      <button class="btn gold" id="doSplit">🫙 ${t("split_it")}</button>
+      <button class="btn" id="doAll">🍿 ${t("all_spend")}</button>
+    </div>`);
+  const get=wireAmount(prev);
+  wireChips("inCats",k=>cat=k);
+  function prev(){
+    const a=get(), p=splitAmount(a);
+    document.getElementById("splitPrev").innerHTML=a>0
+      ? `💰 ${t("j_save")} <b>${money(p.save)}</b> · 🍿 ${t("j_spend")} <b>${money(p.spend)}</b> · 🎁 ${t("j_give")} <b>${money(p.give)}</b>`
+      : `${D.split.save}% ${t("j_save")} · ${D.split.spend}% ${t("j_spend")} · ${D.split.give}% ${t("j_give")}`;
+  }
+  prev();
+  const finish=(split)=>{
+    const a=get(); if(a<=0){ toast(t("err_amount")); sfx.wrong(); return; }
+    const note=document.getElementById("noteIn").value.trim();
+    const d=split?splitAmount(a):{save:0,spend:a,give:0};
+    addTx({dir:"in",amt:a,cat,note,split,d});
+    save(); closeSheet(); sfx.coin(); renderAll();
+    toast(`+${money(a)} ${split?"🫙":"🍿"}`);
+    checkBadges();
+  };
+  document.getElementById("doSplit").addEventListener("click",()=>finish(true));
+  document.getElementById("doAll").addEventListener("click",()=>finish(false));
+}
+
+/* ---- money went out ---- */
+function openOut(){
+  let cat="c_snack", nw="", from="spend";
+  const jarOpts=["spend","save","give"];
+  openSheet(`${head("🧾",t("out_t"),t("out_s"))}
+    ${amountField(null)}
+    <div class="fields">
+      <div><label>${t("what_for")}</label>${chipRow("outCats",OUT_CATS,cat)}</div>
+      <div><label>${t("need")} / ${t("want")}</label>
+        <div class="segs" id="nwSeg">
+          <button type="button" data-k="need" aria-pressed="false">🏷️ ${t("need")}</button>
+          <button type="button" data-k="want" aria-pressed="false">✨ ${t("want")}</button>
+          <button type="button" data-k="" aria-pressed="true">🤷 ${t("skipnw")}</button>
+        </div></div>
+      <div><label>${LANG==="hi"?"किस जार से":"Out of which jar"}</label>
+        <div class="chips" id="jarPick">${jarOpts.map(k=>
+          `<button class="chip" type="button" data-k="${k}" aria-pressed="${k===from}">${jarName(k)} <small>${money(D.jars[k])}</small></button>`).join("")}</div></div>
+      <div><input id="noteOut" type="text" maxlength="40" placeholder="${t("note_ph")}"></div>
+    </div>
+    <div class="actions"><button class="btn gold" id="doOut">${t("take_it")}</button></div>`);
+  const get=wireAmount();
+  wireChips("outCats",k=>cat=k);
+  wireChips("jarPick",k=>from=k);
+  sheet.querySelectorAll("#nwSeg button").forEach(b=>b.addEventListener("click",()=>{
+    sheet.querySelectorAll("#nwSeg button").forEach(o=>o.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); nw=b.dataset.k; sfx.tick();
+  }));
+  document.getElementById("doOut").addEventListener("click",()=>{
+    const a=get();
+    if(a<=0){ toast(t("err_amount")); sfx.wrong(); return; }
+    if(a>D.jars[from]){ toast(tf("err_jar",money(D.jars[from]))); sfx.wrong(); return; }
+    const note=document.getElementById("noteOut").value.trim();
+    addTx({dir:"out",amt:a,cat,note,nw:nw||null,from,d:{[from]:-a}});
+    save(); closeSheet(); sfx.down(); renderAll(); toast(`−${money(a)}`);
+    checkBadges();
+  });
+}
+
+/* ---- move between jars (and into goals) ---- */
+function openMove(from){
+  const others=["save","spend","give"].filter(k=>k!==from);
+  const goalOpts=D.goals.filter(g=>!g.done);
+  let to=goalOpts.length&&from==="save"?"g:"+goalOpts[0].id:others[0];
+  const max=D.jars[from]||0;
+  openSheet(`${head("🔁",t("move_t"),t("move_s"))}
+    <div class="note">${jarName(from)} — <b>${money(max)}</b></div>
+    ${amountField(max)}
+    <div class="fields"><div><label>${t("move_to")}</label>
+      <div class="chips" id="toPick">
+        ${others.map(k=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${k===to}">${jarName(k)}</button>`).join("")}
+        ${goalOpts.map(g=>`<button class="chip" type="button" data-k="g:${g.id}" aria-pressed="${"g:"+g.id===to}">${g.emoji} ${esc(g.name)}</button>`).join("")}
+      </div></div></div>
+    <div class="actions"><button class="btn gold" id="doMove">${t("move_do")}</button></div>`);
+  const get=wireAmount();
+  wireChips("toPick",k=>to=k);
+  document.getElementById("doMove").addEventListener("click",()=>{
+    const a=get();
+    if(a<=0){ toast(t("err_amount")); sfx.wrong(); return; }
+    if(a>max){ toast(tf("err_jar",money(max))); sfx.wrong(); return; }
+    moveMoney(from,to,a); closeSheet();
+  });
+}
+function moveMoney(from,to,a){
+  const g0=to.startsWith("g:")?D.goals.find(x=>"g:"+x.id===to):null;
+  addTx({dir:"move",amt:a,from,to,toName:g0?g0.emoji+" "+g0.name:null,d:{[from]:-a,[to]:a}});
+  save(); sfx.coin(); renderAll();
+  toast(`${jarName(from)} → ${jarName(to)}  ${money(a)}`);
+  if(to.startsWith("g:")){
+    const g=D.goals.find(x=>x.id===to.slice(2));
+    if(g&&g.done){ setTimeout(()=>{ sfx.fanfare(); confetti(); toast(`${g.emoji} ${t("done_word")}`); },500); }
+  }
+  checkBadges();
+}
+document.getElementById("btnIn").addEventListener("click",()=>{ sfx.pop(); openIn(); });
+document.getElementById("btnOut").addEventListener("click",()=>{ sfx.pop(); openOut(); });
+document.getElementById("tlMore").addEventListener("click",()=>{ tlAll=!tlAll; renderTimeline(); sfx.tick(); });
+
+/* =====================================================================
+   8. GOALS TAB
+   ===================================================================== */
+const weeksFor=(need,perWeek)=>perWeek>0?Math.ceil(need/perWeek):Infinity;
+const weekWord=n=>n===1?t("week_word"):t("weeks_word");
+/* show the year too when a goal lands in a different one, so "25 Feb" isn't ambiguous */
+const dateIn=w=>{ const ts=Date.now()+w*7*DAY;
+  return new Date(ts).getFullYear()!==new Date().getFullYear()?fmtDateY(ts):fmtDate(ts); };
+
+function renderGoals(){
+  const box=document.getElementById("goalList");
+  if(!D.goals.length){ box.innerHTML=`<p class="none">${t("no_goals")}</p>`; return; }
+  const rate=weeklyRate();
+  box.innerHTML=D.goals.map(g=>{
+    const pct=g.target>0?Math.min(100,Math.round(g.saved/g.target*100)):0;
+    const need=Math.max(0,g.target-g.saved), w=weeksFor(need,rate);
+    const line=g.done?`<small>🎉 ${t("done_word")}</small>`
+      :`<small>${t("about")} ${w===Infinity?"∞":w} ${weekWord(w)} · ${t("ready_by")} ${w===Infinity?"—":dateIn(w)}</small>`;
+    return `<button class="goalcard${g.done?" done":""}" type="button" data-goal="${g.id}">
+      <span class="gring" style="--p:${pct}"><span>${g.emoji}</span></span>
+      <span class="gtext"><b>${esc(g.name)}</b>
+        <span class="amt">${money(g.saved)} <i>${t("of_word")} ${money(g.target)} · ${pct}%</i></span>
+        ${line}</span></button>`;
+  }).join("");
+  box.querySelectorAll("[data-goal]").forEach(b=>b.addEventListener("click",()=>{ sfx.pop(); openGoal(b.dataset.goal); }));
+}
+
+function openGoalForm(existing){
+  const g=existing||{emoji:"🎧",name:"",target:"",due:""};
+  openSheet(`${head("🎯",existing?esc(g.name):t("goal_new"),t("goal_new_s"))}
+    <div class="fields">
+      <div><label>${t("goal_pick")}</label>
+        <div class="emojipick" id="ePick">${GOAL_EMOJI.map(e=>
+          `<button type="button" data-e="${e}" aria-pressed="${e===g.emoji}">${e}</button>`).join("")}</div></div>
+      <div><label for="gName">${t("goal_name")}</label><input id="gName" type="text" maxlength="30" value="${esc(g.name)}" placeholder="${LANG==="hi"?"हेडफ़ोन":"Headphones"}"></div>
+      <div class="two">
+        <div><label for="gTarget">${t("goal_target")}</label><input id="gTarget" type="number" inputmode="numeric" min="1" step="1" value="${g.target}" placeholder="2400"></div>
+        <div><label for="gDue">${t("goal_due")}</label><input id="gDue" type="date" value="${g.due||""}"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn gold" id="gSave">${t("goal_save")}</button>
+      ${existing?`<button class="btn pink" id="gDel">${t("goal_del")}</button>`:""}
+    </div>`);
+  let emoji=g.emoji;
+  sheet.querySelectorAll("#ePick button").forEach(b=>b.addEventListener("click",()=>{
+    sheet.querySelectorAll("#ePick button").forEach(o=>o.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); emoji=b.dataset.e; sfx.tick();
+  }));
+  document.getElementById("gSave").addEventListener("click",()=>{
+    const name=document.getElementById("gName").value.trim();
+    const target=POS(document.getElementById("gTarget").value);
+    const due=document.getElementById("gDue").value||"";
+    if(!name){ toast(t("err_name")); sfx.wrong(); return; }
+    if(target<=0){ toast(t("err_target")); sfx.wrong(); return; }
+    if(existing){ Object.assign(existing,{emoji,name,target,due}); }
+    else D.goals.push({id:uid("g"),emoji,name,target,due,saved:0,done:false});
+    recompute(); save(); closeSheet(); sfx.coin(); renderAll(); checkBadges();
+    toast(`${emoji} ${esc(name)}`);
+  });
+  const del=document.getElementById("gDel");
+  if(del) del.addEventListener("click",()=>{
+    if(!confirm(LANG==="hi"?"लक्ष्य हटा दें? इसमें रखे पैसे बचत जार में वापस चले जाएँगे।":"Delete this goal? The money inside goes back to your Savings jar.")) return;
+    if(existing.saved>0) addTx({dir:"move",amt:existing.saved,from:"g:"+existing.id,to:"save",fromName:existing.emoji+" "+existing.name,d:{["g:"+existing.id]:-existing.saved,save:existing.saved}});
+    D.goals=D.goals.filter(x=>x.id!==existing.id);
+    recompute(); save(); closeSheet(); sfx.down(); renderAll();
+    toast(LANG==="hi"?"लक्ष्य हटा दिया":"Goal deleted");
+  });
+}
+
+function openGoal(id){
+  const g=D.goals.find(x=>x.id===id); if(!g) return;
+  const pct=g.target>0?Math.min(100,Math.round(g.saved/g.target*100)):0;
+  const need=Math.max(0,g.target-g.saved), rate=weeklyRate(), w=weeksFor(need,rate);
+  openSheet(`${head(g.emoji,esc(g.name),`${money(g.saved)} ${t("of_word")} ${money(g.target)}`)}
+    <div class="ring" style="--p:${pct}"><div><b>${pct}%</b><small>${g.done?t("done_word"):money(need)+" "+t("left_word")}</small></div></div>
+    ${g.done?"":`<div class="note" style="text-align:center">${t("about")} <b>${w===Infinity?"∞":w} ${weekWord(w)}</b> ${LANG==="hi"?"और":"to go"} · ${t("ready_by")} <b>${w===Infinity?"—":dateIn(w)}</b><br><small>${LANG==="hi"?"तुम हर हफ़्ते करीब":"Based on about"} ${money(rate)} ${LANG==="hi"?"बचा रहे हो":"a week"}</small></div>`}
+    ${g.due?`<div class="note">📅 ${LANG==="hi"?"चाहिए":"Wanted by"} ${fmtDateY(new Date(g.due).getTime())}</div>`:""}
+    <div class="actions">
+      ${g.done?`<button class="btn gold" id="gBought">${t("goal_bought")}</button>`
+              :`<button class="btn gold" id="gAdd">💰 ${t("goal_add")}</button>
+                <button class="btn mint" id="gWhat">🤔 ${t("goal_whatif")}</button>`}
+      <button class="btn sm" id="gEdit">✏️ ${LANG==="hi"?"बदलो":"Edit"}</button>
+    </div>`);
+  const add=document.getElementById("gAdd");
+  if(add) add.addEventListener("click",()=>{ closeSheet(); setTimeout(()=>openAddToGoal(g.id),60); });
+  const what=document.getElementById("gWhat");
+  if(what) what.addEventListener("click",()=>openPlanner({emoji:g.emoji,title:t("goal_whatif"),sub:esc(g.name),price:g.target,have:g.saved,askPrice:false}));
+  const bought=document.getElementById("gBought");
+  if(bought) bought.addEventListener("click",()=>{
+    const pot=g.saved;
+    if(pot>0) addTx({dir:"out",amt:pot,cat:"c_other",note:g.name,nw:null,from:"g:"+g.id,d:{["g:"+g.id]:-pot}});
+    D.goals=D.goals.filter(x=>x.id!==g.id);
+    recompute(); save(); closeSheet(); sfx.fanfare(); confetti(); renderAll(); checkBadges();
+    toast(`${g.emoji} ${LANG==="hi"?"मुबारक हो!":"Enjoy it!"}`);
+  });
+  document.getElementById("gEdit").addEventListener("click",()=>{ closeSheet(); setTimeout(()=>openGoalForm(g),60); });
+}
+
+/* put money into one goal, from any jar that has some */
+function openAddToGoal(id){
+  const g=D.goals.find(x=>x.id===id); if(!g) return;
+  const jars=["save","spend","give"].filter(k=>D.jars[k]>0);
+  if(!jars.length){ toast(LANG==="hi"?"किसी जार में पैसे नहीं हैं।":"No money in any jar yet."); sfx.wrong(); return; }
+  let from=jars[0];
+  const maxOf=()=>D.jars[from]||0;
+  openSheet(`${head(g.emoji,t("goal_add"),esc(g.name))}
+    ${amountField(null)}
+    <div class="fields"><div><label>${LANG==="hi"?"किस जार से":"Out of which jar"}</label>
+      <div class="chips" id="fromPick">${jars.map(k=>
+        `<button class="chip" type="button" data-k="${k}" aria-pressed="${k===from}">${jarName(k)} <small>${money(D.jars[k])}</small></button>`).join("")}</div></div></div>
+    <div class="actions"><button class="btn gold" id="doAdd">${t("add_it")}</button></div>`);
+  const get=wireAmount();
+  wireChips("fromPick",k=>from=k);
+  document.getElementById("doAdd").addEventListener("click",()=>{
+    const a=get();
+    if(a<=0){ toast(t("err_amount")); sfx.wrong(); return; }
+    if(a>maxOf()){ toast(tf("err_jar",money(maxOf()))); sfx.wrong(); return; }
+    addTx({dir:"move",amt:a,from,to:"g:"+g.id,toName:g.emoji+" "+g.name,d:{[from]:-a,["g:"+g.id]:a}});
+    save(); closeSheet(); sfx.coin(); renderAll(); checkBadges();
+    const fresh=D.goals.find(x=>x.id===g.id);
+    if(fresh&&fresh.done){ setTimeout(()=>{ sfx.fanfare(); confetti(); toast(`${g.emoji} ${t("done_word")}`); },450); }
+    else toast(`${g.emoji} +${money(a)}`);
+  });
+}
+
+/* =====================================================================
+   9. PLANNER  — one engine, two doors: "Can I afford it?" and "What if?"
+   ===================================================================== */
+function openPlanner(o){
+  let price=POS(o.price), extra=0, skip=0;
+  const have=POS(o.have), rate=weeklyRate();
+  openSheet(`${head(o.emoji,o.title,o.sub)}
+    ${o.askPrice?`<div class="fields"><div><label for="pPrice">${t("price")}</label>
+      <input id="pPrice" type="number" inputmode="numeric" min="1" step="1" placeholder="2400" value="${price||""}"></div></div>`:""}
+    <div id="planOut"></div>
+    <div class="sl">
+      <div class="slhead"><span>${t("extra_week")}</span><b id="vExtra">${money(0)}</b></div>
+      <input type="range" id="rExtra" min="0" max="500" step="10" value="0" aria-label="${t("extra_week")}">
+    </div>
+    <div class="sl">
+      <div class="slhead"><span>${t("skip_week")}</span><b id="vSkip">${money(0)}</b></div>
+      <input type="range" id="rSkip" min="0" max="300" step="10" value="0" aria-label="${t("skip_week")}">
+    </div>`);
+  const out=document.getElementById("planOut");
+  function draw(){
+    if(price<=0){ out.innerHTML=`<div class="note">${t("err_target")}</div>`; return; }
+    const need=Math.max(0,price-have);
+    const per=rate+extra+skip;
+    const wBase=weeksFor(Math.max(0,price-have),rate), wNow=weeksFor(need,per);
+    const canNow=have>=price;
+    const sooner=(wBase!==Infinity&&wNow!==Infinity)?wBase-wNow:0;
+    out.innerHTML=`
+      <div class="kv">
+        <span class="k">${LANG==="hi"?"दाम":"It costs"}</span><span class="v">${money(price)}</span>
+        <span class="k">${LANG==="hi"?"तुम्हारे पास":"You have"}</span><span class="v">${money(have)}</span>
+        <span class="k">${t("need_more")}</span><span class="v big">${money(need)}</span>
+      </div>
+      <div class="note">🛒 <b>${t("buy_now")}:</b> ${canNow?tf("buy_now_ok",money(have-price)):tf("buy_now_no",money(need))}</div>
+      <div class="note">🐖 <b>${tf("keep_saving",money(per))}:</b> ${need===0?t("done_word"):(wNow===Infinity?"—":`${t("about")} <b>${wNow} ${weekWord(wNow)}</b> · ${t("ready_by")} <b>${dateIn(wNow)}</b>`)}
+        ${sooner>0?`<br>⚡ ${tf("faster",sooner+" "+weekWord(sooner))}`:""}</div>`;
+  }
+  draw();
+  const pp=document.getElementById("pPrice");
+  if(pp){ pp.addEventListener("input",()=>{ price=POS(pp.value); draw(); }); setTimeout(()=>pp.focus(),80); }
+  const rE=document.getElementById("rExtra"), rS=document.getElementById("rSkip");
+  rE.addEventListener("input",()=>{ extra=Number(rE.value); document.getElementById("vExtra").textContent=money(extra); draw(); });
+  rS.addEventListener("input",()=>{ skip=Number(rS.value); document.getElementById("vSkip").textContent=money(skip); draw(); });
+}
+document.getElementById("newGoal").addEventListener("click",()=>{ sfx.pop(); openGoalForm(null); });
+document.getElementById("affordBtn").addEventListener("click",()=>{
+  sfx.pop();
+  openPlanner({emoji:"🤔",title:t("afford_t"),sub:t("afford_s"),price:0,have:D.jars.save+D.jars.spend,askPrice:true});
+});
+
+/* =====================================================================
+   10. GROW TAB  — compound interest, honestly labelled as a guess
+   ===================================================================== */
+/* money after n months of paying in `m` at the end of every month */
+function futureValue(m,months,ratePct){
+  const i=ratePct/100/12;
+  if(i===0) return m*months;
+  return m*((Math.pow(1+i,months)-1)/i);
+}
+function growPoints(m,years,ratePct){
+  const months=years*12, steps=Math.min(months,120), pts=[];
+  for(let s=0;s<=steps;s++){
+    const mo=Math.round(months*s/steps);
+    pts.push({mo, put:m*mo, tot:futureValue(m,mo,ratePct)});
+  }
+  return pts;
+}
+function drawGrow(){
+  const m=Number(document.getElementById("rMonth").value),
+        y=Number(document.getElementById("rYears").value),
+        r=Number(document.getElementById("rRate").value);
+  document.getElementById("vMonth").textContent=money(m);
+  document.getElementById("vYears").textContent=y;
+  document.getElementById("vRate").textContent=r+"%";
+
+  const pts=growPoints(m,y,r), last=pts[pts.length-1];
+  document.getElementById("kPut").textContent=money(last.put);
+  document.getElementById("kGrow").textContent=money(last.tot-last.put);
+  document.getElementById("kTotal").textContent=money(last.tot);
+
+  const W=320,H=200,PAD=6, maxV=Math.max(1,last.tot);
+  const X=p=>PAD+(p.mo/(y*12||1))*(W-PAD*2);
+  const Y=v=>H-PAD-(v/maxV)*(H-PAD*2);
+  const area=key=>`M ${PAD} ${H-PAD} `+pts.map(p=>`L ${X(p).toFixed(1)} ${Y(p[key]).toFixed(1)}`).join(" ")+` L ${W-PAD} ${H-PAD} Z`;
+  const grid=[0.25,0.5,0.75,1].map(f=>`<line class="gl" x1="${PAD}" x2="${W-PAD}" y1="${(H-PAD-f*(H-PAD*2)).toFixed(1)}" y2="${(H-PAD-f*(H-PAD*2)).toFixed(1)}"/>`).join("");
+  document.getElementById("growChart").innerHTML=
+    grid+
+    `<path d="${area("tot")}" fill="var(--gold)" opacity=".85"/>`+
+    `<path d="${area("put")}" fill="var(--berry)" opacity=".95"/>`;
+
+  /* start at 13 vs start at 18, both stopping at 30 */
+  /* round first, then subtract — otherwise the difference can be a rupee off the two numbers shown */
+  const a=Math.round(futureValue(m,17*12,r)), b=Math.round(futureValue(m,12*12,r));
+  document.getElementById("early13").textContent=money(a);
+  document.getElementById("early18").textContent=money(b);
+  document.getElementById("early13y").textContent=LANG==="hi"?"17 साल":"17 years";
+  document.getElementById("early18y").textContent=LANG==="hi"?"12 साल":"12 years";
+  const diff=a-b, extraPaid=m*5*12;
+  document.getElementById("earlyTip").innerHTML=LANG==="hi"
+    ? `5 साल पहले शुरू करने पर तुमने सिर्फ़ <b>${money(extraPaid)}</b> ज़्यादा डाले — लेकिन अंत में <b>${money(diff)}</b> ज़्यादा मिले।`
+    : `Starting 5 years earlier means you put in only <b>${money(extraPaid)}</b> more — but you end up with <b>${money(diff)}</b> more.`;
+}
+["rMonth","rYears","rRate"].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener("input",drawGrow);
+  el.addEventListener("change",()=>sfx.tick());
+});
+
+/* ---- learning cards ---- */
+function renderLearn(){
+  const box=document.getElementById("learnCards");
+  box.innerHTML=LEARN.map(c=>{
+    const read=D.learned.includes(c.id);
+    return `<button class="lc${read?" read":""}" type="button" data-lc="${c.id}">
+      <span class="le">${c.e}</span><b>${esc(LANG==="hi"?c.qh:c.q)}</b>
+      <p>${LANG==="hi"?"पढ़ने के लिए टैप":"Tap to read"}</p></button>`;
+  }).join("");
+  box.querySelectorAll("[data-lc]").forEach(b=>b.addEventListener("click",()=>openLearn(b.dataset.lc)));
+  document.getElementById("learnCount").textContent=D.learned.length+"/"+LEARN.length;
+}
+function openLearn(id){
+  const c=LEARN.find(x=>x.id===id); if(!c) return;
+  sfx.pop();
+  openSheet(`${head(c.e,esc(LANG==="hi"?c.qh:c.q),"")}
+    <p style="font-weight:600; font-size:1.05rem; margin-top:14px">${esc(LANG==="hi"?c.ah:c.a)}</p>
+    <div class="actions"><button class="btn gold" id="lcOk">${LANG==="hi"?"समझ गया":"Got it"}</button></div>`);
+  document.getElementById("lcOk").addEventListener("click",()=>{
+    if(!D.learned.includes(id)){
+      D.learned.push(id); save(); sfx.coin();
+      if(D.learned.length===LEARN.length){ confetti(); sfx.fanfare(); toast(t("learned_all")); }
+    }
+    closeSheet(); renderLearn(); renderBadges(); checkBadges();
+  });
+}
+
+/* =====================================================================
+   11. MORE TAB
+   ===================================================================== */
+/* ---- badges: always recomputed, so a badge can never go stale ---- */
+function earnedBadges(){ const s=stats(); return BADGES.filter(b=>b.c(s)).map(b=>b.id); }
+function renderBadges(){
+  const got=earnedBadges();
+  document.getElementById("badgeGrid").innerHTML=BADGES.map(b=>
+    `<div class="bcard${got.includes(b.id)?" on":""}"><div class="be">${b.e}</div>
+      <b>${esc(LANG==="hi"?b.nh:b.n)}</b><small>${esc(LANG==="hi"?b.dh:b.d)}</small></div>`).join("");
+  document.getElementById("badgeCount").textContent=got.length+" / "+BADGES.length;
+}
+function checkBadges(){
+  const got=earnedBadges();
+  const fresh=got.filter(id=>!D.badges.includes(id));
+  D.badges=got; save(); renderBadges();
+  document.getElementById("sBadges").textContent=got.length;
+  if(fresh.length){
+    const b=BADGES.find(x=>x.id===fresh[0]);
+    setTimeout(()=>{ sfx.fanfare(); confetti(); toast(`${b.e} ${LANG==="hi"?b.nh:b.n}`); },700);
+  }
+}
+
+/* ---- weekly challenge ---- */
+const currentChal=()=>CHALS[weekNumber()%CHALS.length];
+function renderChal(){
+  const c=currentChal(), wk=thisWeek();
+  if(D.chal.week!==wk){ D.chal={week:wk,done:false}; save(); }
+  if(c.auto&&!D.chal.done&&c.auto(stats())){ D.chal.done=true; save(); }
+  const box=document.getElementById("chalBox");
+  box.className="chal"+(D.chal.done?" done":"");
+  box.innerHTML=`<div class="ce">${c.e}</div><b>${esc(LANG==="hi"?c.th:c.t)}</b>
+    <p>${esc(LANG==="hi"?c.dh:c.d)}</p>
+    <div class="actions">${D.chal.done
+      ? `<span class="btn" style="pointer-events:none">${t("chal_done")}</span>`
+      : (c.auto?`<span class="btn sm" style="pointer-events:none">${t("chal_auto")}</span>`
+               :`<button class="btn gold" id="chalDone">${t("chal_done_btn")}</button>`)}</div>`;
+  const b=document.getElementById("chalDone");
+  if(b) b.addEventListener("click",()=>{
+    D.chal.done=true; save(); sfx.fanfare(); confetti(); renderChal(); checkBadges();
+    toast(LANG==="hi"?"शाबाश! ✅":"Nice one ✅");
+  });
+}
+
+/* ---- needs vs wants ---- */
+function renderNW(){
+  const s=stats(), tot=s.needs+s.wants, box=document.getElementById("nwBox");
+  if(tot===0){ box.innerHTML=`<p class="none">${t("no_spend_month")}</p>`; return; }
+  const row=(lbl,cls,v)=>`<div class="nwrow"><span>${lbl}</span>
+    <span class="track"><span class="fill ${cls}" style="width:${Math.round(v/tot*100)}%"></span></span>
+    <span class="k">${money(v)}</span></div>`;
+  box.innerHTML=row("🏷️ "+t("need"),"need",s.needs)+row("✨ "+t("want"),"want",s.wants)+
+    `<p class="sub">${LANG==="hi"
+      ? `इस महीने ज़रूरत पर <b>${money(s.needs)}</b> और शौक पर <b>${money(s.wants)}</b>।`
+      : `This month: <b>${money(s.needs)}</b> on needs, <b>${money(s.wants)}</b> on wants.`}</p>`;
+}
+
+/* ---- parent mode (uses the same PIN as Fridge Chef) ---- */
+let parentUnlocked=false, pinFails=0, pinLockUntil=0;
+async function hashPin(pin){
+  const str="fridgechef|"+pin;
+  try{
+    const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  }catch(e){ let h=5381; for(const c of str) h=((h<<5)+h+c.charCodeAt(0))|0; return "djb2:"+(h>>>0).toString(16); }
+}
+function renderParent(){
+  document.getElementById("parentBody").hidden=!parentUnlocked;
+  document.getElementById("unlockBtn").hidden=parentUnlocked;
+  document.getElementById("lockBtn").hidden=!parentUnlocked;
+  document.getElementById("changePinBtn").hidden=!parentUnlocked;
+  document.getElementById("parentSub").textContent=parentUnlocked
+    ? (LANG==="hi"?"इस बार के लिए खुला है। पेज रिफ़्रेश होते ही फिर लॉक।":"Unlocked for this visit. Locks again when the page reloads.")
+    : (FC.pinHash?(LANG==="hi"?"PIN से लॉक है। किसी बड़े से पूछो।":"Locked with a PIN. Ask a grown-up.")
+                 :(LANG==="hi"?"अभी कोई PIN नहीं — बड़े एक बना लें।":"No PIN yet — a grown-up should set one."));
+  if(parentUnlocked){
+    document.getElementById("allowAmt").value=D.allow.amt;
+    document.getElementById("allowEvery").value=D.allow.every;
+    renderChoreAdmin(); renderPending();
+  }
+}
+function openPin(mode,onDone){
+  let stage=mode==="create"?"new":"enter", first="", buf="";
+  const titles={enter:t("pin_enter"),new:t("pin_new"),confirm:t("pin_conf")};
+  const subs={enter:t("pin_enter_s"),new:t("pin_new_s"),confirm:t("pin_conf_s")};
+  openSheet(`${head("🔑",titles[stage],subs[stage])}
+    <div class="pinbox" id="pinbox">${"<span></span>".repeat(4)}</div>
+    <div class="pinmsg" id="pinmsg"></div>
+    <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-k="${n}">${n}</button>`).join("")}
+      <button type="button" class="soft" data-k="none"></button>
+      <button type="button" data-k="0">0</button>
+      <button type="button" class="soft" data-k="del">⌫</button></div>`);
+  const box=document.getElementById("pinbox"), msg=document.getElementById("pinmsg");
+  const draw=()=>box.querySelectorAll("span").forEach((s,i)=>s.classList.toggle("on",i<buf.length));
+  const retitle=()=>{ document.getElementById("sheetTitle").textContent=titles[stage];
+                      sheet.querySelector(".sheet-head .sub").textContent=subs[stage]; };
+  const fail=txt=>{ msg.textContent=txt; msg.classList.add("err"); box.classList.add("shake"); sfx.wrong();
+                    setTimeout(()=>{ box.classList.remove("shake"); buf=""; draw(); },400); };
+  async function submit(){
+    if(stage==="enter"){
+      if(Date.now()<pinLockUntil){ fail(`${Math.ceil((pinLockUntil-Date.now())/1000)}s`); return; }
+      if(await hashPin(buf)===FC.pinHash){
+        parentUnlocked=true; pinFails=0; renderParent(); closeSheet(); sfx.fanfare();
+        toast(LANG==="hi"?"खुल गया 👋":"Unlocked. Hi, grown-up 👋"); if(onDone) onDone();
+      } else { pinFails++;
+        if(pinFails>=3){ pinLockUntil=Date.now()+30000; pinFails=0; fail(LANG==="hi"?"गलत PIN। 30 सेकंड रुको।":"Wrong PIN. Locked for 30 seconds."); }
+        else fail(LANG==="hi"?"गलत PIN। फिर कोशिश करो।":"Wrong PIN. Try again."); }
+    } else if(stage==="new"){ first=buf; buf=""; stage="confirm"; retitle(); draw(); msg.textContent=""; msg.classList.remove("err"); }
+    else {
+      if(buf===first){ patchGlobal({pinHash:await hashPin(buf)}); parentUnlocked=true; renderParent(); closeSheet(); sfx.fanfare();
+        toast(LANG==="hi"?"PIN सेव हो गया 🤫":"PIN saved. Don't tell the kids 🤫"); }
+      else { stage="new"; first=""; retitle(); fail(LANG==="hi"?"मेल नहीं खाया। फिर से।":"They didn't match. Start again."); }
+    }
+  }
+  sheet.querySelectorAll(".pad button").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset.k;
+    if(k==="none") return;
+    if(k==="del"){ buf=buf.slice(0,-1); draw(); return; }
+    if(buf.length>=4) return;
+    buf+=k; draw(); sfx.tick();
+    if(buf.length===4) setTimeout(submit,180);
+  }));
+}
+document.getElementById("unlockBtn").addEventListener("click",()=>FC.pinHash?openPin("enter"):openPin("create"));
+document.getElementById("lockBtn").addEventListener("click",()=>{ parentUnlocked=false; renderParent(); sfx.tick();
+  toast(LANG==="hi"?"फिर लॉक 🔒":"Parent mode locked 🔒"); });
+document.getElementById("changePinBtn").addEventListener("click",()=>openPin("create"));
+document.getElementById("allowAmt").addEventListener("change",e=>{
+  D.allow.amt=POS(e.target.value); if(!D.allow.last) D.allow.last=Date.now(); save();
+  toast(D.allow.amt>0?`${money(D.allow.amt)} ${D.allow.every==="week"?t("every_week"):t("every_month")}`:(LANG==="hi"?"जेबखर्च बंद":"Pocket money off"));
+});
+document.getElementById("allowEvery").addEventListener("change",e=>{ D.allow.every=e.target.value; D.allow.last=Date.now(); save(); });
+
+/* ---- paid jobs ---- */
+function renderChoreAdmin(){
+  const box=document.getElementById("choreAdmin");
+  box.innerHTML=D.chores.length?D.chores.map(c=>
+    `<div class="row"><div><b>${c.emoji} ${esc(c.name)}</b><small>${money(c.pay)}</small></div>
+      <button class="btn sm pink" data-rm="${c.id}">✕</button></div>`).join(""):"";
+  box.querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",()=>{
+    D.chores=D.chores.filter(c=>c.id!==b.dataset.rm); save(); renderChoreAdmin(); renderChores(); sfx.down();
+  }));
+}
+function renderPending(){
+  const box=document.getElementById("pendList");
+  document.getElementById("pendCount").textContent=D.claims.length;
+  box.innerHTML=D.claims.length?D.claims.map(c=>
+    `<div class="row"><div><b>${esc(c.name)}</b><small>${money(c.pay)} · ${fmtDate(c.ts)}</small></div>
+      <div style="display:flex;gap:8px"><button class="btn sm gold" data-ok="${c.id}">${t("approve")}</button>
+      <button class="btn sm pink" data-no="${c.id}">${t("reject")}</button></div></div>`).join(""):"";
+  box.querySelectorAll("[data-ok]").forEach(b=>b.addEventListener("click",()=>{
+    const c=D.claims.find(x=>x.id===b.dataset.ok); if(!c) return;
+    addTx({dir:"in",amt:c.pay,cat:"cat_job",note:c.name,split:true,d:splitAmount(c.pay)});
+    D.claims=D.claims.filter(x=>x.id!==c.id); save(); sfx.coin(); renderAll(); checkBadges();
+    toast(`+${money(c.pay)} 🧹`);
+  }));
+  box.querySelectorAll("[data-no]").forEach(b=>b.addEventListener("click",()=>{
+    D.claims=D.claims.filter(x=>x.id!==b.dataset.no); save(); sfx.down(); renderAll();
+  }));
+}
+document.getElementById("addChore").addEventListener("click",()=>{
+  sfx.pop();
+  openSheet(`${head("🧹",t("job_new"),"")}
+    <div class="fields">
+      <div><label>${t("goal_pick")}</label><div class="emojipick" id="cPick">
+        ${["🧹","🍽️","🛏️","🗑️","🚿","🪴","🐕","🚲","📚","🧺","🚗","👕"].map((e,i)=>
+          `<button type="button" data-e="${e}" aria-pressed="${i===0}">${e}</button>`).join("")}</div></div>
+      <div><label for="cName">${t("job_name")}</label><input id="cName" type="text" maxlength="30" placeholder="${LANG==="hi"?"कमरा साफ़ करना":"Clean my room"}"></div>
+      <div><label for="cPay">${t("job_pay")}</label><input id="cPay" type="number" inputmode="numeric" min="1" step="1" placeholder="50"></div>
+    </div>
+    <div class="actions"><button class="btn gold" id="cSave">${t("job_save")}</button></div>`);
+  let emoji="🧹";
+  sheet.querySelectorAll("#cPick button").forEach(b=>b.addEventListener("click",()=>{
+    sheet.querySelectorAll("#cPick button").forEach(o=>o.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true"); emoji=b.dataset.e; sfx.tick();
+  }));
+  document.getElementById("cSave").addEventListener("click",()=>{
+    const name=document.getElementById("cName").value.trim(), pay=POS(document.getElementById("cPay").value);
+    if(!name){ toast(t("err_name")); sfx.wrong(); return; }
+    if(pay<=0){ toast(t("err_amount")); sfx.wrong(); return; }
+    D.chores.push({id:uid("c"),emoji,name,pay}); save(); closeSheet(); sfx.coin();
+    renderChoreAdmin(); renderChores(); toast(`${emoji} ${esc(name)}`);
+  });
+});
+function renderChores(){
+  const box=document.getElementById("choreList");
+  if(!D.chores.length){ box.innerHTML=`<p class="none">${t("no_jobs")}</p>`; return; }
+  box.innerHTML=D.chores.map(c=>{
+    const waiting=D.claims.some(x=>x.choreId===c.id);
+    return `<div class="row"><div><b>${c.emoji} ${esc(c.name)}</b><small>${money(c.pay)}</small></div>
+      ${waiting?`<span class="btn sm" style="pointer-events:none">⏳ ${t("job_wait")}</span>`
+               :`<button class="btn sm gold" data-did="${c.id}">${t("job_claim")}</button>`}</div>`;
+  }).join("");
+  box.querySelectorAll("[data-did]").forEach(b=>b.addEventListener("click",()=>{
+    const c=D.chores.find(x=>x.id===b.dataset.did); if(!c) return;
+    D.claims.push({id:uid("k"),choreId:c.id,name:c.name,pay:c.pay,ts:Date.now()});
+    save(); sfx.coin(); renderChores(); renderPending();
+    toast(LANG==="hi"?"बड़ों के पास भेज दिया ⏳":"Sent to a grown-up ⏳");
+  }));
+}
+
+/* ---- settings ---- */
+function renderSettings(){
+  document.getElementById("curSel").value=D.cur;
+  document.getElementById("splitNow").textContent=`${D.split.save}% ${t("j_save")} · ${D.split.spend}% ${t("j_spend")} · ${D.split.give}% ${t("j_give")}`;
+  document.getElementById("muteBtn").textContent=FC.muted?"🔇":"🔊";
+}
+document.getElementById("curSel").addEventListener("change",e=>{ D.cur=e.target.value; save(); renderAll(); sfx.tick(); });
+document.getElementById("muteBtn").addEventListener("click",()=>{ patchGlobal({muted:!FC.muted}); renderSettings(); if(!FC.muted) sfx.pop(); });
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(!confirm(LANG==="hi"?"इस शेफ़ का सारा Money Counter डेटा मिटा दें? बाकी ऐप्स को कुछ नहीं होगा।"
+                         :"Delete ALL Money Counter data for this chef? The other apps are not touched.")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  location.reload();
+});
+document.getElementById("editSplit").addEventListener("click",()=>{
+  sfx.pop();
+  const s={...D.split};
+  openSheet(`${head("⚖️",t("split_t"),t("split_s"))}
+    ${["save","spend","give"].map(k=>`
+      <div class="splitrow"><span class="k">${jarName(k)}</span>
+        <input type="range" data-s="${k}" min="0" max="100" step="5" value="${s[k]}" aria-label="${t("j_"+k)}">
+        <span class="v" data-v="${k}">${s[k]}%</span></div>`).join("")}
+    <div class="splitwarn" id="sWarn" hidden></div>
+    <div class="actions"><button class="btn gold" id="sSave">${t("btn_change")}</button></div>`);
+  const warn=document.getElementById("sWarn"), btn=document.getElementById("sSave");
+  const upd=()=>{
+    const tot=s.save+s.spend+s.give;
+    warn.hidden=tot===100; warn.textContent=`${t("split_must")} ${tot}%`;
+    btn.disabled=tot!==100;
+  };
+  sheet.querySelectorAll("[data-s]").forEach(r=>r.addEventListener("input",()=>{
+    s[r.dataset.s]=Number(r.value);
+    sheet.querySelector(`[data-v="${r.dataset.s}"]`).textContent=s[r.dataset.s]+"%"; upd();
+  }));
+  upd();
+  btn.addEventListener("click",()=>{ D.split=s; save(); closeSheet(); sfx.coin(); renderAll();
+    toast(`${s.save}/${s.spend}/${s.give}`); });
+});
+
+/* ---- pocket money that adds itself ---- */
+function runAllowance(){
+  if(!(D.allow.amt>0)) return;
+  const now=Date.now();
+  if(!D.allow.last){ D.allow.last=now; save(); return; }
+  let added=0;
+  if(D.allow.every==="week"){
+    while(now-D.allow.last>=7*DAY && added<8){
+      D.allow.last+=7*DAY;
+      addTx({dir:"in",amt:D.allow.amt,cat:"cat_allow",note:"",split:true,ts:D.allow.last,d:splitAmount(D.allow.amt)});
+      added++;
+    }
+  } else {
+    let d=new Date(D.allow.last);
+    while(added<8){
+      const nx=new Date(d); nx.setMonth(nx.getMonth()+1);
+      if(nx.getTime()>now) break;
+      d=nx;
+      addTx({dir:"in",amt:D.allow.amt,cat:"cat_allow",note:"",split:true,ts:d.getTime(),d:splitAmount(D.allow.amt)});
+      added++;
+    }
+    D.allow.last=d.getTime();
+  }
+  if(added){ save(); setTimeout(()=>{ sfx.coin(); toast(`🪙 +${money(D.allow.amt*added)}`); },600); }
+}
+
+/* =====================================================================
+   12. START
+   ===================================================================== */
+function renderAll(){
+  applyLang();
+  renderBalance(); renderJars(); renderWeek(); renderTimeline();
+  renderGoals(); drawGrow(); renderLearn();
+  renderChal(); renderNW(); renderBadges(); renderChores(); renderParent(); renderSettings();
+}
+function welcome(){
+  openSheet(`${head("🪙",LANG==="hi"?"नमस्ते!":"Hey!",LANG==="hi"?"Money Counter में तीन बातें:":"Three things about Money Counter:")}
+    <div class="fields">
+      <div class="note">🫙 <b>${LANG==="hi"?"हर रुपया किसी जार में रहता है।":"Every rupee lives in a jar."}</b> ${LANG==="hi"?"बचत, खर्च, दान। ऊपर का बड़ा नंबर तीनों का जोड़ है।":"Savings, Spending, Giving. The big number on top is all of them added up."}</div>
+      <div class="note">🎯 <b>${LANG==="hi"?"लक्ष्य बचत जार से भरते हैं।":"Goals get filled from your jars."}</b> ${LANG==="hi"?"रिंग भरते देखो और पता चलेगा कितने हफ़्ते बाकी हैं।":"Watch the ring fill and see how many weeks are left."}</div>
+      <div class="note">🏦 <b>${LANG==="hi"?"यहाँ असली पैसे नहीं हैं।":"There's no real money in here."}</b> ${LANG==="hi"?"यह सिर्फ़ हिसाब रखने वाली कॉपी है।":"It's a notebook that does the maths for you."}</div>
+    </div>
+    <div class="actions"><button class="btn gold" id="wGo">${LANG==="hi"?"चलो शुरू करें":"Let's go"}</button></div>`);
+  document.getElementById("wGo").addEventListener("click",()=>{ D.seen=true; save(); closeSheet(); sfx.fanfare(); });
+}
+(function init(){
+  if(chef) document.getElementById("chefName").textContent=`${chef.avatar||"🍳"} ${chef.name}`;
+  recompute();
+  runAllowance();
+  renderAll();
+  checkBadges();
+  if(!D.seen) setTimeout(welcome,400);
+})();
+</script>
+</body>
+</html>
