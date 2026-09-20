@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fridge Chef Lite</title>
+<meta name="description" content="Tap what's in your fridge. See what you can cook. That's the whole app.">
+<meta name="theme-color" content="#07070D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=DM+Sans:opsz,wght@9..40,500;9..40,700;9..40,800&display=swap">
+<style>
+:root, :root[data-theme="dark"]{
+  --bg:#07070D; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
+  --ink:#E6E3F5; --muted:#7E7B9C; --line:rgba(255,255,255,.09);
+  --sun:#9EDB1F; --tomato:#E0207A; --mint:#1FC9D8; --berry:#5E45D6;
+  --ok-bg:rgba(31,201,216,.12); --ok-ink:#6FDCE6;
+  --warn-bg:rgba(224,32,122,.14); --warn-ink:#F07AB4;
+  --shadow:0 12px 30px -12px rgba(0,0,0,.8);
+  --radius:24px; --body:"DM Sans",system-ui,sans-serif; --display:"Unbounded","DM Sans",system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#FFFDF6; --panel:#FFFFFF; --panel2:#FFF6D6; --ink:#141320; --muted:#5B5870; --line:#141320;
+  --sun:#C9F55A; --tomato:#FF4D8D; --mint:#5FD4FF; --berry:#7B61FF;
+  --ok-bg:#D9F3FF; --ok-ink:#141320; --warn-bg:#FFD9E6; --warn-ink:#141320;
+  --shadow:4px 4px 0 #141320; color-scheme:light;
+}
+*{box-sizing:border-box} [hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.45;
+  padding-inline:16px; padding-block:0 40px; overflow-x:hidden; position:relative}
+h1,h2,h3{font-family:var(--display); line-height:1.08; margin:0; letter-spacing:-.02em; text-wrap:balance}
+button{font:inherit; color:inherit; cursor:pointer; border:0; background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--berry); outline-offset:3px}
+.blob{position:fixed; width:60vmax; height:60vmax; border-radius:50%; filter:blur(110px); opacity:.22; z-index:-1;
+  background:#4A2FBF; top:-25vmax; left:-20vmax; pointer-events:none}
+:root[data-theme="light"] .blob{display:none}
+:root[data-theme="light"] body{background:var(--bg) radial-gradient(#141320 1px,transparent 1.2px) 0 0/22px 22px; background-attachment:fixed}
+:root[data-theme="light"] body::before{content:""; position:fixed; inset:0; z-index:-1; background:var(--bg); opacity:.86}
+
+.top{max-width:1120px; margin:0 auto; padding-block:20px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.logo{display:flex; align-items:center; gap:11px; text-decoration:none; color:inherit}
+.logo .f{width:40px; height:48px; border-radius:12px; background:linear-gradient(160deg,var(--berry),var(--tomato)); position:relative; transform:rotate(-6deg); flex:none}
+.logo .f::before,.logo .f::after{content:""; position:absolute; left:7px; width:4px; height:9px; border-radius:3px; background:#fff}
+.logo .f::before{top:7px}.logo .f::after{bottom:7px}
+.logo h1{font-size:1.4rem; font-weight:900; text-transform:uppercase}
+.logo h1 span{color:var(--sun)}
+.logo small{display:block; font-family:var(--body); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:800}
+.pill{display:flex; align-items:center; gap:7px; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:9px 14px; font-weight:800; text-decoration:none; color:inherit; font-size:.9rem}
+
+.wrap{max-width:1120px; margin:0 auto; display:grid; grid-template-columns:minmax(0,400px) minmax(0,1fr); gap:20px; align-items:start}
+@media (max-width:880px){ .wrap{grid-template-columns:1fr} }
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px}
+.panel h2{font-size:1.25rem; font-weight:800}
+.sub{color:var(--muted); font-weight:600; font-size:.92rem; margin:4px 0 0}
+.head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; margin-bottom:8px}
+
+.search{width:100%; margin-top:12px; padding:12px 17px; border-radius:999px; border:1px solid var(--line);
+  background:var(--panel2); color:var(--ink); font:inherit; font-weight:600}
+.search::placeholder{color:var(--muted)}
+details.grp{margin-top:9px}
+details.grp summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:10px 14px;
+  border-radius:15px; background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.75rem;
+  text-transform:uppercase; letter-spacing:.07em}
+details.grp summary::-webkit-details-marker{display:none}
+details.grp summary::after{content:"▾"; margin-left:auto; color:var(--muted); transition:transform .15s}
+details.grp[open] summary::after{transform:rotate(180deg)}
+details.grp summary .n{background:var(--sun); color:#07070D; border-radius:999px; min-width:23px; height:23px;
+  display:inline-grid; place-items:center; font-size:.78rem; padding:0 7px; letter-spacing:0}
+details.grp summary .n:empty{display:none}
+.chips{display:flex; flex-wrap:wrap; gap:8px; padding:11px 3px 3px}
+.chip{display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px; background:var(--panel2);
+  border:1px solid var(--line); font-weight:700; font-size:.92rem; color:var(--ink);
+  transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.chip::after{content:"✓"; font-weight:900; width:.9em; text-align:center; opacity:0; transform:scale(.4);
+  transition:opacity .12s, transform .15s cubic-bezier(.34,1.56,.64,1)}
+.chip[aria-pressed="true"]::after{opacity:1; transform:scale(1)}
+.chip:hover{transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--sun); color:#07070D; border-color:transparent}
+.chip .e{font-size:1.1rem; line-height:1}
+
+.btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; font-weight:800;
+  font-size:.92rem; background:var(--panel2); color:var(--ink); border:1px solid var(--line);
+  transition:transform .12s cubic-bezier(.34,1.56,.64,1)}
+.btn:hover{transform:translateY(-2px)} .btn:active{transform:scale(.96)}
+.btn.lime{background:var(--sun); color:#07070D; border-color:transparent}
+.btn.mint{background:var(--mint); color:#062A33; border-color:transparent}
+.btn.sm{padding:7px 13px; font-size:.82rem}
+.tools{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+
+.sect{display:flex; align-items:baseline; gap:10px; margin:20px 0 12px; flex-wrap:wrap}
+.sect h3{font-size:1rem; font-weight:800; text-transform:uppercase; letter-spacing:.02em}
+.sect .sub{font-size:.85rem; margin:0}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px}
+@media (max-width:600px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px} }
+.card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:17px; text-align:left; display:flex; flex-direction:column; gap:9px; min-width:0; cursor:pointer;
+  transition:transform .15s cubic-bezier(.34,1.56,.64,1), border-color .15s}
+.card:hover{transform:translateY(-3px); border-color:var(--sun)}
+.card .e{font-size:2.5rem; line-height:1; transform:rotate(-7deg); width:max-content}
+.card h4{font-family:var(--display); font-size:1rem; margin:0; line-height:1.2; font-weight:800}
+.tag{white-space:nowrap; font-size:.72rem; font-weight:700; padding:5px 10px; border-radius:999px;
+  background:var(--panel2); border:1px solid var(--line); display:inline-flex; gap:4px}
+.tag.ok{background:var(--ok-bg); color:var(--ok-ink); border-color:transparent}
+.tag.warn{background:var(--warn-bg); color:var(--warn-ink); border-color:transparent}
+.meta{display:flex; gap:6px; flex-wrap:wrap}
+.miss{font-size:.87rem; color:var(--muted); font-weight:600; margin:0}
+.miss b{color:var(--tomato)}
+.swap{font-size:.82rem; color:var(--ok-ink); background:var(--ok-bg); border-radius:11px; padding:6px 10px; font-weight:700; margin:0}
+.empty{background:var(--panel2); border:1px dashed var(--line); border-radius:var(--radius); padding:26px;
+  text-align:center; font-weight:600; color:var(--muted)}
+.empty .big{font-size:2.4rem; display:block; margin-bottom:8px}
+
+/* recipe sheet */
+.modal[hidden]{display:none}
+.modal{position:fixed; inset:0; z-index:20; display:grid; place-items:end center}
+.backdrop{position:absolute; inset:0; background:rgba(5,5,12,.7)}
+.sheet{position:relative; width:min(660px,100%); max-height:92vh; overflow:auto; background:var(--bg);
+  border:1px solid var(--line); border-radius:26px 26px 0 0; padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));
+  animation:up .3s cubic-bezier(.34,1.3,.64,1)}
+@media (min-width:700px){ .modal{place-items:center; padding:20px} .sheet{border-radius:26px; padding-bottom:24px} }
+@keyframes up{from{transform:translateY(40px); opacity:0} to{transform:none; opacity:1}}
+.sheet-head{display:flex; gap:14px; align-items:flex-start}
+.sheet-head .e{font-size:3rem; line-height:1; transform:rotate(-7deg)}
+.sheet-head h2{font-size:1.35rem}
+.close{margin-left:auto; width:40px; height:40px; border-radius:50%; background:var(--panel2);
+  border:1px solid var(--line); font-size:1.1rem; font-weight:900; flex:none}
+.safety{margin-top:14px; padding:11px 14px; border-radius:15px; background:var(--warn-bg); color:var(--warn-ink); font-weight:700}
+.safety.none{background:var(--ok-bg); color:var(--ok-ink)}
+.lbl{font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; font-weight:800; color:var(--muted); margin-top:18px}
+.need{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-wrap:wrap; gap:7px}
+.need li{padding:6px 12px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); font-weight:700; font-size:.88rem}
+.need li.have{background:var(--ok-bg); color:var(--ok-ink); border-color:transparent}
+.need li.no{background:var(--warn-bg); color:var(--warn-ink); border-color:transparent}
+.need li.opt{border-style:dashed; background:transparent; color:var(--muted)}
+.steps{margin:8px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px}
+.steps li{display:flex; gap:11px; align-items:flex-start; padding:13px; border-radius:16px;
+  background:var(--panel); border:1px solid var(--line)}
+.steps .num{font-family:var(--display); font-weight:800; color:var(--sun); min-width:1.5em; font-size:.95rem}
+.steps .say{margin-left:auto; flex:none; width:34px; height:34px; border-radius:50%; background:var(--panel2); border:1px solid var(--line)}
+.tip{margin-top:14px; padding:11px 14px; border-radius:15px; background:var(--panel2); border:1px solid var(--line); font-weight:600}
+.acts{display:flex; gap:9px; flex-wrap:wrap; margin-top:18px}
+
+/* cook mode */
+.cook{position:fixed; inset:0; z-index:25; background:var(--bg); display:flex; flex-direction:column;
+  padding:calc(14px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px)); gap:14px; overflow:auto}
+.cook-top{display:flex; align-items:center; gap:12px}
+.cook-title{font-family:var(--display); font-weight:800; font-size:.9rem; flex:1; text-align:center; opacity:.8;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bar{height:8px; border-radius:999px; background:var(--panel2); border:1px solid var(--line); overflow:hidden}
+.bar div{height:100%; background:linear-gradient(90deg,var(--sun),var(--mint)); transition:width .3s}
+.count{text-transform:uppercase; letter-spacing:.14em; font-weight:800; color:var(--muted); font-size:.78rem; text-align:center}
+.big-step{flex:1; display:grid; place-items:center; text-align:center; font-family:var(--display); font-weight:800;
+  font-size:clamp(1.5rem,4.5vw + .5rem,2.9rem); line-height:1.25; padding:10px; max-width:900px; margin:0 auto; cursor:pointer}
+.timer{display:flex; flex-direction:column; align-items:center; gap:10px}
+.clock{font-family:var(--display); font-size:clamp(2.4rem,10vw,4.6rem); font-weight:900; font-variant-numeric:tabular-nums; color:var(--sun); line-height:1}
+.clock.hot{color:var(--tomato)}
+.cook-nav{display:grid; grid-template-columns:1fr 2fr; gap:12px; max-width:680px; width:100%; margin:0 auto}
+.cook-nav .btn{justify-content:center; padding:19px; font-size:1.1rem; border-radius:20px}
+.dots{display:flex; justify-content:center; gap:7px; flex-wrap:wrap}
+.dots button{width:11px; height:11px; border-radius:50%; background:var(--panel2); border:1px solid var(--line); padding:0}
+.dots button.past{background:var(--mint); border-color:transparent}
+.dots button.on{background:var(--sun); border-color:transparent; transform:scale(1.3)}
+
+.jump{display:none}
+@media (max-width:880px){
+  .jump{display:flex; position:fixed; left:50%; transform:translateX(-50%); bottom:calc(16px + env(safe-area-inset-bottom,0px));
+    z-index:6; background:var(--bg); color:var(--ink); border:1px solid var(--sun); padding:10px 18px; border-radius:999px;
+    font-weight:800; gap:6px; white-space:nowrap; box-shadow:0 0 30px -6px var(--sun)}
+  .jump[hidden]{display:none} .jump b{color:var(--sun)}
+}
+.toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#14141F; color:var(--ink);
+  border:1px solid var(--sun); padding:12px 20px; border-radius:999px; font-weight:800; z-index:31; text-align:center;
+  max-width:calc(100% - 32px)}
+:root[data-theme="light"] .toast{background:var(--ink); color:#fff}
+footer{max-width:1120px; margin:34px auto 0; color:var(--muted); font-weight:600; font-size:.86rem; text-align:center}
+
+:root[data-theme="light"] .panel,:root[data-theme="light"] .card,:root[data-theme="light"] .pill,:root[data-theme="light"] .sheet{border:2px solid var(--line)}
+:root[data-theme="light"] .btn,:root[data-theme="light"] .chip,:root[data-theme="light"] .tag,:root[data-theme="light"] .need li,
+:root[data-theme="light"] .steps li,:root[data-theme="light"] details.grp summary,:root[data-theme="light"] .search,
+:root[data-theme="light"] .tip{border:2px solid var(--line); background:#fff}
+:root[data-theme="light"] .btn,:root[data-theme="light"] .chip{box-shadow:2px 2px 0 var(--line)}
+:root[data-theme="light"] .chip[aria-pressed="true"]{background:var(--sun); color:var(--ink)}
+:root[data-theme="light"] .card:hover{transform:translate(-2px,-2px)}
+:root[data-theme="light"] .steps .num{color:#5A8A00} :root[data-theme="light"] .clock{color:var(--ink)}
+:root[data-theme="light"] .dots button.on{background:var(--ink)}
+@media (prefers-reduced-motion: reduce){ .sheet{animation:none} .chip,.btn,.card{transition:none} }
+</style>
+</head>
+<body>
+<div class="blob" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="logo" href="../"><div class="f" aria-hidden="true"></div>
+    <div><h1>Fridge<span>Chef</span></h1><small>Lite</small></div></a>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="pill" href="../">🏠 Home</a>
+    <a class="pill" href="../fridgechef/">✨ Full version</a>
+    <button class="pill" id="themeBtn" title="Switch theme">🌙</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel">
+    <div class="head">
+      <div><h2>What's in your fridge?</h2><p class="sub" id="haveLine"></p></div>
+      <button class="btn sm" id="clearBtn">🧹 Clear</button>
+    </div>
+    <input class="search" id="search" type="search" placeholder="search… banana, kela, cheese" aria-label="Search ingredients">
+    <div id="groups"></div>
+  </section>
+
+  <section>
+    <div class="panel">
+      <div class="head" style="margin:0">
+        <div><h2>What can I make?</h2><p class="sub">Tap a recipe for the steps.</p></div>
+        <button class="btn sm mint" id="surprise">🎲 Surprise me</button>
+      </div>
+    </div>
+    <div id="results"></div>
+  </section>
+  <button class="jump" id="jump" hidden>✅ <b id="jumpN">0</b> ready · scroll ↓</button>
+</main>
+
+<footer>Fridge Chef Lite — the core idea, nothing else.<br>Always ask a grown-up before using the stove, oven, or a sharp knife.</footer>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="backdrop" id="backdrop"></div><div class="sheet" id="sheet"></div>
+</div>
+<div class="cook" id="cook" hidden role="dialog" aria-modal="true" aria-label="Cooking mode"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- recipe data (same source as the full version) ---------- */
+const GROUPS = [
+  ["Fruit & veg", ["banana","apple","mango","lemon","tomato","onion","potato","cucumber","carrot","capsicum","coriander","mint","garlic","ginger","green_chilli","spinach","corn","peas","mixed_fruit","berries"]],
+  ["Dairy & eggs", ["milk","curd","cheese","butter","ghee","paneer","egg","cream","condensed_milk"]],
+  ["Grains & bread", ["bread","rice","cooked_rice","poha","rava","besan","pasta","noodles","oats","cornflakes","tortilla","atta","maida","popcorn_kernels","biscuits"]],
+  ["Pantry & jars", ["peanut_butter","jam","honey","jaggery","chocolate","cocoa","ketchup","mayo","puffed_rice","sev","peanuts","dry_fruits","baking_powder","vanilla","tea"]],
+  ["Dals & tins", ["dal","chana","rajma","sweetcorn_tin","coconut"]],
+];
+const ING = {
+  banana:["🍌","Banana","kela"], apple:["🍎","Apple","seb"], mango:["🥭","Mango","aam"], lemon:["🍋","Lemon","nimbu"], tomato:["🍅","Tomato","tamatar"],
+  onion:["🧅","Onion","pyaaz"], potato:["🥔","Potato","aloo"], cucumber:["🥒","Cucumber","kheera"], carrot:["🥕","Carrot","gajar"], capsicum:["🫑","Capsicum","shimla mirch"],
+  coriander:["🌿","Coriander","dhaniya"], mint:["🌿","Mint","pudina"], garlic:["🧄","Garlic","lehsun"], ginger:["🫚","Ginger","adrak"], green_chilli:["🌶️","Green chilli","hari mirch"], spinach:["🥬","Spinach","palak"],
+  corn:["🌽","Corn on the cob","bhutta"], peas:["🫛","Peas","matar"], mixed_fruit:["🍇","Any fruit","phal"], berries:["🍓","Berries",""],
+  milk:["🥛","Milk","doodh"], curd:["🍶","Curd / yogurt","dahi"], cheese:["🧀","Cheese",""], butter:["🧈","Butter","makkhan"], ghee:["🧈","Ghee",""], paneer:["⬜","Paneer",""], egg:["🥚","Eggs","anda"], cream:["🍦","Cream / ice cream","malai"], condensed_milk:["🥫","Condensed milk",""],
+  bread:["🍞","Bread",""], rice:["🍚","Rice (raw)","chawal"], cooked_rice:["🍛","Leftover rice","bacha chawal"], poha:["🥣","Poha",""], rava:["🥣","Rava / sooji",""], besan:["🥣","Besan",""], pasta:["🍝","Pasta",""],
+  noodles:["🍜","Instant noodles",""], oats:["🥣","Oats",""], cornflakes:["🥣","Cornflakes",""], tortilla:["🫓","Roti / tortilla",""], atta:["🌾","Atta",""], maida:["🌾","Maida / flour",""], popcorn_kernels:["🍿","Popcorn kernels","makai ke daane"], biscuits:["🍪","Biscuits",""],
+  peanut_butter:["🥜","Peanut butter",""], jam:["🍓","Jam",""], honey:["🍯","Honey","shahad"], jaggery:["🟫","Jaggery","gur"], chocolate:["🍫","Chocolate",""], cocoa:["🍫","Cocoa powder",""],
+  ketchup:["🍅","Ketchup",""], mayo:["🥄","Mayo",""], puffed_rice:["🍘","Puffed rice","murmura"], sev:["🥨","Sev / namkeen",""], peanuts:["🥜","Peanuts","moongphali"],
+  dry_fruits:["🌰","Nuts / dry fruits","mewa"], baking_powder:["🧁","Baking powder",""], vanilla:["🌼","Vanilla",""], tea:["🍵","Tea leaves","chai patti"],
+  dal:["🫘","Dal (any)",""], chana:["🫘","Boiled chana",""], rajma:["🫘","Rajma",""], sweetcorn_tin:["🥫","Sweetcorn tin","makai"], coconut:["🥥","Coconut","nariyal"],
+};
+const STAPLES = new Set(["salt","sugar","oil","chaat_masala","red_chilli","turmeric","jeera","pepper","water"]);
+const SUBS = {
+  curd:[["milk","lemon"]], butter:[["ghee"]], ghee:[["butter"]], cheese:[["paneer"]], paneer:[["cheese"]],
+  bread:[["tortilla"]], tortilla:[["bread"]], maida:[["atta"]], atta:[["maida"]], honey:[["jam"],["jaggery"]],
+  peanut_butter:[["butter","peanuts"]], cream:[["milk"]], mayo:[["curd"]], ketchup:[["tomato"]], capsicum:[["onion"]],
+  peanuts:[["dry_fruits"]], dry_fruits:[["peanuts"]], berries:[["mixed_fruit"]], mango:[["banana"]], banana:[["mango"]],
+  sweetcorn_tin:[["corn"]], corn:[["sweetcorn_tin"]], chana:[["rajma"]], rajma:[["chana"]], jaggery:[["honey"]],
+  condensed_milk:[["milk","sugar"]], cornflakes:[["oats"]], cocoa:[["chocolate"]], coriander:[["mint"]], mint:[["coriander"]],
+  cooked_rice:[["rice"]], milk:[["curd"]], biscuits:[["bread"]],
+};
+const RECIPES = [
+ {id:"bread_pizza",name:"Bread Pizza",emoji:"🍕",mins:12,level:1,tags:["snack"],safety:["stove","knife"],needs:["bread","cheese","ketchup","tomato"],optional:["capsicum"],
+  steps:["Spread ketchup on a bread slice.","Chop tomato (and capsicum) into tiny bits — grown-up helps with the knife.","Sprinkle the veggies and lots of grated cheese on top.","Heat a pan on low, place the bread in, cover with a lid for 3–4 min until the cheese melts.","Slide onto a plate. Pizza!"],tip:"Add a pinch of oregano or chilli flakes if you have them."},
+ {id:"banana_pancakes",name:"2-Ingredient Banana Pancakes",emoji:"🥞",mins:15,level:2,tags:[],safety:["stove"],needs:["banana","egg"],optional:["honey"],
+  steps:["Mash 1 banana with a fork until gooey.","Crack in 2 eggs and mix well.","Heat a pan with a little butter or oil on medium-low.","Pour small spoonfuls — tiny pancakes flip better.","Flip when the edges look dry (about 1 min). Cook the other side 30 seconds."],tip:"Drizzle honey or add chocolate chips into the batter."},
+ {id:"fruit_chaat",name:"Fruit Chaat",emoji:"🍉",mins:8,level:1,tags:["snack","nostove","indian"],safety:["knife"],needs:["mixed_fruit","lemon"],
+  steps:["Wash the fruit.","Cut into bite-size pieces (grown-up for the knife).","Squeeze lemon on top.","Sprinkle a pinch of chaat masala and toss."],tip:"Cold fruit from the fridge tastes best."},
+ {id:"nimbu_pani",name:"Nimbu Pani",emoji:"🍋",mins:5,level:1,tags:["snack","nostove","indian"],safety:["none"],needs:["lemon"],optional:["mint"],
+  steps:["Fill a glass with cold water.","Squeeze in half a lemon.","Add 1–2 spoons sugar and a tiny pinch of salt.","Stir until the sugar disappears. Add ice!"],tip:"A few mint leaves make it fancy."},
+ {id:"masala_noodles",name:"Loaded Instant Noodles",emoji:"🍜",mins:12,level:1,tags:[],safety:["stove"],needs:["noodles","onion","capsicum"],optional:["cheese"],
+  steps:["Boil 1½ cups water in a pan.","Add the noodles and the masala packet.","Toss in finely chopped onion and capsicum.","Cook 3 min, stirring.","Turn off the heat and grate cheese on top."],tip:"A dash of ketchup makes it sweet-and-spicy."},
+ {id:"cheese_sandwich",name:"Grilled Cheese Sandwich",emoji:"🥪",mins:10,level:1,tags:["snack"],safety:["stove"],needs:["bread","cheese","butter"],
+  steps:["Butter one side of two bread slices.","Put cheese between them, buttered sides facing OUT.","Heat a pan on low. Place the sandwich in.","Press gently with a spatula. Flip after 2 min.","Cook until golden and the cheese is melty."],tip:"Add a slice of tomato inside for a juicy surprise."},
+ {id:"pb_banana_toast",name:"Peanut Butter Banana Toast",emoji:"🍞",mins:5,level:1,tags:["snack","nostove"],safety:["none"],needs:["bread","peanut_butter","banana"],optional:["honey"],
+  steps:["Toast the bread in the toaster (or eat it soft).","Spread peanut butter thickly.","Slice a banana with a butter knife and lay the coins on top.","Drizzle honey if you have it."],tip:"Try it with a sprinkle of cocoa powder."},
+ {id:"curd_rice",name:"Cool Curd Rice",emoji:"🍚",mins:6,level:1,tags:["nostove","indian"],safety:["none"],needs:["cooked_rice","curd"],
+  steps:["Put leftover rice in a bowl and mash lightly.","Mix in curd until creamy.","Add salt.","Top with pomegranate, grapes, or a spoon of pickle."],tip:"Perfect on a hot day."},
+ {id:"veg_fried_rice",name:"Veg Fried Rice",emoji:"🍛",mins:15,level:2,tags:[],safety:["stove","knife"],needs:["cooked_rice","onion","carrot","capsicum"],optional:["garlic"],
+  steps:["Chop veggies small (grown-up on knife duty).","Heat 1 spoon oil in a pan on medium.","Fry garlic 30 sec, then add veggies. Stir 3 min.","Add the rice, salt and pepper. Stir-fry 3 min.","Splash of soy sauce or ketchup if you like."],tip:"Leftover cold rice fries better than fresh rice."},
+ {id:"omelette",name:"Fluffy Omelette",emoji:"🍳",mins:8,level:2,tags:[],safety:["stove"],needs:["egg","onion"],optional:["tomato","cheese"],
+  steps:["Crack 2 eggs into a bowl, add salt and pepper.","Whisk with a fork until bubbly.","Stir in finely chopped onion (and tomato).","Heat a little oil in a pan on medium-low.","Pour in the egg. Cook 2 min, fold in half, 1 more min."],tip:"Grated cheese inside = cheese omelette!"},
+ {id:"mango_lassi",name:"Mango Lassi",emoji:"🥭",mins:5,level:1,tags:["snack","nostove","indian"],safety:["none"],needs:["mango","curd"],optional:["milk"],
+  steps:["Peel and chop a ripe mango (grown-up help).","Put mango, 1 cup curd, ½ cup milk and 2 spoons sugar in a blender.","Blend until smooth.","Pour over ice."],tip:"Banana works when mango is out of season."},
+ {id:"mug_cake",name:"Chocolate Mug Cake",emoji:"🧁",mins:7,level:2,tags:["snack"],safety:["microwave"],needs:["maida","cocoa","milk","butter"],optional:["baking_powder","chocolate"],
+  steps:["In a big mug mix 4 spoons maida, 2 spoons sugar, 1 spoon cocoa and a pinch of baking powder.","Add 3 spoons milk and 1 spoon melted butter. Stir until no lumps.","Drop in a piece of chocolate if you have one.","Microwave 70–90 seconds. It will puff up!","Let it cool 1 minute — the mug is hot."],tip:"Do not overcook or it turns rubbery. Start with 70 seconds."},
+ {id:"popcorn",name:"Stovetop Popcorn",emoji:"🍿",mins:8,level:2,tags:["snack"],safety:["stove"],needs:["popcorn_kernels"],optional:["butter"],
+  steps:["Heat 1 spoon oil in a deep pan with a lid on medium.","Drop in 3 kernels. When they pop, add ¼ cup more.","Put the lid on and shake the pan now and then.","When popping slows to 2 seconds apart, turn off the heat.","Melt butter, pour over, sprinkle salt."],tip:"Try chaat masala or grated cheese on top."},
+ {id:"cucumber_sandwich",name:"Cucumber Sandwiches",emoji:"🥒",mins:8,level:1,tags:["snack","nostove"],safety:["knife"],needs:["bread","cucumber","butter"],
+  steps:["Slice cucumber thinly (grown-up helps).","Butter the bread.","Lay cucumber slices on, sprinkle salt and pepper.","Close, cut into triangles."],tip:"Mint chutney instead of butter is a classic."},
+ {id:"parfait",name:"Fruit & Yogurt Parfait",emoji:"🍨",mins:6,level:1,tags:["snack","nostove"],safety:["none"],needs:["curd","mixed_fruit"],optional:["honey","cornflakes"],
+  steps:["In a glass, spoon a layer of curd.","Add a layer of chopped fruit.","Repeat until the glass is full.","Drizzle honey. Crush some cornflakes or nuts on top."],tip:"Looks amazing in a see-through glass."},
+ {id:"poha",name:"Quick Poha",emoji:"🥣",mins:15,level:2,tags:["indian"],safety:["stove","knife"],needs:["poha","onion","potato","lemon"],optional:["peanuts","coriander"],
+  steps:["Rinse poha in a sieve until soft. Leave it to drain.","Heat 1 spoon oil. Add jeera, peanuts and chopped onion. Fry 2 min.","Add small potato cubes, turmeric and salt. Cover and cook 5 min.","Add the poha, mix gently, cook 2 min.","Squeeze lemon and add coriander."],tip:"Sev on top makes it crunchy."},
+ {id:"egg_salad",name:"Boiled Egg Salad",emoji:"🥚",mins:15,level:1,tags:[],safety:["stove"],needs:["egg","mayo","cucumber"],
+  steps:["Boil eggs 10 minutes, cool in cold water, peel.","Chop the eggs and cucumber.","Mix with 2 spoons mayo, salt and pepper.","Eat in a bowl or stuff into bread."],tip:"A squeeze of lemon makes it fresh."},
+ {id:"bhel",name:"Bhel Puri",emoji:"🍘",mins:8,level:1,tags:["snack","nostove","indian"],safety:["knife"],needs:["puffed_rice","onion","tomato","lemon"],optional:["sev","coriander"],
+  steps:["Chop onion and tomato tiny (grown-up on the knife).","In a big bowl add 3 cups puffed rice, onion, tomato and a handful of sev.","Add salt, chaat masala and lemon juice.","Mix fast and eat FAST before it goes soft."],tip:"Add boiled potato and coriander for the full street-style version."},
+ {id:"smoothie",name:"Banana Berry Smoothie",emoji:"🥤",mins:5,level:1,tags:["snack","nostove"],safety:["none"],needs:["banana","berries","milk"],
+  steps:["Peel a banana and break it into a blender.","Add a handful of berries and 1 cup milk.","Add honey or 1 spoon sugar.","Blend 30 seconds. Done!"],tip:"Freeze the banana first for a thick milkshake feel."},
+ {id:"french_toast",name:"French Toast",emoji:"🍞",mins:12,level:2,tags:[],safety:["stove"],needs:["bread","egg","milk","butter"],
+  steps:["Whisk 1 egg, ¼ cup milk and 1 spoon sugar in a wide bowl.","Dip a bread slice for 5 seconds each side.","Melt butter in a pan on medium-low.","Cook the bread 2 min each side until golden.","Top with honey, jam, or fruit."],tip:"A pinch of cinnamon in the egg mix is magic."},
+ {id:"quesadilla",name:"Cheesy Quesadilla",emoji:"🫓",mins:10,level:1,tags:["snack"],safety:["stove"],needs:["tortilla","cheese"],optional:["sweetcorn_tin"],
+  steps:["Lay a roti or tortilla in a dry pan on low.","Sprinkle grated cheese and sweetcorn over half.","Fold the other half over.","Press 2 min, flip, 2 more min until crispy.","Cut into triangles. Dip in ketchup."],tip:"Add leftover sabzi or rajma inside — anything goes."},
+ {id:"masala_corn",name:"Masala Corn Cup",emoji:"🌽",mins:8,level:1,tags:["snack","indian"],safety:["microwave"],needs:["sweetcorn_tin","butter"],optional:["lemon"],
+  steps:["Put 1 cup sweetcorn in a bowl with 1 spoon butter.","Microwave 1 minute.","Add salt, chaat masala and red chilli.","Squeeze lemon and stir."],tip:"Grated cheese on top: cheese corn!"},
+ {id:"dal_chawal",name:"Dal Chawal",emoji:"🍛",mins:30,level:3,tags:["indian"],safety:["stove"],needs:["dal","rice","onion","tomato"],optional:["garlic","ginger"],
+  steps:["Wash ½ cup dal and ½ cup rice separately.","Pressure-cook dal with turmeric, salt and 2 cups water (grown-up does this).","Cook rice in a pot with 1 cup water, lid on, 12 min.","In a small pan heat oil, add jeera, garlic, ginger, onion, tomato. Fry 5 min.","Pour into the dal. Serve over rice with a spoon of ghee."],tip:"This is the comfort-food boss level. Get a grown-up to cook it WITH you."},
+ {id:"popsicles",name:"Fruit Popsicles",emoji:"🍧",mins:10,level:1,tags:["snack","nostove"],safety:["none"],needs:["mixed_fruit","curd"],optional:["honey"],
+  steps:["Blend fruit, curd and a spoon of honey.","Pour into popsicle moulds or small paper cups.","Add a stick or spoon, freeze 4+ hours.","Run under warm water for 5 seconds to pop them out."],tip:"Layer two colours for stripes."},
+ {id:"energy_balls",name:"No-Bake Energy Balls",emoji:"🍪",mins:15,level:1,tags:["snack","nostove"],safety:["none"],needs:["oats","peanut_butter","honey"],optional:["chocolate","coconut"],
+  steps:["Mix 1 cup oats, ½ cup peanut butter and 3 spoons honey.","Chop chocolate into chips and stir in.","Roll into ping-pong-ball sizes with clean hands.","Chill in the fridge 30 min."],tip:"Roll them in coconut for a snowball look."},
+ {id:"garlic_bread",name:"Garlic Butter Bread",emoji:"🥖",mins:10,level:1,tags:["snack"],safety:["stove"],needs:["bread","butter","garlic"],optional:["coriander","cheese"],
+  steps:["Mash 2 spoons soft butter with crushed garlic and chopped coriander.","Spread on bread slices.","Toast in a pan on low, butter side down, 2 min.","Sprinkle cheese if you want it extra."],tip:"Great with tomato soup."},
+ {id:"tomato_soup",name:"Tomato Soup",emoji:"🍅",mins:20,level:2,tags:[],safety:["stove","knife"],needs:["tomato","onion","garlic","butter"],optional:["cream"],
+  steps:["Chop 4 tomatoes, 1 onion and 2 garlic cloves.","Melt butter in a pot, fry onion and garlic 3 min.","Add tomatoes, salt and 1 cup water. Cover, cook 10 min.","Let it cool a bit, then blend (grown-up helps).","Stir in a spoon of cream and a pinch of pepper."],tip:"Add a spoon of sugar if it tastes sour."},
+ {id:"upma",name:"Rava Upma",emoji:"🥣",mins:15,level:2,tags:["indian"],safety:["stove"],needs:["rava","onion","lemon"],optional:["green_chilli","peanuts","peas"],
+  steps:["Dry-roast 1 cup rava on low 4 min until it smells toasty. Set aside.","Heat oil, add jeera, peanuts, chopped onion and chilli. Fry 2 min.","Add 2 cups water and salt. Bring to a boil.","Pour in rava slowly while stirring. Lid on, 2 min.","Fluff, squeeze lemon on top."],tip:"Add peas or carrot to hide veggies in it."},
+ {id:"egg_bhurji",name:"Egg Bhurji",emoji:"🍳",mins:10,level:2,tags:["indian"],safety:["stove","knife"],needs:["egg","onion","tomato"],optional:["green_chilli","coriander"],
+  steps:["Chop onion, tomato and chilli.","Heat oil, fry onion 2 min, add tomato and chilli, 2 min.","Crack in 2–3 eggs, add salt and turmeric.","Scramble on medium until just set.","Top with coriander. Eat with bread or roti."],tip:"Grated cheese at the end = cheese bhurji."},
+ {id:"pasta",name:"Tomato Cheese Pasta",emoji:"🍝",mins:20,level:2,tags:[],safety:["stove"],needs:["pasta","tomato","cheese","butter"],optional:["garlic"],
+  steps:["Boil pasta in salted water 9–10 min. Drain (grown-up helps).","Melt butter, fry crushed garlic 30 sec.","Add chopped tomatoes and salt, cook 5 min until saucy.","Add the pasta and mix.","Cover with grated cheese."],tip:"Ketchup + a splash of milk is a cheat sauce that works."},
+ {id:"jeera_aloo",name:"Jeera Aloo",emoji:"🥔",mins:20,level:2,tags:["indian"],safety:["stove","knife"],needs:["potato","lemon"],optional:["coriander"],
+  steps:["Boil 3 potatoes 15 min, cool, peel, cube.","Heat oil, add 1 spoon jeera. Let it sizzle.","Add potato, salt, turmeric and red chilli. Fry 5 min until crispy edges.","Squeeze lemon, add coriander."],tip:"Roll into a roti for a jeera aloo wrap."},
+ {id:"chana_chaat",name:"Chana Chaat",emoji:"🫘",mins:8,level:1,tags:["snack","nostove","indian"],safety:["knife"],needs:["chana","onion","tomato","lemon"],optional:["coriander","sev"],
+  steps:["Chop onion and tomato small.","Mix with boiled chana in a bowl.","Add salt, chaat masala, lemon juice and coriander.","Toss and eat."],tip:"Add sev or crushed papdi for crunch."},
+ {id:"choco_milk",name:"Hot Chocolate",emoji:"☕",mins:6,level:1,tags:["snack"],safety:["microwave"],needs:["milk","chocolate"],optional:["cream"],
+  steps:["Pour 1 cup milk in a mug.","Break in 3–4 pieces of chocolate.","Microwave 1 minute, stir, 30 seconds more.","Stir until smooth. Top with cream or marshmallows if you have them."],tip:"A pinch of salt makes chocolate taste more chocolatey. Really."},
+ {id:"cheese_toast",name:"Chilli Cheese Toast",emoji:"🧀",mins:8,level:1,tags:["snack"],safety:["stove"],needs:["bread","cheese","butter"],optional:["green_chilli"],
+  steps:["Mix grated cheese with tiny chopped chilli and a bit of butter.","Spread thick on bread.","Toast in a pan with the lid on, low heat, 3 min until bubbly."],tip:"Skip the chilli for plain cheese toast — still awesome."},
+ {id:"apple_pb",name:"Apple Nachos",emoji:"🍎",mins:6,level:1,tags:["snack","nostove"],safety:["knife"],needs:["apple","peanut_butter"],optional:["chocolate","dry_fruits"],
+  steps:["Slice an apple thinly (grown-up helps).","Spread the slices on a plate like nachos.","Warm peanut butter 15 sec in the microwave and drizzle over.","Sprinkle chopped chocolate or nuts."],tip:"Squeeze lemon on apples so they don't turn brown."},
+ {id:"paneer_wrap",name:"Paneer Wrap",emoji:"🌯",mins:15,level:2,tags:["indian"],safety:["stove"],needs:["tortilla","paneer","onion","capsicum"],optional:["ketchup","mayo"],
+  steps:["Cube paneer, slice onion and capsicum.","Fry in 1 spoon oil with salt, red chilli and a pinch of chaat masala, 5 min.","Warm a roti/tortilla in the pan.","Spread ketchup or mayo, add the filling, roll tight."],tip:"Wrap in foil and it travels well for a picnic."},
+ {id:"coconut_ladoo",name:"Coconut Ladoo",emoji:"🥥",mins:12,level:1,tags:["snack","nostove","indian"],safety:["none"],needs:["coconut","milk"],optional:["dry_fruits"],
+  steps:["Mix 1 cup desiccated coconut with ½ cup condensed milk (or milk + 3 spoons sugar warmed for 1 min).","Add chopped nuts.","Roll into small balls with slightly wet hands.","Roll in more coconut. Chill 20 min."],tip:"Push a raisin in the middle as a secret centre."},
+];
+
+/* ---------- storage: shares the active chef's fridge with the full version ---------- */
+const LS={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+          set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const FC=LS.get("fc_global")||{};
+const PKEY=FC.active?"fc_p_"+FC.active:"fcl_solo";
+const have=new Set((LS.get(PKEY)||{}).have||[]);
+function save(){ const d=LS.get(PKEY)||{}; d.have=[...have]; LS.set(PKEY,d); }
+
+const sysDark=matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(){ const t=FC.theme||"dark", dark=t==="auto"?sysDark.matches:t!=="light";
+  document.documentElement.dataset.theme=dark?"dark":"light";
+  document.querySelector('meta[name="theme-color"]').content=dark?"#07070D":"#FFFDF6";
+  document.getElementById("themeBtn").textContent={dark:"🌙",light:"☀️",auto:"🌗"}[t]; }
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  FC.theme={dark:"light",light:"auto",auto:"dark"}[FC.theme||"dark"]; LS.set("fc_global",FC); applyTheme(); });
+sysDark.addEventListener("change",()=>{ if((FC.theme||"dark")==="auto") applyTheme(); });
+applyTheme();
+
+/* ---------- tiny sound (follows the full app's mute setting) ---------- */
+let ac=null;
+function tone(f,d,type="sine",v=.16,to=null){ if(FC.muted) return;
+  try{ ac=ac||new (AudioContext||webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain(); o.type=type; o.frequency.setValueAtTime(f,ac.currentTime);
+    if(to) o.frequency.exponentialRampToValueAtTime(to,ac.currentTime+d);
+    g.gain.setValueAtTime(v,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+d); }catch(e){} }
+const pop=()=>tone(520,.09,"sine",.18,180), unpop=()=>tone(260,.09,"sine",.13,120),
+      tick=()=>tone(880,.12,"triangle",.1), ding=()=>[523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,.25,"triangle",.13),i*90));
+
+/* ---------- read aloud (built into the browser) ---------- */
+const TTS="speechSynthesis" in window;
+function speak(t){ if(!TTS) return; speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t.replace(/[🔥🔪📡🧊]/g,""));
+  const vs=speechSynthesis.getVoices();
+  const v=vs.find(x=>/^en-IN/i.test(x.lang))||vs.find(x=>/^en/i.test(x.lang)); if(v) u.voice=v;
+  u.rate=.95; speechSynthesis.speak(u); }
+const hush=()=>{ if(TTS) speechSynthesis.cancel(); };
+
+/* ---------- matching ---------- */
+const hasIt=id=>have.has(id)||STAPLES.has(id);
+const ingName=id=>ING[id]?ING[id][1]:id, ingE=id=>ING[id]?ING[id][0]:"🛒";
+function analyse(r){
+  const miss=[],swaps=[],hints=[];
+  r.needs.forEach(id=>{ if(hasIt(id)) return;
+    const opts=SUBS[id]||[], ok=opts.find(o=>o.every(hasIt));
+    if(ok) swaps.push({from:id,to:ok}); else { miss.push(id); if(opts.length) hints.push({from:id,to:opts[0]}); } });
+  return {miss,swaps,hints};
+}
+function safetyTag(r){
+  if(r.safety.includes("stove")||r.safety.includes("oven")) return '<span class="tag warn">🔥 Stove · with a grown-up</span>';
+  if(r.safety.includes("microwave")) return '<span class="tag warn">📡 Microwave</span>';
+  if(r.safety.includes("knife")) return '<span class="tag warn">🔪 Knife · with a grown-up</span>';
+  return '<span class="tag ok">🧊 No heat, no knife</span>';
+}
+
+/* ---------- fridge ---------- */
+const groupsEl=document.getElementById("groups"), searchEl=document.getElementById("search");
+const closed=new Set(); // every group starts open — fewer taps before you see a recipe
+function renderGroups(){
+  const q=searchEl.value.trim().toLowerCase();
+  groupsEl.innerHTML="";
+  GROUPS.forEach(([title,ids])=>{
+    const vis=ids.filter(id=>!q||ING[id][1].toLowerCase().includes(q)||(ING[id][2]||"").includes(q));
+    if(!vis.length) return;
+    const d=document.createElement("details"); d.className="grp"; d.open=!!q||!closed.has(title);
+    d.innerHTML=`<summary>${title}<span class="n">${ids.filter(i=>have.has(i)).length||""}</span></summary>`;
+    const c=document.createElement("div"); c.className="chips";
+    vis.forEach(id=>{
+      const b=document.createElement("button"); b.className="chip"; b.type="button"; b.dataset.id=id;
+      b.setAttribute("aria-pressed",have.has(id)?"true":"false");
+      b.innerHTML=`<span class="e">${ING[id][0]}</span><span>${ING[id][1]}</span>`;
+      b.addEventListener("click",()=>{ have.has(id)?(have.delete(id),unpop()):(have.add(id),pop());
+        save(); syncChips(); renderResults(); });
+      c.appendChild(b);
+    });
+    d.appendChild(c);
+    d.addEventListener("toggle",()=>{ if(!q) d.open?closed.delete(title):closed.add(title); });
+    groupsEl.appendChild(d);
+  });
+}
+function syncChips(){
+  groupsEl.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",have.has(c.dataset.id)?"true":"false"));
+  groupsEl.querySelectorAll("details.grp").forEach(d=>{
+    const n=[...d.querySelectorAll(".chip")].filter(c=>have.has(c.dataset.id)).length;
+    d.querySelector(".n").textContent=n||""; });
+}
+searchEl.addEventListener("input",renderGroups);
+document.getElementById("clearBtn").addEventListener("click",()=>{
+  if(!have.size) return; have.clear(); save(); syncChips(); renderResults(); unpop(); });
+
+/* ---------- results ---------- */
+const resultsEl=document.getElementById("results"), haveLine=document.getElementById("haveLine");
+function card(r,a){
+  const b=document.createElement("div"); b.className="card"; b.tabIndex=0; b.setAttribute("role","button");
+  b.innerHTML=`<div class="e">${r.emoji}</div><h4>${r.name}</h4>
+    <div class="meta"><span class="tag">⏱ ${r.mins} min · ${"⭐".repeat(r.level)}</span></div>
+    <div class="meta">${safetyTag(r)}</div>
+    ${a.swaps.length?`<p class="swap">🔄 ${a.swaps.map(s=>ingName(s.from)+" → "+s.to.map(ingName).join(" + ")).join(", ")}</p>`:""}
+    ${a.miss.length?`<p class="miss">Need: <b>${a.miss.map(ingName).join(", ")}</b>${a.hints.length?` · or ${a.hints.map(s=>s.to.map(ingName).join(" + ")+" instead of "+ingName(s.from)).join(", ")}`:""}</p>`:""}`;
+  const go=()=>openRecipe(r);
+  b.addEventListener("click",go);
+  b.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+  return b;
+}
+function renderResults(){
+  const n=have.size;
+  haveLine.textContent=n?`${n} thing${n===1?"":"s"} picked`:"Tap what you've got to start.";
+  const scored=RECIPES.map(r=>({r,...analyse(r)}));
+  const can=scored.filter(x=>!x.miss.length).sort((a,b)=>a.swaps.length-b.swaps.length||a.r.mins-b.r.mins);
+  const almost=scored.filter(x=>x.miss.length&&x.miss.length<=2).sort((a,b)=>a.miss.length-b.miss.length||a.r.mins-b.r.mins);
+  document.getElementById("jumpN").textContent=can.length; updateJump();
+  resultsEl.innerHTML="";
+  if(!n){ resultsEl.innerHTML=`<div class="sect"><h3>Let's cook</h3></div>
+    <div class="empty"><span class="big">🧊</span>Your fridge is empty on screen.<br>Tap a few things and recipes appear here.</div>`; return; }
+  const s1=document.createElement("div");
+  s1.innerHTML=`<div class="sect"><h3>✅ Make these now</h3><span class="sub">${can.length} recipe${can.length===1?"":"s"}</span></div>`;
+  if(can.length){ const g=document.createElement("div"); g.className="grid"; can.forEach(x=>g.appendChild(card(x.r,x))); s1.appendChild(g); }
+  else s1.innerHTML+=`<div class="empty"><span class="big">🤔</span>Nothing yet — check "almost there" below, you might be one item away.</div>`;
+  resultsEl.appendChild(s1);
+  if(almost.length){
+    const s2=document.createElement("div");
+    s2.innerHTML=`<div class="sect"><h3>🛒 Almost there</h3><span class="sub">missing 1–2 things</span></div>`;
+    const g=document.createElement("div"); g.className="grid"; almost.forEach(x=>g.appendChild(card(x.r,x))); s2.appendChild(g);
+    resultsEl.appendChild(s2);
+  }
+}
+document.getElementById("surprise").addEventListener("click",()=>{
+  const can=RECIPES.filter(r=>!analyse(r).miss.length), pool=can.length?can:RECIPES;
+  pop(); openRecipe(pool[Math.floor(Math.random()*pool.length)]);
+  if(!can.length) toast("Nothing matches yet — here's a random idea!");
+});
+
+/* ---------- recipe sheet ---------- */
+const modal=document.getElementById("modal"), sheet=document.getElementById("sheet");
+let lastFocus=null;
+function closeSheet(){ hush(); modal.hidden=true; document.body.style.overflow="";
+  if(lastFocus&&document.contains(lastFocus)) lastFocus.focus({preventScroll:true}); }
+document.getElementById("backdrop").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) closeSheet(); });
+
+function openRecipe(r){
+  const {miss,swaps}=analyse(r), missSet=new Set(miss), swapMap=Object.fromEntries(swaps.map(s=>[s.from,s.to]));
+  const stove=r.safety.includes("stove")||r.safety.includes("oven"), knife=r.safety.includes("knife"), micro=r.safety.includes("microwave");
+  let msg,cls="";
+  if(stove&&knife) msg="🔥🔪 Uses the stove and a knife — ask a grown-up to be with you.";
+  else if(stove) msg="🔥 Uses the stove — ask a grown-up to be with you.";
+  else if(knife) msg="🔪 Needs a knife — ask a grown-up to help with cutting.";
+  else if(micro) msg="📡 Uses the microwave — careful, the bowl gets hot!";
+  else { msg="🧊 No heat, no sharp stuff. You've got this on your own!"; cls="none"; }
+  lastFocus=document.activeElement;
+  sheet.innerHTML=`
+    <div class="sheet-head"><div class="e">${r.emoji}</div>
+      <div><h2 id="sheetTitle">${r.name}</h2>
+        <div class="meta" style="margin-top:6px"><span class="tag">⏱ ${r.mins} min</span><span class="tag">${"⭐".repeat(r.level)}</span></div></div>
+      <button class="close" id="closeBtn" aria-label="Close">✕</button></div>
+    <div class="safety ${cls}">${msg}</div>
+    <div class="lbl">You need</div>
+    <ul class="need">
+      ${r.needs.map(id=>swapMap[id]
+        ? `<li class="have">${ingE(id)} ${ingName(id)} → <b>${swapMap[id].map(ingName).join(" + ")}</b></li>`
+        : `<li class="${missSet.has(id)?"no":"have"}">${ingE(id)} ${ingName(id)}${missSet.has(id)?" (missing)":""}</li>`).join("")}
+      ${(r.optional||[]).map(id=>`<li class="opt">${ingE(id)} ${ingName(id)} · nice to have</li>`).join("")}
+      <li>+ salt, sugar, oil, spices</li>
+    </ul>
+    ${miss.length?`<div class="acts" style="margin-top:10px"><button class="btn sm" id="copyMiss">📋 Copy shopping list</button></div>`:""}
+    <div class="lbl">Steps</div>
+    <ol class="steps">${r.steps.map((s,i)=>`<li><span class="num">${i+1}.</span><span>${s}</span>${TTS?`<button class="say" data-i="${i}" aria-label="Read step aloud">🔊</button>`:""}</li>`).join("")}</ol>
+    ${r.tip?`<div class="tip"><b>Tip:</b> ${r.tip}</div>`:""}
+    <div class="acts">
+      <button class="btn lime" id="cookBtn">👩‍🍳 Cook mode</button>
+      <button class="btn" id="copyBtn">📋 Copy recipe</button>
+    </div>`;
+  modal.hidden=false; document.body.style.overflow="hidden"; sheet.scrollTop=0;
+  document.getElementById("closeBtn").addEventListener("click",closeSheet);
+  document.getElementById("closeBtn").focus();
+  sheet.querySelectorAll(".say").forEach(b=>b.addEventListener("click",()=>speak(`Step ${+b.dataset.i+1}. ${r.steps[+b.dataset.i]}`)));
+  const cm=document.getElementById("copyMiss");
+  if(cm) cm.addEventListener("click",async()=>{
+    try{ await navigator.clipboard.writeText("Need to buy 🛒\n"+miss.map(m=>"• "+ingName(m)).join("\n")); toast("Copied!"); }
+    catch(e){ toast("Couldn't copy on this browser."); } });
+  document.getElementById("copyBtn").addEventListener("click",async()=>{
+    const t=`${r.emoji} ${r.name} (${r.mins} min)\n\nYou need: ${r.needs.map(ingName).join(", ")}\n\n${r.steps.map((s,i)=>`${i+1}. ${s}`).join("\n")}${r.tip?`\n\nTip: ${r.tip}`:""}`;
+    try{ await navigator.clipboard.writeText(t); toast("Recipe copied!"); }catch(e){ toast("Couldn't copy on this browser."); } });
+  document.getElementById("cookBtn").addEventListener("click",()=>openCook(r));
+}
+
+/* ---------- cook mode ---------- */
+const cook=document.getElementById("cook");
+let cs=null, wake=null, timer=null;
+async function keepAwake(){ try{ if("wakeLock" in navigator) wake=await navigator.wakeLock.request("screen"); }catch(e){} }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&cs) keepAwake(); });
+const parseTimer=s=>{ const m=s.match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*(min|mins|minute|minutes|sec|secs|second|seconds)\b/i);
+  return m?{secs:+m[1]*(/^s/i.test(m[3])?1:60),label:m[0]}:null; };
+function openCook(r){ hush(); closeSheet(); cs={r,i:0}; cook.hidden=false; document.body.style.overflow="hidden"; keepAwake(); drawCook(); }
+function closeCook(){ hush(); clearInterval(timer); timer=null; cook.hidden=true; document.body.style.overflow="";
+  cs=null; try{ wake?.release(); }catch(e){} wake=null; }
+function drawCook(){
+  const {r,i}=cs, n=r.steps.length, text=r.steps[i], tm=parseTimer(text), last=i===n-1;
+  clearInterval(timer); timer=null;
+  cook.innerHTML=`
+    <div class="cook-top"><button class="close" id="cClose" aria-label="Exit cooking mode">✕</button>
+      <div class="cook-title">${r.emoji} ${r.name}</div><div style="width:40px"></div></div>
+    <div class="bar"><div style="width:${((i+1)/n)*100}%"></div></div>
+    <div class="count">Step ${i+1} / ${n}</div>
+    <div class="big-step" id="bigStep">${text}</div>
+    ${tm?`<div class="timer"><button class="btn lime" id="tBtn">⏱ Start timer · ${tm.label}</button><div class="clock" id="clock" hidden>00:00</div></div>`:""}
+    ${last&&r.tip?`<div class="tip">💡 ${r.tip}</div>`:""}
+    <div class="cook-nav">
+      <button class="btn" id="cPrev" ${i===0?"disabled":""}>← Back</button>
+      ${last?`<button class="btn lime" id="cDone">🎉 Done!</button>`:`<button class="btn mint" id="cNext">Next →</button>`}</div>
+    <div class="dots">${r.steps.map((_,k)=>`<button class="${k===i?"on":""}${k<i?" past":""}" data-k="${k}" aria-label="Step ${k+1}"></button>`).join("")}</div>`;
+  document.getElementById("cClose").addEventListener("click",closeCook);
+  document.getElementById("cPrev").addEventListener("click",()=>{ cs.i--; unpop(); drawCook(); });
+  const nx=document.getElementById("cNext"); if(nx) nx.addEventListener("click",()=>{ cs.i++; tick(); drawCook(); });
+  const dn=document.getElementById("cDone"); if(dn) dn.addEventListener("click",()=>{ ding(); toast("Nice one, chef 🔥"); closeCook(); });
+  cook.querySelectorAll(".dots button").forEach(b=>b.addEventListener("click",()=>{ cs.i=+b.dataset.k; drawCook(); }));
+  document.getElementById("bigStep").addEventListener("click",()=>speak(text));
+  const tb=document.getElementById("tBtn"); if(tb) tb.addEventListener("click",()=>startTimer(tm.secs));
+}
+function startTimer(secs){
+  const clock=document.getElementById("clock"), btn=document.getElementById("tBtn"); let left=secs;
+  clock.hidden=false; btn.textContent="⏹ Stop";
+  const draw=()=>{ clock.textContent=`${String(Math.floor(left/60)).padStart(2,"0")}:${String(left%60).padStart(2,"0")}`;
+    clock.classList.toggle("hot",left<=10); };
+  draw(); clearInterval(timer);
+  const reset=()=>{ clearInterval(timer); timer=null; clock.hidden=true; btn.textContent="⏱ Start timer"; btn.onclick=()=>startTimer(secs); };
+  btn.onclick=reset;
+  timer=setInterval(()=>{ left--; draw();
+    if(left<=0){ clearInterval(timer); timer=null; clock.textContent="Time's up!"; ding(); setTimeout(ding,600);
+      speak("Time's up"); if(navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
+      btn.textContent="⏱ Start timer"; btn.onclick=()=>startTimer(secs); } },1000);
+}
+let sx=null;
+cook.addEventListener("touchstart",e=>sx=e.touches[0].clientX,{passive:true});
+cook.addEventListener("touchend",e=>{ if(sx===null||!cs) return; const dx=e.changedTouches[0].clientX-sx; sx=null;
+  if(Math.abs(dx)<60) return;
+  if(dx<0&&cs.i<cs.r.steps.length-1){ cs.i++; drawCook(); } if(dx>0&&cs.i>0){ cs.i--; drawCook(); } });
+document.addEventListener("keydown",e=>{ if(!cs) return;
+  if(e.key==="ArrowRight"&&cs.i<cs.r.steps.length-1){ cs.i++; drawCook(); }
+  if(e.key==="ArrowLeft"&&cs.i>0){ cs.i--; drawCook(); }
+  if(e.key==="Escape") closeCook(); });
+
+/* ---------- misc ---------- */
+const jump=document.getElementById("jump");
+function updateJump(){ const r=resultsEl.getBoundingClientRect();
+  jump.hidden=r.top<innerHeight*0.6||!have.size||innerWidth>880; }
+jump.addEventListener("click",()=>{ resultsEl.scrollIntoView({behavior:"smooth",block:"start"}); });
+addEventListener("scroll",updateJump,{passive:true}); addEventListener("resize",updateJump);
+let tt; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.hidden=false;
+  clearTimeout(tt); tt=setTimeout(()=>t.hidden=true,2400); }
+
+renderGroups(); renderResults();
+</script>
+</body>
+</html>
