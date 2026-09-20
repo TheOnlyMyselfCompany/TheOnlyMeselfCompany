@@ -90,8 +90,6 @@
 :root[data-theme="light"] .pack .sw{background:#fff; border:2px solid var(--line)} :root[data-theme="light"] .pack .sw::after{background:var(--ink); top:1px; left:1px} :root[data-theme="light"] .pack[aria-pressed="true"] .sw{background:var(--sun)} :root[data-theme="light"] .pack[aria-pressed="true"] .sw::after{left:17px}
 :root[data-theme="light"] .tile{background:#fff} :root[data-theme="light"] .tile:nth-child(1){background:var(--panel2)} :root[data-theme="light"] .tile:nth-child(2){background:var(--ok-bg)} :root[data-theme="light"] .tile:nth-child(3){background:var(--sun)} :root[data-theme="light"] .tile:nth-child(4){background:var(--warn-bg)} :root[data-theme="light"] .tile:nth-child(5){background:#EDE7FF}
 :root[data-theme="light"] .tile small{color:var(--ink); opacity:.7}
-:root[data-theme="light"] .day{background:#fff; border-style:solid} :root[data-theme="light"] .day.today{background:var(--panel2); box-shadow:2px 2px 0 var(--line)} :root[data-theme="light"] .day.today h4{color:var(--ink)} :root[data-theme="light"] .day.over{background:var(--ok-bg); box-shadow:none}
-:root[data-theme="light"] .meal{background:#fff}
 :root[data-theme="light"] .badge{background:#fff} :root[data-theme="light"] .badge.earned{background:var(--sun); box-shadow:3px 3px 0 var(--line)} :root[data-theme="light"] .badge.locked{opacity:.55; filter:grayscale(1); box-shadow:none; border-style:dashed}
 :root[data-theme="light"] .badge small{color:var(--ink); opacity:.65}
 :root[data-theme="light"] .shop li{background:#fff} :root[data-theme="light"] .shop li.got{background:var(--panel2)}
@@ -118,7 +116,6 @@
 /* colour-blind safe: cyan / orange instead of lime-vs-pink */
 :root[data-cb="1"]{ --tomato:#E07A1F; --sun:#1FC9D8; --chip-on:#1FC9D8; --ok-bg:rgba(31,201,216,.12); --ok-ink:#6FDCE6; --warn-bg:rgba(224,122,31,.16); --warn-ink:#F0B57A; }
 :root[data-cb="1"][data-theme="light"]{ --tomato:#C4600A; --sun:#12A9B8; --chip-on:#12A9B8; --ok-ink:#0A5F68; --warn-bg:rgba(196,96,10,.14); --warn-ink:#7A3A00; }
-
 /* PIN pad */
 .pinbox{display:flex; justify-content:center; gap:12px; margin:18px 0}
 .pinbox span{width:18px; height:18px; border-radius:50%; border:2px solid var(--line); background:transparent; transition:background .1s, transform .1s}
@@ -136,7 +133,6 @@
 .segs button[aria-pressed="true"]{background:var(--sun); color:#07070D}
 /* dyslexia-friendly */
 :root[data-dys="1"]{ --body-font:"Lexend","DM Sans",system-ui,sans-serif; --display-font:"Lexend","Unbounded",sans-serif; --ls:.03em; --lh:1.7; }
-
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0;padding:0}
@@ -166,7 +162,6 @@ input[type="text"],input[type="number"],select,textarea{
 textarea{min-height:120px; resize:vertical}
 label.f{display:block; font-weight:800; font-size:.9rem; color:var(--muted); margin-top:12px}
 label.f span{display:block; margin-bottom:5px}
-
 /* header */
 .top{max-width:1180px; margin:0 auto; padding-block:22px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; position:relative; z-index:1}
 .logo{display:flex; align-items:center; gap:12px}
@@ -181,7 +176,6 @@ label.f span{display:block; margin-bottom:5px}
 .pillbtn .av{font-size:1.4rem; line-height:1}
 .iconbtn{width:44px; height:44px; border-radius:50%; background:var(--panel); border:1px solid var(--line); font-size:1.2rem; display:grid; place-items:center}
 .iconbtn[aria-pressed="true"]{opacity:.5}
-
 /* layout */
 .wrap{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:minmax(0,420px) minmax(0,1fr); gap:22px; align-items:start; position:relative; z-index:1}
 @media (max-width:860px){ .wrap{grid-template-columns:1fr} }
@@ -193,7 +187,6 @@ label.f span{display:block; margin-bottom:5px}
 .search{width:100%; margin-top:10px; padding:13px 18px; border-radius:999px; border:1px solid var(--line); background:var(--panel2); color:var(--ink); font-weight:600; font-size:1rem}
 .search:focus{border-color:var(--mint); box-shadow:0 0 0 4px rgba(61,242,255,.18)}
 .search::placeholder{color:var(--muted)}
-
 .group{margin-top:16px}
 .group-title{display:flex; align-items:center; gap:8px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; color:var(--muted); margin-bottom:8px}
 .group-title::after{content:""; flex:1; height:2px; background:var(--line); border-radius:2px}
@@ -210,7 +203,6 @@ label.f span{display:block; margin-bottom:5px}
 .chip:active{transform:scale(.94)}
 .chip.blocked{opacity:.35; text-decoration:line-through}
 .chip .leaf{position:absolute; top:-9px; right:-7px; font-size:.8rem; background:#101018; border:1px solid var(--line); border-radius:50%; width:22px; height:22px; display:grid; place-items:center}
-
 .toolbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px}
 .btn{display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:999px; font-weight:800; font-size:.93rem; background:var(--panel2); color:var(--ink); border:1px solid var(--line); transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s}
 .btn:hover{transform:translateY(-2px) scale(1.02)} .btn:active{transform:scale(.96)}
@@ -221,17 +213,14 @@ label.f span{display:block; margin-bottom:5px}
 .btn.ghost{background:transparent}
 .btn.sm{padding:7px 13px; font-size:.82rem}
 .btn:disabled{opacity:.5; cursor:not-allowed; transform:none; box-shadow:none}
-
 .toggle{display:flex; align-items:center; gap:10px; margin-top:12px; font-weight:700; font-size:.95rem; color:var(--muted)}
 .toggle input{width:22px; height:22px; accent-color:var(--sun); flex:none}
 .toggle small{display:block; font-weight:600; color:var(--muted); font-size:.8rem}
-
 details.panel summary{cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px}
 details.panel summary::-webkit-details-marker{display:none}
 details.panel summary::after{content:"▾"; font-size:1.3rem; color:var(--muted); transition:transform .15s}
 details.panel[open] summary::after{transform:rotate(180deg)}
 details.panel summary h2{font-size:1.1rem}
-
 /* packs */
 .packs{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px}
 @media (max-width:480px){ .packs{grid-template-columns:1fr} }
@@ -243,14 +232,12 @@ details.panel summary h2{font-size:1.1rem}
 .pack .sw{margin-left:auto; width:40px; height:24px; border-radius:12px; background:var(--line); position:relative; flex:none}
 .pack .sw::after{content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left .15s}
 .pack[aria-pressed="true"] .sw{background:var(--berry)} .pack[aria-pressed="true"] .sw::after{left:19px}
-
 /* shopping */
 .shop{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:6px}
 .shop li{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:14px; background:var(--panel2); font-weight:700}
 .shop li input{width:22px; height:22px; accent-color:var(--mint)}
 .shop li.got{opacity:.45; text-decoration:line-through}
 .shop li .x{margin-left:auto; color:var(--muted); font-weight:900; padding:2px 8px}
-
 /* results */
 .tabs{display:flex; gap:8px; flex-wrap:wrap}
 .tab{padding:9px 14px; border-radius:999px; font-weight:700; background:transparent; border:1px solid var(--line); display:inline-flex; align-items:center; gap:8px; color:var(--muted)}
@@ -296,18 +283,6 @@ details.panel summary h2{font-size:1.1rem}
 .card .addmiss{margin-top:auto; align-self:flex-start}
 .empty{background:var(--panel); border:1px dashed var(--line); border-radius:var(--radius); padding:28px; text-align:center; font-weight:600; color:var(--muted)}
 .empty .big{font-size:2.6rem; display:block; margin-bottom:6px}
-
-/* planner */
-.week{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; margin-top:12px}
-.day{background:var(--panel2); border-radius:18px; padding:12px; min-height:120px; border:1px dashed var(--line); display:flex; flex-direction:column; gap:6px}
-.day.over{border-color:var(--mint); box-shadow:0 0 24px -8px var(--mint)}
-.day.today{border:1px solid var(--sun); box-shadow:0 0 24px -10px var(--sun)}
-.day h4{font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-family:var(--body-font); font-weight:800}
-.day.today h4{color:var(--sun)}
-.meal{display:flex; align-items:center; gap:6px; background:#101018; border:1px solid var(--line); border-radius:12px; padding:7px 9px; font-weight:700; font-size:.82rem; cursor:pointer; line-height:1.2}
-.meal .x{margin-left:auto; color:var(--muted); font-weight:900; padding:0 4px}
-.day .hint{color:var(--muted); font-size:.78rem; font-weight:600; margin:auto 0; text-align:center}
-
 /* badges */
 .badges{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:12px}
 .badge{background:var(--panel2); border:1px solid var(--line); border-radius:18px; padding:14px 10px; text-align:center; font-weight:800; font-size:.82rem; line-height:1.2; position:relative}
@@ -316,7 +291,6 @@ details.panel summary h2{font-size:1.1rem}
 .badge.locked{opacity:.4; filter:grayscale(1)}
 .badge.earned{background:linear-gradient(160deg,rgba(198,255,61,.18),rgba(124,92,255,.18)); border-color:var(--sun); box-shadow:0 0 30px -12px var(--sun)}
 .badge.earned .e{transform:rotate(-8deg); display:inline-block}
-
 /* diary */
 .diary{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-top:12px}
 .snap{background:var(--panel2); border-radius:16px; overflow:hidden; position:relative}
@@ -324,7 +298,6 @@ details.panel summary h2{font-size:1.1rem}
 .snap .cap{padding:8px 10px; font-weight:800; font-size:.85rem; line-height:1.25}
 .snap .cap small{display:block; color:var(--muted); font-weight:700}
 .snap .del{position:absolute; top:6px; right:6px; width:30px; height:30px; border-radius:50%; background:rgba(20,15,45,.7); color:#fff; font-weight:900}
-
 /* modal */
 .modal[hidden]{display:none}
 .modal{position:fixed; inset:0; z-index:20; display:grid; place-items:end center; padding:0}
@@ -362,8 +335,6 @@ details.panel summary h2{font-size:1.1rem}
 .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
 @media (max-width:480px){ .row2{grid-template-columns:1fr} }
 .err{color:var(--tomato); font-weight:800; margin-top:10px}
-.daypick{display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:8px; margin-top:8px}
-
 /* quiz */
 .q{margin-top:16px; padding:14px; border-radius:16px; background:var(--panel2)}
 .q h3{font-size:1.1rem; margin-bottom:10px}
@@ -375,7 +346,6 @@ details.panel summary h2{font-size:1.1rem}
 .q .why{margin-top:8px; font-weight:700; color:var(--muted); font-size:.9rem}
 .scorebox{text-align:center; padding:20px; margin-top:16px; border-radius:16px; background:var(--panel2); font-weight:800}
 .scorebox .big{font-size:3rem; font-family:var(--display-font); display:block}
-
 /* measure */
 .measure{display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; margin-top:12px; text-align:center}
 .measure .m{background:var(--panel2); border-radius:16px; padding:12px 8px; font-weight:800; font-size:.9rem}
@@ -384,7 +354,6 @@ details.panel summary h2{font-size:1.1rem}
 .mtable{width:100%; border-collapse:collapse; margin-top:14px; font-weight:700}
 .mtable td{padding:8px 10px; border-bottom:2px solid var(--line)}
 .mtable td:first-child{font-weight:800}
-
 /* profiles */
 .profiles{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
 .prof{display:flex; flex-direction:column; align-items:center; gap:4px; padding:12px; border-radius:16px; background:var(--panel2); border:3px solid var(--line); min-width:100px; font-weight:800; position:relative}
@@ -394,7 +363,6 @@ details.panel summary h2{font-size:1.1rem}
 .avpick{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px}
 .avpick button{font-size:1.6rem; width:46px; height:46px; border-radius:12px; background:var(--panel2); border:3px solid var(--line)}
 .avpick button[aria-pressed="true"]{border-color:var(--berry)}
-
 /* cooking mode */
 .cook{position:fixed; inset:0; z-index:25; background:var(--bg); display:flex; flex-direction:column; padding:calc(14px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px)); gap:14px; overflow:auto}
 .cook-top{display:flex; align-items:center; gap:12px}
@@ -428,7 +396,52 @@ details.panel summary h2{font-size:1.1rem}
 .ob-tip{display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:16px; background:var(--panel2); border:1px solid var(--line); margin-top:10px; font-weight:600}
 .ob-tip .e{font-size:1.6rem; line-height:1}
 @media (prefers-reduced-motion: reduce){ .ob-hero span{animation:none} .cook-clock.urgent{animation:none} }
-
+/* ===== clarity layer ===== */
+.group-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.16em; font-weight:800; color:var(--muted); margin:26px 4px 10px}
+.group-label:first-child{margin-top:4px}
+.legend{margin-top:14px}
+.legend summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:14px;
+  background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.85rem; color:var(--muted)}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::after{content:"▾"; margin-left:auto; transition:transform .15s}
+.legend[open] summary::after{transform:rotate(180deg)}
+.legend-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:10px; padding:14px 4px 4px}
+.legend-grid>div{display:flex; gap:10px; align-items:flex-start; font-size:.88rem; font-weight:600; color:var(--muted); line-height:1.35}
+.legend-grid>div>:first-child{flex:none}
+.tag{white-space:nowrap; font-size:.72rem; font-weight:800; padding:5px 10px; border-radius:999px; background:var(--panel2);
+  color:var(--ink); border:1px solid var(--line); display:inline-flex; gap:4px}
+.tag.ok{background:var(--ok-bg); color:var(--ok-ink); border-color:transparent}
+.tag.warn{background:var(--warn-bg); color:var(--warn-ink); border-color:transparent}
+.tag.lock{background:#1A1A2A; color:var(--muted)}
+:root[data-theme="light"] .tag.lock{background:#EAE7DE}
+.swapdemo{font-size:.78rem; color:var(--ok-ink); background:var(--ok-bg); border-radius:11px; padding:5px 10px; font-weight:700; white-space:nowrap}
+.missdemo{font-size:.8rem; color:var(--muted); font-weight:700; white-space:nowrap}
+.missdemo b{color:var(--tomato)}
+:root[data-theme="light"] .legend summary,:root[data-theme="light"] .tag{border:2px solid var(--line); background:#fff}
+:root[data-theme="light"] .tag.ok{background:var(--ok-bg)} :root[data-theme="light"] .tag.warn{background:var(--warn-bg)}
+/* first-visit hint */
+.hint-card{display:flex; gap:14px; align-items:center; background:linear-gradient(120deg,rgba(158,219,31,.16),rgba(94,69,214,.14));
+  border:1px solid var(--line); border-radius:20px; padding:14px 18px; margin-bottom:16px; font-weight:700; font-size:.95rem}
+.hint-card .e{font-size:1.8rem; line-height:1; flex:none}
+.hint-card button{margin-left:auto; flex:none}
+:root[data-theme="light"] .hint-card{background:var(--panel2); border:2px solid var(--line)}
+/* help sheet */
+.help-step{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start; padding:14px; border-radius:18px;
+  background:var(--panel2); border:1px solid var(--line); margin-top:10px}
+.help-step .n{width:30px; height:30px; border-radius:10px; background:var(--sun); color:#07070D; font-family:var(--display-font);
+  font-weight:800; display:grid; place-items:center; font-size:.9rem}
+.help-step b{display:block; font-family:var(--display-font); font-size:.98rem; margin-bottom:3px}
+.help-step span{color:var(--muted); font-weight:600; font-size:.92rem}
+:root[data-theme="light"] .help-step{background:#fff; border:2px solid var(--line)}
+:root[data-theme="light"] .help-step .n{background:var(--ink); color:#fff}
+.help-tabs{display:flex; flex-direction:column; gap:8px; margin-top:8px}
+.help-tabs div{display:flex; gap:10px; align-items:baseline; font-weight:600; color:var(--muted); font-size:.92rem}
+.help-tabs b{color:var(--ink); font-family:var(--display-font); font-size:.9rem; min-width:112px; display:inline-block}
+/* primary action in the recipe sheet */
+.primary-act{display:flex; gap:10px; align-items:center; margin-top:16px; flex-wrap:wrap}
+.primary-act .btn{padding:15px 22px; font-size:1rem}
+.act-label{font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; font-weight:800; color:var(--muted); margin-top:20px}
+.acts-row{display:flex; gap:9px; flex-wrap:wrap; margin-top:8px}
 /* ===== 3D layer ===== */
 /* card tilt + sheen */
 .grid{perspective:1200px}
@@ -473,7 +486,6 @@ details.panel summary h2{font-size:1.1rem}
 @keyframes turnNext{from{transform:rotateY(-70deg) translateX(30%); opacity:0} to{transform:none; opacity:1}}
 @keyframes turnPrev{from{transform:rotateY(70deg) translateX(-30%); opacity:0} to{transform:none; opacity:1}}
 @media (prefers-reduced-motion: reduce){ .card.tilting{transform:none} .door{animation:none; display:none} .cook-step.turn-next,.cook-step.turn-prev{animation:none} .badge.spin .inner{animation:none} .badge .inner{transition:none} }
-
 #confetti{position:fixed; inset:0; pointer-events:none; z-index:30}
 .toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:#14141F; color:var(--ink); border:1px solid var(--sun); padding:12px 20px; border-radius:999px; font-weight:800; z-index:31; box-shadow:0 0 30px -6px var(--sun); max-width:calc(100% - 32px); text-align:center; animation:up .25s cubic-bezier(.34,1.5,.64,1)}
 @media (max-width:600px){ .toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))} }
@@ -506,7 +518,6 @@ details.panel summary h2{font-size:1.1rem}
 .tile b{font-family:var(--display-font); font-size:.85rem}
 .tile small{color:var(--muted); font-weight:600; font-size:.8rem}
 .tile[aria-pressed="true"] .ti{opacity:.4}
-
 /* collapsible ingredient groups */
 details.group{margin-top:10px}
 details.group summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:8px; padding:11px 14px; border-radius:16px; background:var(--panel2); border:1px solid var(--line); font-weight:800; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em}
@@ -517,7 +528,6 @@ details.group summary::after{content:"▾"; color:var(--muted); font-size:1.1rem
 details.group[open] summary::after{transform:rotate(180deg)}
 details.group .chips{padding:12px 4px 4px}
 details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); border-color:transparent}
-
 @media print{
   body{background:#fff; color:#000; padding:0}
   body>*:not(#modal){display:none!important}
@@ -534,26 +544,29 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
 <body>
 <div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 <div class="grain" aria-hidden="true"></div>
-
 <header class="top">
   <div class="logo"><div class="fridge" aria-hidden="true"></div><h1>Fridge<span>Chef</span></h1></div>
   <div class="head-right">
     <a class="pillbtn" href="../" title="Back to home">🏠</a>
+    <button class="pillbtn" id="helpBtn" title="How this app works" aria-label="How this app works">❓</button>
     <button class="pillbtn" id="profileBtn" title="Switch chef"><span class="av" id="profAv">👩‍🍳</span><span id="profName">Chef</span></button>
     <button class="pillbtn" id="badgeBtn" title="Your badges"><span>🏅</span><b id="badgeCount">0</b></button>
   </div>
 </header>
-
 <nav class="nav" aria-label="Sections">
   <button class="navbtn" data-view="cook" aria-current="page"><span class="ni">🍳</span><span data-i18n="nav_cook">Cook</span></button>
-  <button class="navbtn" data-view="plan"><span class="ni">📅</span><span data-i18n="nav_plan">Plan</span><span class="dot" id="planDot" hidden></span></button>
+  <button class="navbtn" data-view="plan"><span class="ni">🛒</span><span data-i18n="nav_plan">Shopping</span><span class="dot" id="planDot" hidden></span></button>
   <button class="navbtn" data-view="me"><span class="ni">🏅</span><span data-i18n="nav_me">Me</span></button>
   <button class="navbtn" data-view="more"><span class="ni">⚙️</span><span data-i18n="nav_more">More</span></button>
 </nav>
-
 <!-- ============ COOK ============ -->
 <main class="wrap view" data-view="cook">
   <div class="col">
+    <div class="hint-card" id="hintCard" hidden>
+      <span class="e">👋</span>
+      <span data-i18n="hint1"><b>Start here:</b> tap anything you actually have below. Recipes you can cook appear on the right, updating as you go.</span>
+      <button class="btn sm" id="hintX" data-i18n="gotit">Got it</button>
+    </div>
     <div class="fridge-wrap"><div class="door" id="door" aria-hidden="true">Fridge<br>Chef</div>
     <section class="panel" aria-labelledby="fridgeTitle">
       <div class="panel-head">
@@ -565,7 +578,6 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
     </section>
     </div>
   </div>
-
   <div class="col">
     <section aria-labelledby="resultsTitle">
       <div class="panel">
@@ -578,32 +590,37 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
         </div>
         <div class="tabs" role="tablist" aria-label="Filter recipes">
           <button class="tab" role="tab" data-filter="all" aria-selected="true" data-i18n="tab_all">All</button>
-          <button class="tab" role="tab" data-filter="nostove" aria-selected="false" data-i18n="tab_nostove">🧊 No stove</button>
+          <button class="tab" role="tab" data-filter="nostove" aria-selected="false" data-i18n="tab_nostove">🧊 No cooking</button>
           <button class="tab" role="tab" data-filter="quick" aria-selected="false" data-i18n="tab_quick">⚡ Quick</button>
           <button class="tab" role="tab" data-filter="snack" aria-selected="false" data-i18n="tab_snack">🍪 Snacks</button>
-          <button class="tab" role="tab" data-filter="season" aria-selected="false" data-i18n="tab_season">🌱 Season</button>
+          <button class="tab" role="tab" data-filter="season" aria-selected="false" data-i18n="tab_season">🌱 In season</button>
           <button class="tab" role="tab" data-filter="fav" aria-selected="false" data-i18n="tab_fav">❤️ Faves</button>
-          <button class="tab" role="tab" data-filter="mine" aria-selected="false" data-i18n="tab_mine">✨ Mine</button>
+          <button class="tab" role="tab" data-filter="mine" aria-selected="false" data-i18n="tab_mine">✨ My recipes</button>
         </div>
+        <details class="legend" id="legend">
+          <summary><span data-i18n="legend_t">❓ What do the labels on recipes mean?</span></summary>
+          <div class="legend-grid">
+            <div><span class="tag ok">🧊 No heat, no knife</span><span data-i18n="lg1">You can do this one entirely on your own.</span></div>
+            <div><span class="tag warn">🔥 Stove · with a grown-up</span><span data-i18n="lg2">Needs the hob or oven. Never do these alone.</span></div>
+            <div><span class="tag warn">🔪 Knife · with a grown-up</span><span data-i18n="lg3">Something needs proper cutting.</span></div>
+            <div><span class="tag lock">🔒 Quiz first</span><span data-i18n="lg4">Pass the safety quiz once and stove recipes unlock.</span></div>
+            <div><span class="tag">⏱ 8 min · ⭐⭐</span><span data-i18n="lg5">How long it takes, and how tricky it is out of three.</span></div>
+            <div><span class="swapdemo">🔄 Curd → Milk + Lemon</span><span data-i18n="lg6">You are missing something, but what you have will work instead.</span></div>
+            <div><span class="missdemo">Need: <b>cheese</b></span><span data-i18n="lg7">This one is 1–2 items short. Tap "add missing" to start a shopping list.</span></div>
+            <div><span class="tag">🌱 ✨ 🏅</span><span data-i18n="lg8">In season this month · your own recipe · you have cooked it before.</span></div>
+          </div>
+        </details>
       </div>
       <div id="results"></div>
     </section>
   </div>
   <button class="jump" id="jumpBtn" hidden>✅ <b id="jumpCount">0</b> <span data-i18n="jump">recipes ready · scroll ↓</span></button>
 </main>
-
 <!-- ============ PLAN ============ -->
 <main class="wrap one view" data-view="plan" hidden>
-  <section class="panel" aria-labelledby="planTitle">
-    <div class="panel-head">
-      <div><h2 id="planTitle" data-i18n="plan_title">📅 the week ahead</h2><p class="sub" data-i18n="plan_sub">drag a recipe from Cook onto a day, or tap a day inside any recipe</p></div>
-      <button class="btn sm mint" id="planShop" data-i18n="plan_shop">🛒 add what's missing this week</button>
-    </div>
-    <div class="week" id="week"></div>
-  </section>
-
   <section class="panel" aria-labelledby="shopTitle">
-    <div class="panel-head"><div><h2 id="shopTitle" data-i18n="shop_title">🛒 shopping list</h2><p class="sub" id="shopSub"></p></div></div>
+    <div class="panel-head"><div><h2 id="shopTitle" data-i18n="shop_title">🛒 Shopping list</h2><p class="sub" id="shopSub"></p></div></div>
+    <p class="sub" data-i18n="shop_how">Open any recipe you're a couple of items short on and tap <b>add missing</b> — everything you need lands here.</p>
     <ul class="shop" id="shopList"></ul>
     <div class="toolbar" id="shopTools" hidden>
       <button class="btn sm" id="copyShop" data-i18n="copy_list">📋 Copy list</button>
@@ -612,44 +629,50 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
     </div>
   </section>
 </main>
-
 <!-- ============ ME ============ -->
 <main class="wrap one view" data-view="me" hidden>
   <section class="panel" id="badgePanel" aria-labelledby="badgeTitle">
-    <div class="panel-head"><div><h2 id="badgeTitle" data-i18n="badge_title">🏅 badge wall</h2><p class="sub" id="badgeSub"></p></div></div>
+    <div class="panel-head"><div><h2 id="badgeTitle" data-i18n="badge_title">🏅 Badges</h2><p class="sub" id="badgeSub"></p></div></div>
     <div class="badges" id="badges"></div>
   </section>
-
   <section class="panel" aria-labelledby="diaryTitle">
-    <div class="panel-head"><div><h2 id="diaryTitle" data-i18n="diary_title">📸 the feed</h2><p class="sub" data-i18n="diary_sub">pics of what you made · saved on this device only</p></div></div>
+    <div class="panel-head"><div><h2 id="diaryTitle" data-i18n="diary_title">📸 Photo diary</h2><p class="sub" data-i18n="diary_sub">Snap what you cooked. Photos stay on this device — nobody else can see them.</p></div></div>
     <div class="diary" id="diary"></div>
-    <div class="empty" id="diaryEmpty"><span class="big">📷</span><span data-i18n="diary_empty">no pics yet. cook something, tap "add a photo", flex.</span></div>
+    <div class="empty" id="diaryEmpty"><span class="big">📷</span><span data-i18n="diary_empty">No photos yet. Cook something, open the recipe again and tap <b>Add a photo</b>.</span></div>
   </section>
 </main>
-
 <!-- ============ MORE ============ -->
 <main class="wrap one view" data-view="more" hidden>
+  <div class="group-label" data-i18n="grp_learn">Learn</div>
   <section class="tiles">
-    <button class="tile" id="measureBtn"><span class="ti">📏</span><b data-i18n="tile_measure">Measurements</b><small data-i18n="tile_measure_s">cups, spoons, pinches</small></button>
-    <button class="tile" id="quizBtn"><span class="ti">🛡️</span><b data-i18n="tile_quiz">Safety quiz</b><small data-i18n="tile_quiz_s">unlock the stove 🔓</small></button>
+    <button class="tile" id="helpBtn2"><span class="ti">❓</span><b data-i18n="tile_help">How it works</b><small data-i18n="tile_help_s">a 1-minute guide to the whole app</small></button>
+    <button class="tile" id="measureBtn"><span class="ti">📏</span><b data-i18n="tile_measure">Measurements</b><small data-i18n="tile_measure_s">how big is a cup, a spoon, a pinch</small></button>
+    <button class="tile" id="quizBtn"><span class="ti">🛡️</span><b data-i18n="tile_quiz">Safety quiz</b><small data-i18n="tile_quiz_s">pass once to unlock stove recipes</small></button>
+  </section>
+  <div class="group-label" data-i18n="grp_look">Make it yours</div>
+  <section class="tiles">
     <button class="tile" id="themeBtn"><span class="ti">🌙</span><b data-i18n="tile_theme">Theme</b><small id="themeSmall">dark · tap to switch</small></button>
-    <button class="tile" id="a11yBtn"><span class="ti">👁️</span><b data-i18n="tile_a11y">Reading & colours</b><small data-i18n="tile_a11y_s">fonts + colour-blind mode</small></button>
+    <button class="tile" id="a11yBtn"><span class="ti">👁️</span><b data-i18n="tile_a11y">Reading & colours</b><small data-i18n="tile_a11y_s">easy-read font, colour-blind mode</small></button>
     <button class="tile" id="muteBtn" aria-pressed="false"><span class="ti">🔊</span><b data-i18n="tile_sounds">Sounds</b><small id="soundSmall">pop · tap to change</small></button>
     <button class="tile" id="langBtn"><span class="ti">🌐</span><b data-i18n="tile_lang">Language</b><small id="langSmall">English · हिंदी</small></button>
-    <a class="tile" href="../calorietracker/" style="text-decoration:none"><span class="ti">🔥</span><b data-i18n="tile_cal">Calorie tracker</b><small data-i18n="tile_cal_s">track what you ate ↗</small></a>
   </section>
-
+  <div class="group-label" data-i18n="grp_apps">My other apps</div>
+  <section class="tiles">
+    <a class="tile" href="../calorietracker/" style="text-decoration:none"><span class="ti">🔥</span><b data-i18n="tile_cal">Calorie tracker</b><small data-i18n="tile_cal_s">log what you ate today →</small></a>
+    <a class="tile" href="../healthhelper/" style="text-decoration:none"><span class="ti">🩺</span><b data-i18n="tile_health">Health Helper</b><small data-i18n="tile_health_s">feeling unwell? check the signs →</small></a>
+  </section>
+  <div class="group-label" data-i18n="grp_recipes">More recipes</div>
   <section class="panel" aria-labelledby="packTitle">
-    <div class="panel-head"><div><h2 id="packTitle" data-i18n="packs_title">📦 recipe packs</h2><p class="sub" data-i18n="packs_sub">DLC for your kitchen. switch on extra collections.</p></div></div>
+    <div class="panel-head"><div><h2 id="packTitle" data-i18n="packs_title">📦 Recipe packs</h2><p class="sub" data-i18n="packs_sub">Extra collections of recipes. Switch one on and its recipes join your list.</p></div></div>
     <div class="packs" id="packs"></div>
   </section>
-
   <section class="panel">
-    <h2 style="font-size:1.25rem" data-i18n="fridge_opts">🧂 Fridge options</h2>
+    <div class="group-label" data-i18n="grp_fridge">Fridge options</div>
+    <h2 style="font-size:1.25rem" data-i18n="fridge_opts">🧂 How matching works</h2>
     <label class="toggle"><input type="checkbox" id="staples" checked> <span data-i18n="staples_lbl">Pantry basics always in (salt, sugar, oil, spices…)</span></label>
     <label class="toggle"><input type="checkbox" id="hindi"> <span data-i18n="hindi_lbl">Show Hindi names — Curd (dahi)</span></label>
   </section>
-
+  <div class="group-label" data-i18n="grp_adult">For grown-ups</div>
   <section class="panel" id="parentPanel" aria-labelledby="parentTitle">
     <div class="panel-head">
       <div><h2 id="parentTitle" data-i18n="parent_title">🔒 Grown-up settings</h2><p class="sub" id="parentSub">Locked with a PIN. Ask a grown-up.</p></div>
@@ -675,7 +698,6 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
   </section>
   <p class="sub" style="text-align:center" data-i18n="footer">Always ask a grown-up before using the stove, oven, or a sharp knife.</p>
 </main>
-
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="backdrop" id="backdrop"></div>
   <div class="sheet" id="sheet"></div>
@@ -683,7 +705,6 @@ details.group.season summary{background:var(--ok-bg); color:var(--ok-ink); borde
 <div class="cook" id="cook" hidden role="dialog" aria-modal="true" aria-label="Cooking mode"></div>
 <canvas id="confetti"></canvas>
 <div class="toast" id="toast" hidden></div>
-
 <script>
 /* =====================================================================
    DATA
@@ -733,7 +754,6 @@ const SEASON = [
   ["apple","banana","peanuts","coconut"], ["peas","carrot","apple","peanuts","potato"], ["carrot","peas","spinach","potato","ginger"],
 ];
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-
 const RECIPES = [
  {id:"bread_pizza",name:"Bread Pizza",emoji:"🍕",mins:12,level:1,tags:["snack"],safety:["stove","knife"],needs:["bread","cheese","ketchup","tomato"],optional:["capsicum"],
   steps:["Spread ketchup on a bread slice.","Chop tomato (and capsicum) into tiny bits — grown-up helps with the knife.","Sprinkle the veggies and lots of grated cheese on top.","Heat a pan on low, place the bread in, cover with a lid for 3–4 min until the cheese melts.","Slide onto a plate. Pizza!"],tip:"Add a pinch of oregano or chilli flakes if you have them."},
@@ -810,7 +830,6 @@ const RECIPES = [
  {id:"coconut_ladoo",name:"Coconut Ladoo",emoji:"🥥",mins:12,level:1,tags:["snack","nostove","indian"],safety:["none"],needs:["coconut","milk"],optional:["dry_fruits"],
   steps:["Mix 1 cup desiccated coconut with ½ cup condensed milk (or milk + 3 spoons sugar warmed for 1 min).","Add chopped nuts.","Roll into small balls with slightly wet hands.","Roll in more coconut. Chill 20 min."],tip:"Push a raisin in the middle as a secret centre."},
 ];
-
 /* ---- Recipe packs (switch on/off) ---- */
 const PACKS = [
  {id:"diwali",name:"Diwali Sweets",emoji:"🪔",desc:"Mithai you can make at home.",recipes:[
@@ -862,11 +881,9 @@ const PACKS = [
    steps:["Squeeze 3 lemons into a big jug.","Add 4 spoons sugar or honey and 1 litre cold water. Stir.","Drop in chopped fruit and mint leaves.","Add lots of ice. Serve with straws."],tip:"Freeze berries inside ice cubes for fancy party ice."},
  ]},
 ];
-
 /* approx calories per recipe at the default serving — rough, for the Calorie Chef handoff */
 const KCAL={bread_pizza:280,banana_pancakes:300,fruit_chaat:120,nimbu_pani:50,masala_noodles:400,cheese_sandwich:350,pb_banana_toast:320,curd_rice:300,veg_fried_rice:320,omelette:180,mango_lassi:220,mug_cake:350,popcorn:150,cucumber_sandwich:220,parfait:200,poha:250,egg_salad:220,bhel:250,smoothie:200,french_toast:300,quesadilla:330,masala_corn:150,dal_chawal:450,popsicles:60,energy_balls:180,garlic_bread:220,tomato_soup:150,upma:230,egg_bhurji:220,pasta:400,jeera_aloo:220,chana_chaat:200,choco_milk:250,cheese_toast:300,apple_pb:220,paneer_wrap:380,coconut_ladoo:110,
  pk_besan_ladoo:180,pk_choco_barfi:200,pk_rava_ladoo:160,pk_fruit_cream:250,pk_choco_nuts:150,pk_veg_sandwich:250,pk_jam_rolls:200,pk_lemon_rice:300,pk_corn_roll:300,pk_chana_box:220,pk_bhutta:130,pk_bread_pakora:320,pk_chai:60,pk_cutlet:200,pk_corn_chaat:150,pk_skewers:100,pk_clusters:180,pk_rainbow_sandwich:280,pk_biscuit_cake:350,pk_punch:80};
-
 /* ---- Badges ---- */
 const BADGES = [
  {id:"first",emoji:"🍳",name:"First Bite",desc:"Cook your first recipe",check:s=>s.cooked.size>=1},
@@ -882,11 +899,10 @@ const BADGES = [
  {id:"explorer",emoji:"🧭",name:"Explorer",desc:"Cook from 2 different recipe packs",check:s=>new Set(cookedWhere(s,r=>r.pack).map(r=>r.pack)).size>=2},
  {id:"inventor",emoji:"✨",name:"Inventor",desc:"Create your own recipe",check:s=>s.custom.length>=1},
  {id:"shutterbug",emoji:"📸",name:"Shutterbug",desc:"Add 3 photos to your diary",check:s=>s.diary.length>=3},
- {id:"planner",emoji:"📅",name:"Planner",desc:"Plan 3 meals for the week",check:s=>Object.values(s.planner).reduce((a,b)=>a+b.length,0)>=3},
+ {id:"shopper",emoji:"🛒",name:"Shopper",desc:"Put 5 things on your shopping list",check:s=>s.shop.length>=5},
  {id:"season",emoji:"🌱",name:"Season Scout",desc:"Cook 3 recipes with in-season ingredients",check:s=>cookedWhere(s,r=>inSeason(r)).length>=3},
  {id:"hardcore",emoji:"💪",name:"Boss Level",desc:"Cook a 3-star recipe",check:s=>cookedWhere(s,r=>r.level===3).length>=1},
 ];
-
 /* ---- Safety quiz ---- */
 const QUIZ = [
  {q:"Before turning on the stove, you should…",opts:["Ask a grown-up to be with you","Put on headphones","Check what's on TV"],a:0,why:"A grown-up nearby can help fast if anything goes wrong."},
@@ -898,16 +914,14 @@ const QUIZ = [
  {q:"You spill water on the kitchen floor. You should…",opts:["Wipe it up right away","Step over it","Leave it, it will dry"],a:0,why:"Wet floors + hot pans = slips and burns."},
 ];
 const AVATARS=["👩‍🍳","👨‍🍳","🧑‍🍳","🦸","🦄","🐯","🐼","🦊","🐸","🤖","👽","🧙","🐨","🦁","🐧","🦖"];
-
 /* =====================================================================
    STATE & STORAGE  (global = whole device, profile = each chef)
    ===================================================================== */
-const G = { profiles:[], active:null, muted:false, hindi:false, staples:true, cb:false, dys:false, allergy:{}, packs:[], quizReq:true, theme:"dark", pinHash:null, lang:"en", soundPack:"pop", autoRead:true, onboarded:false };
+const G = { profiles:[], active:null, muted:false, hindi:false, staples:true, cb:false, dys:false, allergy:{}, packs:[], quizReq:true, theme:"dark", pinHash:null, lang:"en", soundPack:"pop", autoRead:true, onboarded:false, legendOpen:true, hintDone:false };
 let parentUnlocked=false; // only for this visit — locks again on reload
 let P = null; // active profile data
-const blankProfile = ()=>({ have:new Set(), cooked:new Set(), favs:new Set(), shop:[], custom:[], planner:{0:[],1:[],2:[],3:[],4:[],5:[],6:[]}, quizPassed:false, badges:[], diary:[] });
+const blankProfile = ()=>({ have:new Set(), cooked:new Set(), favs:new Set(), shop:[], custom:[], quizPassed:false, badges:[], diary:[] });
 const LS = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }, del(k){ try{ localStorage.removeItem(k); }catch(e){} } };
-
 function loadGlobal(){
   const g=LS.get("fc_global");
   if(g){ Object.assign(G,g); }
@@ -916,30 +930,29 @@ function loadGlobal(){
     const old=LS.get("fridgechef"), id="p"+Date.now();
     G.profiles=[{id,name:"Chef",avatar:"👩‍🍳"}]; G.active=id;
     if(old){
-      G.onboarded=true; G.muted=!!old.muted; G.hindi=!!old.hindi; G.staples=old.staples!==false; G.allergy=old.allergy||{};
-      LS.set("fc_p_"+id,{have:old.have||[],cooked:old.cooked||[],shop:old.shop||[],custom:old.custom||[],planner:null,quizPassed:false,badges:[]});
+      G.onboarded=true; G.hintDone=true; G.muted=!!old.muted; G.hindi=!!old.hindi; G.staples=old.staples!==false; G.allergy=old.allergy||{};
+      LS.set("fc_p_"+id,{have:old.have||[],cooked:old.cooked||[],shop:old.shop||[],custom:old.custom||[],quizPassed:false,badges:[]});
       const d=LS.get("fridgechef_diary"); if(d) LS.set("fc_d_"+id,d);
       LS.del("fridgechef"); LS.del("fridgechef_diary");
     }
     saveGlobal();
   }
 }
-function saveGlobal(){ LS.set("fc_global",{profiles:G.profiles,active:G.active,muted:G.muted,hindi:G.hindi,staples:G.staples,cb:G.cb,dys:G.dys,allergy:G.allergy,packs:G.packs,quizReq:G.quizReq,theme:G.theme,pinHash:G.pinHash,lang:G.lang,soundPack:G.soundPack,autoRead:G.autoRead,onboarded:G.onboarded}); }
+function saveGlobal(){ LS.set("fc_global",{profiles:G.profiles,active:G.active,muted:G.muted,hindi:G.hindi,staples:G.staples,cb:G.cb,dys:G.dys,allergy:G.allergy,packs:G.packs,quizReq:G.quizReq,theme:G.theme,pinHash:G.pinHash,lang:G.lang,soundPack:G.soundPack,autoRead:G.autoRead,onboarded:G.onboarded,legendOpen:G.legendOpen,hintDone:G.hintDone}); }
 function loadProfile(id){
   P=blankProfile(); const s=LS.get("fc_p_"+id)||{};
   (s.have||[]).forEach(x=>P.have.add(x)); (s.cooked||[]).forEach(x=>P.cooked.add(x)); (s.favs||[]).forEach(x=>P.favs.add(x));
   P.shop=s.shop||[]; P.custom=(s.custom||[]).map(r=>({...r,custom:true})); P.quizPassed=!!s.quizPassed; P.badges=s.badges||[];
-  if(s.planner) P.planner={...P.planner,...s.planner};
   P.diary=LS.get("fc_d_"+id)||[];
+  P.badges=P.badges.filter(id=>BADGES.some(b=>b.id===id)); // drop badges from removed features
   // new chefs start with an empty fridge — onboarding (or the empty state) guides them
 }
 function save(){
-  LS.set("fc_p_"+G.active,{have:[...P.have],cooked:[...P.cooked],favs:[...P.favs],shop:P.shop,custom:P.custom.map(({custom,...r})=>r),planner:P.planner,quizPassed:P.quizPassed,badges:P.badges});
+  LS.set("fc_p_"+G.active,{have:[...P.have],cooked:[...P.cooked],favs:[...P.favs],shop:P.shop,custom:P.custom.map(({custom,...r})=>r),quizPassed:P.quizPassed,badges:P.badges});
   checkBadges();
 }
 function saveDiary(){ if(LS.set("fc_d_"+G.active,P.diary)) return true; toast("Photo storage is full — delete a few old photos first."); return false; }
 const activeProfile = ()=>G.profiles.find(p=>p.id===G.active)||G.profiles[0];
-
 /* =====================================================================
    HELPERS
    ===================================================================== */
@@ -957,7 +970,6 @@ function ingName(id){ const e=ING[id]; if(!e) return id; return G.hindi&&e[2]?`$
 const ingPlain = id=>ING[id]?ING[id][1]:id;
 const ingEmoji = id=>ING[id]?ING[id][0]:"🛒";
 const needsQuiz = r=>G.quizReq && !P.quizPassed && (r.safety.includes("stove")||r.safety.includes("oven"));
-
 // returns {miss:[ids still missing after swaps], swaps:[{from,to:[ids]}], hints:[{from,to:[ids]}]}
 function analyse(r){
   const miss=[], swaps=[], hints=[];
@@ -971,7 +983,6 @@ function analyse(r){
   return {miss,swaps,hints};
 }
 const swapText = s=>`No ${ingPlain(s.from)}? Use ${s.to.map(ingPlain).join(" + ")}`;
-
 /* =====================================================================
    SOUND
    ===================================================================== */
@@ -1001,7 +1012,6 @@ const PACKS_SFX={
 const sfx=new Proxy({},{get:(_,k)=>(...a)=>(PACKS_SFX[G.soundPack]||PACKS_SFX.pop)[k]?.(...a)});
 const muteBtn=document.getElementById("muteBtn");
 function renderMute(){ muteBtn.querySelector(".ti").textContent=G.muted?"🔇":{pop:"🔊",arcade:"👾",asmr:"🎧"}[G.soundPack]; muteBtn.querySelector("small").textContent=G.muted?t("muted"):`${t("pack_"+G.soundPack)} · ${t("tap_change")}`; muteBtn.setAttribute("aria-pressed",G.muted); }
-
 /* views */
 function showView(v){
   document.querySelectorAll(".view").forEach(m=>m.hidden=m.dataset.view!==v);
@@ -1009,7 +1019,6 @@ function showView(v){
   window.scrollTo({top:0,behavior:"smooth"}); setTimeout(updateJump,50);
 }
 document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>{ showView(b.dataset.view); sfx.pop(); }));
-
 /* phone: floating "see recipes" button, hidden once the results are on screen */
 const jumpBtn=document.getElementById("jumpBtn");
 function updateJump(){
@@ -1021,7 +1030,6 @@ function updateJump(){
 jumpBtn.addEventListener("click",()=>{ document.getElementById("resultsTitle").scrollIntoView({behavior:"smooth",block:"start"}); sfx.pop(); });
 addEventListener("scroll",updateJump,{passive:true}); addEventListener("resize",updateJump);
 muteBtn.addEventListener("click",openSounds);
-
 /* =====================================================================
    FRIDGE
    ===================================================================== */
@@ -1060,7 +1068,6 @@ function renderGroups(){
   GROUPS.forEach(([title,ids])=>addGroup(title,t("grp_"+title.replace(/[^a-z]/gi,"").toLowerCase()),ids.filter(match)));
 }
 searchEl.addEventListener("input",renderGroups);
-
 /* =====================================================================
    RESULTS
    ===================================================================== */
@@ -1082,13 +1089,11 @@ function renderResults(){
   const scored=pool.filter(r=>passesFilter(r)).map(r=>({r,...analyse(r)}));
   const can=scored.filter(x=>!x.miss.length).sort((a,b)=>a.swaps.length-b.swaps.length||a.r.mins-b.r.mins);
   const almost=scored.filter(x=>x.miss.length>0&&x.miss.length<=2&&x.r.needs.length-x.miss.length>=1).sort((a,b)=>a.miss.length-b.miss.length||a.r.mins-b.r.mins);
-
   document.querySelectorAll(".tab").forEach(t=>{
     const f=t.dataset.filter;
     const c=f==="mine"?P.custom.length:f==="fav"?pool.filter(r=>P.favs.has(r.id)).length:pool.filter(r=>passesFilter(r,f)).filter(r=>!analyse(r).miss.length).length;
     let badge=t.querySelector(".n"); if(!badge){badge=document.createElement("span"); badge.className="n"; t.appendChild(badge);} badge.textContent=c;
   });
-
   resultsEl.innerHTML="";
   document.getElementById("jumpCount").textContent=can.length;
   updateJump();
@@ -1096,7 +1101,6 @@ function renderResults(){
   if(filter==="fav"&&!pool.filter(r=>P.favs.has(r.id)).length){ resultsEl.innerHTML=`<div class="section-title"><h3>${t("tab_fav")}</h3></div><div class="empty"><span class="big">🤍</span>${t("fav_empty")}</div>`; return; }
   if(filter==="fav"){ const favs=pool.filter(r=>P.favs.has(r.id)).map(r=>({r,...analyse(r)})); const grid=document.createElement("div"); grid.className="grid"; favs.forEach(x=>grid.appendChild(card(x))); resultsEl.innerHTML=`<div class="section-title"><h3>${t("tab_fav")}</h3><span class="sub">${favs.length}</span></div>`; resultsEl.appendChild(grid); return; }
   if(n===0&&filter!=="mine"){ resultsEl.innerHTML=`<div class="section-title"><h3>${t("letscook")}</h3></div><div class="empty"><span class="big">🧊</span>${t("empty_fridge")}</div>`; return; }
-
   const sec=document.createElement("div");
   sec.innerHTML=`<div class="section-title"><h3>${t("can_now")}</h3><span class="sub">${can.length} ${t("recipes")}</span></div>`;
   if(can.length){ const grid=document.createElement("div"); grid.className="grid"; can.forEach(x=>grid.appendChild(card(x))); sec.appendChild(grid); }
@@ -1118,7 +1122,7 @@ const levelStars=l=>"⭐".repeat(l)+`<span style="opacity:.25">${"⭐".repeat(3-
 const packOf=r=>PACKS.find(p=>p.id===r.pack);
 function card({r,miss,swaps,hints}){
   const locked=needsQuiz(r);
-  const b=document.createElement("div"); b.className="card"+(locked?" locked":""); b.tabIndex=0; b.setAttribute("role","button"); b.draggable=true; b.dataset.id=r.id;
+  const b=document.createElement("div"); b.className="card"+(locked?" locked":""); b.tabIndex=0; b.setAttribute("role","button"); b.dataset.id=r.id;
   const badges=[P.cooked.has(r.id)?"🏅":"", r.custom?"✨":"", r.pack?packOf(r).emoji:"", inSeason(r)?"🌱":""].filter(Boolean).join(" ");
   b.innerHTML=`
     <div class="emoji">${r.emoji}</div>
@@ -1135,7 +1139,6 @@ function card({r,miss,swaps,hints}){
   const open=()=>locked?openQuiz(r):openRecipe(r);
   b.addEventListener("click",open);
   b.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault(); open();} });
-  b.addEventListener("dragstart",e=>{ e.dataTransfer.setData("text/plain",r.id); e.dataTransfer.effectAllowed="copy"; });
   const add=b.querySelector(".addmiss"); if(add) add.addEventListener("click",e=>{ e.stopPropagation(); addToShop(miss); });
   b.querySelector(".heart").addEventListener("click",e=>{ e.stopPropagation(); toggleFav(r.id); });
   return b;
@@ -1150,7 +1153,6 @@ resultsEl.addEventListener("pointermove",e=>{
 });
 resultsEl.addEventListener("pointerout",e=>{ const c=e.target.closest(".card"); if(c&&!c.contains(e.relatedTarget)){ c.classList.remove("tilting"); c.style.removeProperty("--rx"); c.style.removeProperty("--ry"); } });
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ filter=t.dataset.filter; document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t?"true":"false")); renderResults(); }));
-
 /* =====================================================================
    TOGGLES / SETTINGS
    ===================================================================== */
@@ -1172,7 +1174,6 @@ document.getElementById("resetAll").addEventListener("click",()=>{
   location.reload();
 });
 function applyA11y(){ document.documentElement.dataset.cb=G.cb?"1":"0"; document.documentElement.dataset.dys=G.dys?"1":"0"; applyTheme(); }
-
 /* ---- theme: dark (default) / light / auto ---- */
 const sysDark=matchMedia("(prefers-color-scheme: dark)");
 function applyTheme(){
@@ -1186,7 +1187,6 @@ function applyTheme(){
 sysDark.addEventListener("change",()=>{ if(G.theme==="auto") applyTheme(); });
 function setTheme(t){ G.theme=t; saveGlobal(); applyTheme(); }
 document.getElementById("themeBtn").addEventListener("click",()=>{ setTheme({dark:"light",light:"auto",auto:"dark"}[G.theme]); sfx.pop(); toast({dark:"dark mode 🌙",light:"light mode ☀️",auto:"auto — follows your device 🌗"}[G.theme]); });
-
 /* ---- grown-up PIN ---- */
 async function hashPin(pin){
   const str="fridgechef|"+pin;
@@ -1237,7 +1237,6 @@ function openPin(mode,onDone){
     if(buf.length===4) setTimeout(submit,120);
   }));
 }
-
 /* packs */
 function renderPacks(){
   const el=document.getElementById("packs"); el.innerHTML="";
@@ -1245,11 +1244,10 @@ function renderPacks(){
     const on=G.packs.includes(p.id);
     const b=document.createElement("button"); b.className="pack"; b.type="button"; b.setAttribute("aria-pressed",on);
     b.innerHTML=`<span class="e">${p.emoji}</span><span><b>${p.name}</b><small>${p.desc} · ${p.recipes.length} recipes</small></span><span class="sw" aria-hidden="true"></span>`;
-    b.addEventListener("click",()=>{ G.packs=on?G.packs.filter(x=>x!==p.id):[...G.packs,p.id]; saveGlobal(); on?sfx.unpop():sfx.pop(); renderPacks(); renderResults(); renderPlanner(); });
+    b.addEventListener("click",()=>{ G.packs=on?G.packs.filter(x=>x!==p.id):[...G.packs,p.id]; saveGlobal(); on?sfx.unpop():sfx.pop(); renderPacks(); renderResults(); });
     el.appendChild(b);
   });
 }
-
 /* =====================================================================
    SHOPPING LIST
    ===================================================================== */
@@ -1276,42 +1274,9 @@ document.getElementById("copyShop").addEventListener("click",async()=>{
 });
 document.getElementById("clearGot").addEventListener("click",()=>{ P.shop=P.shop.filter(s=>!s.got); save(); renderShop(); });
 document.getElementById("clearShop").addEventListener("click",()=>{ P.shop=[]; save(); renderShop(); });
-
 /* =====================================================================
    MEAL PLANNER
    ===================================================================== */
-const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-const todayIdx=()=>(new Date().getDay()+6)%7;
-function renderPlanner(){
-  const w=document.getElementById("week"); w.innerHTML="";
-  DAYS.forEach((d,i)=>{
-    const day=document.createElement("div"); day.className="day"+(i===todayIdx()?" today":""); day.dataset.day=i;
-    day.innerHTML=`<h4>${t("day"+i)}${i===todayIdx()?" · "+t("today"):""}</h4>`;
-    const ids=(P.planner[i]||[]).filter(findRecipe); // ignore recipes from packs that are switched off
-    if(!ids.length) day.innerHTML+=`<div class="hint">${t("drop_here")}</div>`;
-    ids.forEach((id,k)=>{
-      const r=findRecipe(id); if(!r) return;
-      const m=document.createElement("div"); m.className="meal"; m.innerHTML=`<span>${r.emoji}</span><span>${r.name}</span><button class="x" aria-label="Remove">✕</button>`;
-      m.addEventListener("click",e=>{ if(e.target.classList.contains("x")) return; needsQuiz(r)?openQuiz(r):openRecipe(r); });
-      m.querySelector(".x").addEventListener("click",()=>{ P.planner[i].splice(k,1); save(); renderPlanner(); });
-      day.appendChild(m);
-    });
-    day.addEventListener("dragover",e=>{ e.preventDefault(); day.classList.add("over"); });
-    day.addEventListener("dragleave",()=>day.classList.remove("over"));
-    day.addEventListener("drop",e=>{ e.preventDefault(); day.classList.remove("over"); const id=e.dataTransfer.getData("text/plain"); if(findRecipe(id)) addToPlan(i,id); });
-    w.appendChild(day);
-  });
-}
-function addToPlan(day,id){
-  if((P.planner[day]||[]).includes(id)){ toast("Already planned for "+DAYS[day]); return; }
-  (P.planner[day]=P.planner[day]||[]).push(id); save(); renderPlanner(); sfx.tick(); toast(`${findRecipe(id).name} planned for ${DAYS[day]} 📅`);
-}
-document.getElementById("planShop").addEventListener("click",()=>{
-  const ids=new Set(); Object.values(P.planner).flat().forEach(id=>{ const r=findRecipe(id); if(r) analyse(r).miss.forEach(m=>ids.add(m)); });
-  if(!ids.size){ toast(Object.values(P.planner).flat().length?"You already have everything for the week! 🎉":"Plan some meals first."); return; }
-  addToShop([...ids]);
-});
-
 /* =====================================================================
    BADGES
    ===================================================================== */
@@ -1338,7 +1303,6 @@ function renderBadges(){
   });
 }
 document.getElementById("badgeBtn").addEventListener("click",()=>{ showView("me"); sfx.pop(); });
-
 /* =====================================================================
    DIARY
    ===================================================================== */
@@ -1361,7 +1325,6 @@ function addPhoto(file,r){
   };
   img.onerror=()=>toast("Couldn't read that photo."); img.src=url;
 }
-
 /* =====================================================================
    SHEETS (modal)
    ===================================================================== */
@@ -1372,7 +1335,6 @@ function closeSheet(){ modal.hidden=true; document.body.style.overflow=""; if(la
 document.getElementById("backdrop").addEventListener("click",()=>{ if(!G.onboarded) return; closeSheet(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!modal.hidden) closeSheet(); });
 const head=(emoji,title,sub="")=>`<div class="sheet-head"><div class="emoji">${emoji}</div><div><h2 id="sheetTitle">${title}</h2>${sub?`<p class="sub">${sub}</p>`:""}</div><button class="close" id="closeBtn" aria-label="Close">✕</button></div>`;
-
 /* ---- recipe ---- */
 /* ---- servings scaler ---- */
 let servings=2; // 1 | 2 | 4 | 6   (recipes are written for ~2)
@@ -1409,7 +1371,6 @@ function pluralise(text){
 }
 const servMult=()=>({1:.5,2:1,4:2,6:3})[servings];
 const SERV_LABEL={1:"just me",2:"1–2 people",4:"family (4)",6:"party (6)"};
-
 /* ---- text-to-speech (built into the browser, no service) ---- */
 const TTS=("speechSynthesis" in window);
 function pickVoice(){
@@ -1425,10 +1386,8 @@ function speak(text){
   speechSynthesis.speak(u);
 }
 const hush=()=>{ if(TTS) speechSynthesis.cancel(); };
-
 /* ---- favourites ---- */
 function toggleFav(id){ if(P.favs.has(id)){ P.favs.delete(id); sfx.unpop(); toast(t("unfav")); } else { P.favs.add(id); sfx.pop(); toast(t("fav")); } save(); renderResults(); }
-
 /* ---- recipe sheet ---- */
 function openRecipe(r){
   const {miss,swaps}=analyse(r); const missSet=new Set(miss), swapMap=Object.fromEntries(swaps.map(s=>[s.from,s.to]));
@@ -1443,6 +1402,10 @@ function openRecipe(r){
       ${r.custom?'<span class="pill mine">✨ '+t("mine")+'</span>':''}${pk?`<span class="pill pack">${pk.emoji} ${pk.name}</span>`:''}${inSeason(r)?'<span class="pill ok">🌱 '+t("inseason")+'</span>':''}
     </div>
     <div class="safety ${safeClass}">${safeMsg}</div>
+    <div class="primary-act no-print">
+      <button class="btn primary" id="cookBtn">👩‍🍳 ${t("cookmode")}</button>
+      <span class="sub" style="margin:0">${t("cookmode_hint")}</span>
+    </div>
     <div class="need"><h3>${t("servings")}</h3>
       <div class="segs" id="servSegs">${[1,2,4,6].map(n=>`<button type="button" data-n="${n}" aria-pressed="${servings===n}">${{1:"🧒",2:"👫",4:"👨‍👩‍👧‍👦",6:"🎉"}[n]} ${SERV_LABEL[n]}</button>`).join("")}</div>
     </div>
@@ -1457,16 +1420,18 @@ function openRecipe(r){
     <div class="need"><h3>${t("steps")}</h3></div>
     <ol class="steps" id="stepList"></ol>
     ${r.tip?`<div class="tip"><b>${t("protip")}</b> <span class="tiptext"></span></div>`:""}
-    <div class="need no-print"><h3>${t("addtoweek")}</h3><div class="daypick">${DAYS.map((d,i)=>`<button class="btn sm" data-day="${i}">${t("day"+i)}</button>`).join("")}</div></div>
-    <div class="actions">
-      <button class="btn primary" id="cookBtn">👩‍🍳 ${t("cookmode")}</button>
+    <div class="act-label no-print">${t("act_after")}</div>
+    <div class="acts-row">
       <button class="btn lime" id="madeBtn">🎉 ${t("madeit")}</button>
-      <button class="btn" id="favBtn">${fav?"❤️":"🤍"} ${fav?t("faved"):t("favit")}</button>
       <label class="btn filelabel">📸 ${t("addphoto")}<input type="file" accept="image/*" capture="environment" id="photoIn"></label>
       <a class="btn" id="logBtn" href="../calorietracker/">🔥 ${t("logmeal")}</a>
-      <button class="btn" id="printBtn">🖨 ${t("print")}</button>
-      <button class="btn" id="shareBtn">📋 ${t("copy")}</button>
-      ${r.custom?`<button class="btn" id="jsonBtn">📤 Copy JSON</button><button class="btn ghost" id="delBtn">🗑 ${t("delete")}</button>`:""}
+    </div>
+    <div class="act-label no-print">${t("act_other")}</div>
+    <div class="acts-row no-print">
+      <button class="btn sm" id="favBtn">${fav?"❤️":"🤍"} ${fav?t("faved"):t("favit")}</button>
+      <button class="btn sm" id="printBtn">🖨 ${t("print")}</button>
+      <button class="btn sm" id="shareBtn">📋 ${t("copy")}</button>
+      ${r.custom?`<button class="btn sm" id="jsonBtn">📤 Copy JSON</button><button class="btn sm ghost" id="delBtn">🗑 ${t("delete")}</button>`:""}
     </div>`);
   const renderSteps=()=>{
     const m=servMult(); const ol=document.getElementById("stepList"); const done=[...ol.querySelectorAll("input")].map(i=>i.checked);
@@ -1478,7 +1443,6 @@ function openRecipe(r){
   renderSteps();
   sheet.querySelectorAll("#servSegs button").forEach(b=>b.addEventListener("click",()=>{ servings=+b.dataset.n; sheet.querySelectorAll("#servSegs button").forEach(x=>x.setAttribute("aria-pressed",x===b)); renderSteps(); setLog(); sfx.pop(); }));
   const am=document.getElementById("addMissBtn"); if(am) am.addEventListener("click",()=>addToShop(miss));
-  sheet.querySelectorAll(".daypick button").forEach(b=>b.addEventListener("click",()=>addToPlan(+b.dataset.day,r.id)));
   const setLog=()=>{ const k=KCAL[r.id]?Math.round(KCAL[r.id]*servMult()):null; document.getElementById("logBtn").href=`../calorietracker/?food=${encodeURIComponent(r.name)}${k?`&kcal=${k}`:""}`; }; setLog();
   document.getElementById("cookBtn").addEventListener("click",()=>openCookMode(r));
   document.getElementById("madeBtn").addEventListener("click",()=>markMade(r));
@@ -1492,11 +1456,10 @@ function openRecipe(r){
   });
   if(r.custom){
     document.getElementById("jsonBtn").addEventListener("click",async()=>{ const {custom,...clean}=r; try{ await navigator.clipboard.writeText(JSON.stringify(clean,null,1)); toast("JSON copied — paste it into RECIPES in index.html"); }catch(e){ toast(t("nocopy")); } });
-    document.getElementById("delBtn").addEventListener("click",()=>{ if(!confirm(`${t("delete")} "${r.name}"?`)) return; P.custom=P.custom.filter(x=>x.id!==r.id); P.favs.delete(r.id); Object.keys(P.planner).forEach(d=>P.planner[d]=P.planner[d].filter(x=>x!==r.id)); save(); closeSheet(); renderResults(); renderPlanner(); toast(t("deleted")); });
+    document.getElementById("delBtn").addEventListener("click",()=>{ if(!confirm(`${t("delete")} "${r.name}"?`)) return; P.custom=P.custom.filter(x=>x.id!==r.id); P.favs.delete(r.id); save(); closeSheet(); renderResults(); toast(t("deleted")); });
   }
 }
 function markMade(r){ P.cooked.add(r.id); save(); confetti(); sfx.sizzle(); toast(`${r.name} — ${t("cooked_toast")}`); renderResults(); renderBadges(); }
-
 /* ---- cooking mode: one giant step at a time ---- */
 const cook=document.getElementById("cook");
 let cookState=null, wakeLock=null, timerInt=null;
@@ -1557,7 +1520,45 @@ function startTimer(secs){
 let sx=null; cook.addEventListener("touchstart",e=>sx=e.touches[0].clientX,{passive:true});
 cook.addEventListener("touchend",e=>{ if(sx===null||!cookState) return; const dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)<60) return; if(dx<0&&cookState.i<cookState.r.steps.length-1){cookState.i++; cookState.dir="turn-next"; renderCook();} if(dx>0&&cookState.i>0){cookState.i--; cookState.dir="turn-prev"; renderCook();} });
 document.addEventListener("keydown",e=>{ if(!cookState) return; if(e.key==="ArrowRight"&&cookState.i<cookState.r.steps.length-1){cookState.i++; cookState.dir="turn-next"; renderCook();} if(e.key==="ArrowLeft"&&cookState.i>0){cookState.i--; cookState.dir="turn-prev"; renderCook();} if(e.key==="Escape") closeCook(); });
-
+/* ---- how it works ---- */
+function openHelp(){
+  openSheet(`${head("❓",t("help_t"),t("help_s"))}
+    <div class="help-step"><span class="n">1</span><div><b>${t("h1t")}</b><span>${t("h1s")}</span></div></div>
+    <div class="help-step"><span class="n">2</span><div><b>${t("h2t")}</b><span>${t("h2s")}</span></div></div>
+    <div class="help-step"><span class="n">3</span><div><b>${t("h3t")}</b><span>${t("h3s")}</span></div></div>
+    <div class="help-step"><span class="n">4</span><div><b>${t("h4t")}</b><span>${t("h4s")}</span></div></div>
+    <div class="need"><h3>${t("help_tabs")}</h3>
+      <div class="help-tabs">
+        <div><b>🍳 ${t("nav_cook")}</b><span>${t("ht_cook")}</span></div>
+        <div><b>📅 ${t("nav_plan")}</b><span>${t("ht_plan")}</span></div>
+        <div><b>🏅 ${t("nav_me")}</b><span>${t("ht_me")}</span></div>
+        <div><b>⚙️ ${t("nav_more")}</b><span>${t("ht_more")}</span></div>
+      </div>
+    </div>
+    <div class="need"><h3>${t("help_safe")}</h3><p class="sub">${t("help_safe_s")}</p></div>
+    <div class="need"><h3>${t("help_priv")}</h3><p class="sub">${t("help_priv_s")}</p></div>
+    <div class="actions"><button class="btn primary" id="helpDone">${t("gotit")}</button></div>`);
+  document.getElementById("helpDone").addEventListener("click",closeSheet);
+}
+document.getElementById("helpBtn").addEventListener("click",openHelp);
+document.getElementById("helpBtn2").addEventListener("click",openHelp);
+/* ---- symbol legend + first-visit hint ----
+   initClarity() runs from renderAll(), i.e. AFTER saved settings are loaded.
+   The toggle event fires asynchronously, so the handler compares against the
+   stored value instead of using a flag — that way opening it programmatically
+   never counts as the user changing it. */
+function initClarity(){
+  document.getElementById("legend").open=G.legendOpen!==false;
+  document.getElementById("hintCard").hidden=!!G.hintDone;
+}
+document.getElementById("legend").addEventListener("toggle",e=>{
+  const lg=e.currentTarget;
+  if(lg.open===(G.legendOpen!==false)) return;   // programmatic, not a real click
+  G.legendOpen=lg.open; saveGlobal();
+});
+document.getElementById("hintX").addEventListener("click",()=>{
+  document.getElementById("hintCard").hidden=true; G.hintDone=true; saveGlobal(); sfx.tick();
+});
 /* ---- safety quiz ---- */
 document.getElementById("quizBtn").addEventListener("click",()=>openQuiz(null));
 function openQuiz(afterRecipe){
@@ -1595,7 +1596,6 @@ function openQuiz(afterRecipe){
     box.scrollIntoView({behavior:"smooth"});
   });
 }
-
 /* ---- measurements ---- */
 document.getElementById("measureBtn").addEventListener("click",()=>{
   const circle=(r,fill)=>`<svg viewBox="0 0 100 80"><circle cx="50" cy="40" r="${r}" fill="${fill}" stroke="var(--ink)" stroke-width="2"/></svg>`;
@@ -1622,7 +1622,6 @@ document.getElementById("measureBtn").addEventListener("click",()=>{
     <div class="actions"><button class="btn" id="printBtn">🖨 Print this</button></div>`);
   document.getElementById("printBtn").addEventListener("click",()=>window.print());
 });
-
 /* ---- accessibility ---- */
 document.getElementById("a11yBtn").addEventListener("click",()=>{
   openSheet(`
@@ -1645,7 +1644,6 @@ document.getElementById("a11yBtn").addEventListener("click",()=>{
   document.getElementById("muteT").addEventListener("change",e=>{ G.muted=e.target.checked; saveGlobal(); renderMute(); });
   document.getElementById("doneA11y").addEventListener("click",closeSheet);
 });
-
 /* ---- profiles ---- */
 document.getElementById("profileBtn").addEventListener("click",openProfiles);
 function renderProfileBtn(){ const p=activeProfile(); document.getElementById("profAv").textContent=p.avatar; document.getElementById("profName").textContent=p.name; }
@@ -1676,7 +1674,6 @@ function openProfiles(){
     LS.del("fc_p_"+p.id); LS.del("fc_d_"+p.id); G.profiles=G.profiles.filter(x=>x.id!==p.id); switchProfile(G.profiles[0].id); closeSheet();
   });
 }
-
 /* ---- recipe builder ---- */
 document.getElementById("newRecipeBtn").addEventListener("click",openBuilder);
 function openBuilder(){
@@ -1730,28 +1727,39 @@ document.getElementById("exportAll").addEventListener("click",()=>{
   const blob=new Blob([JSON.stringify(P.custom.map(({custom,...r})=>r),null,2)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${activeProfile().name}-fridge-chef-recipes.json`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast("Downloading…");
 });
-
 /* =====================================================================
    I18N  (UI only — recipes stay in English)
    ===================================================================== */
 const STR={
- en:{nav_cook:"Cook",nav_plan:"Plan",nav_me:"Me",nav_more:"More",fridge_title:"what's in the fridge rn?",clear:"🧹 Clear",search_ph:"search… banana, kela, whatever",
+ en:{help:"Help",gotit:"Got it",hint1:"<b>Start here:</b> tap anything you actually have below. Recipes you can cook appear on the right, updating as you go.",
+  legend_t:"❓ What do the labels on recipes mean?",lg1:"You can do this one entirely on your own.",lg2:"Needs the hob or oven. Never do these alone.",lg3:"Something needs proper cutting.",lg4:"Pass the safety quiz once and stove recipes unlock.",lg5:"How long it takes, and how tricky it is out of three.",lg6:"You are missing something, but what you have will work instead.",lg7:"This one is 1–2 items short. Tap \"add missing\" to start a shopping list.",lg8:"In season this month · your own recipe · you have cooked it before.",
+  grp_learn:"Learn",grp_look:"Make it yours",grp_apps:"My other apps",grp_recipes:"More recipes",grp_fridge:"Fridge options",grp_adult:"For grown-ups",
+  tile_help:"How it works",tile_help_s:"a 1-minute guide to the whole app",tile_health:"Health Helper",tile_health_s:"feeling unwell? check the signs →",
+  cookmode_hint:"Best way to actually cook: one big step at a time, read aloud, with timers.",
+  act_after:"When you've made it",act_other:"Other things you can do",
+  help_t:"How Fridge Chef works",help_s:"The whole app in four steps.",
+  h1t:"1. Tell it what you have",h1s:"On the Cook tab, tap every ingredient in your kitchen. It remembers, so you only do this properly once and then adjust.",
+  h2t:"2. See what you can cook",h2s:"\"Make these now\" means you have everything. \"Almost there\" means you're only 1–2 items short — and it tells you which.",
+  h3t:"3. Swaps save the day",h3s:"No curd? It'll say milk + lemon works instead, and move that recipe into the list you can cook.",
+  h4t:"4. Cook mode does the cooking",h4s:"Open a recipe and tap Cook mode. One giant step at a time, read aloud if you want, with a timer whenever a step mentions minutes. Your screen stays awake.",
+  help_tabs:"The four tabs",ht_cook:"your fridge and the recipes you can make",ht_plan:"the shopping list of things you still need",ht_me:"badges you've earned and photos of what you cooked",ht_more:"settings, guides, extra recipe packs, grown-up controls",
+  help_safe:"About the 🔒 lock",help_safe_s:"Recipes using the stove stay locked until you pass the short safety quiz once. Even after that, always cook with a grown-up nearby — the app can't see your kitchen.",
+  help_priv:"Where your stuff is kept",help_priv_s:"Everything — your fridge, badges, photos, plans — is saved only in this browser on this device. Nothing is uploaded anywhere and nobody else can see it.",
+  nav_cook:"Cook",nav_plan:"Shopping",nav_me:"Me",nav_more:"More",fridge_title:"what's in the fridge rn?",clear:"🧹 Clear",search_ph:"search… banana, kela, whatever",
   results_title:"ok so what can i make",results_sub:"tap a recipe → steps, swaps, the works",surprise:"🎲 surprise me",makeown:"✨ make ur own",
-  tab_all:"All",tab_nostove:"🧊 No stove",tab_quick:"⚡ Quick",tab_snack:"🍪 Snacks",tab_season:"🌱 Season",tab_fav:"❤️ Faves",tab_mine:"✨ Mine",
+  tab_all:"All",tab_nostove:"🧊 No cooking",tab_quick:"⚡ Quick",tab_snack:"🍪 Snacks",tab_season:"🌱 In season",tab_fav:"❤️ Faves",tab_mine:"✨ My recipes",
   have0:"tap what you've got to get started",haveN:"{n} things in the fridge",letscook:"Let's cook!",empty_fridge:"fridge is empty (on screen, anyway).<br>tap what you've got and let's see.",
   can_now:"✅ u can make these rn",recipes:"recipes",nothing_yet:"nothing yet 😭 check \"almost there\" below — you might be one item away",almost:"🛒 almost there ngl",almost_sub:"missing just 1–2 things",
   mine_empty:"No recipes of your own yet.<br>Tap \"make ur own\" to invent one!",fav_empty:"No faves yet. Tap the 🤍 on any recipe.",
   need:"Need:",or:"or",insteadof:"instead of",addmissing:"🛒 add missing",quizfirst:"🔒 quiz first",
   pill_stove:"🔥 Stove · with a grown-up",pill_oven:"🔥 Oven · with a grown-up",pill_micro:"📡 Microwave",pill_knife:"🔪 Knife · with a grown-up",pill_none:"🧊 No heat, no knife",
-  plan_title:"📅 the week ahead",plan_sub:"drag a recipe from Cook onto a day, or tap a day inside any recipe",plan_shop:"🛒 add what's missing this week",today:"today",drop_here:"drop a recipe here",
-  day0:"Mon",day1:"Tue",day2:"Wed",day3:"Thu",day4:"Fri",day5:"Sat",day6:"Sun",
-  shop_title:"🛒 shopping list",shop_empty:"Tap \"add missing\" on a recipe to build your list.",tobuy:"{n} to buy",copy_list:"📋 Copy list",remove_bought:"✅ Remove bought",clear_all:"🧹 Clear all",
-  badge_title:"🏅 badge wall",badge_sub:"{a} of {b} earned · {c} recipes cooked",diary_title:"📸 the feed",diary_sub:"pics of what you made · saved on this device only",diary_empty:"no pics yet. cook something, tap \"add a photo\", flex.",
+  shop_title:"🛒 Shopping list",shop_how:"Open any recipe you're a couple of items short on and tap <b>add missing</b> — everything you need lands here.",shop_empty:"Tap \"add missing\" on a recipe to build your list.",tobuy:"{n} to buy",copy_list:"📋 Copy list",remove_bought:"✅ Remove bought",clear_all:"🧹 Clear all",
+  badge_title:"🏅 Badges",badge_sub:"{a} of {b} earned · {c} recipes cooked",diary_title:"📸 Photo diary",diary_sub:"Snap what you cooked. Photos stay on this device — nobody else can see them.",diary_empty:"No photos yet. Cook something, open the recipe again and tap Add a photo.",
   tile_measure:"Measurements",tile_measure_s:"cups, spoons, pinches",tile_quiz:"Safety quiz",tile_quiz_s:"unlock the stove 🔓",tile_theme:"Theme",tile_a11y:"Reading & colours",tile_a11y_s:"fonts + colour-blind mode",tile_sounds:"Sounds",tile_lang:"Language",tile_cal:"Calorie tracker",tile_cal_s:"track what you ate →",
-  packs_title:"📦 recipe packs",packs_sub:"DLC for your kitchen. switch on extra collections.",fridge_opts:"🧂 Fridge options",staples_lbl:"Pantry basics always in (salt, sugar, oil, spices…)",hindi_lbl:"Show Hindi names — Curd (dahi)",
+  packs_title:"📦 Recipe packs",packs_sub:"Extra collections of recipes. Switch one on and its recipes join your list.",fridge_opts:"🧂 How matching works",staples_lbl:"Pantry basics always in (salt, sugar, oil, spices…)",hindi_lbl:"Show Hindi names — Curd (dahi)",
   parent_title:"🔒 Grown-up settings",unlock:"🔑 Unlock",lock:"🔒 Lock",changepin:"Change PIN",footer:"Always ask a grown-up before using the stove, oven, or a sharp knife.",jump:"recipes ready · scroll ↓",
   safe_stove_knife:"🔥🔪 Uses the stove and a knife — ask a grown-up to be with you.",safe_stove:"🔥 Uses the stove — ask a grown-up to be with you.",safe_knife:"🔪 Needs a knife — ask a grown-up to help with cutting.",safe_micro:"📡 Uses the microwave — careful, the bowl gets hot!",safe_none:"🧊 No heat, no sharp stuff. You've got this on your own!",
-  mine:"Mine",inseason:"In season",servings:"how many people?",youneed:"you need",missing:"missing",nicetohave:"nice to have",staples_short:"salt, sugar, oil, spices",addmissing_long:"Add missing to shopping list",steps:"steps — tick them off",protip:"pro tip:",addtoweek:"add to the week",
+  mine:"Mine",inseason:"In season",servings:"how many people?",youneed:"you need",missing:"missing",nicetohave:"nice to have",staples_short:"salt, sugar, oil, spices",addmissing_long:"Add missing to shopping list",steps:"steps — tick them off",protip:"pro tip:",
   cookmode:"Cook mode",logmeal:"log this meal",madeit:"i made it!",favit:"Fave it",faved:"Faved",addphoto:"Add a photo",print:"Print card",copy:"Copy recipe",delete:"Delete",copied:"Recipe copied!",nocopy:"Couldn't copy on this browser.",deleted:"Recipe deleted.",cooked_toast:"cooked. certified chef behaviour 🔥",
   fav:"added to faves ❤️",unfav:"removed from faves",autoread:"Read steps aloud",step:"Step",start_timer:"Start timer",stop_timer:"Stop timer",back:"Back",next:"Next",times_up:"Time's up!",
   muted:"Muted · tap to change",tap_change:"tap to change",pack_pop:"Pop",pack_arcade:"Retro arcade",pack_asmr:"ASMR kitchen",sounds_title:"Sounds",sounds_sub:"Pick a vibe. Tap one to hear it.",mute_lbl:"Mute everything",
@@ -1759,7 +1767,21 @@ const STR={
   ob1_t:"hey chef 👋",ob1_s:"Fridge Chef finds recipes from what's already in your kitchen.",ob_name:"What should we call you?",ob_av:"Pick your avatar",ob2_t:"what's in your fridge rn?",ob2_s:"Tap at least 3 things. You can change this anytime.",ob3_t:"you're set!",ob3_s:"Three things to know:",
   ob_tip1:"Tap any recipe to see steps. Cook mode reads them out one at a time.",ob_tip2:"🔒 means a stove — pass the quick safety quiz first, and always ask a grown-up.",ob_tip3:"Cook stuff, earn badges, flex on the feed.",ob_next:"Next →",ob_go:"Let's cook 🍳",ob_skip:"skip",ob_need3:"Pick at least 3 things!",ob_needname:"Type a name first.", inseason_in:"In season in",swap:"swap:",grp_fruitveg:"Fruit & veg",grp_dairyeggs:"Dairy & eggs",grp_grainsbread:"Grains & bread",grp_pantryjars:"Pantry & jars",grp_dalstins:"Dals & tins",m0:"January",m1:"February",m2:"March",m3:"April",m4:"May",m5:"June",m6:"July",m7:"August",m8:"September",m9:"October",m10:"November",m11:"December",
  },
- hi:{nav_cook:"पकाओ",nav_plan:"प्लान",nav_me:"मैं",nav_more:"और",fridge_title:"फ्रिज में क्या है?",clear:"🧹 साफ़",search_ph:"खोजो… kela, banana, कुछ भी",
+ hi:{help:"मदद",gotit:"समझ गया",hint1:"<b>यहाँ से शुरू करो:</b> नीचे जो भी तुम्हारे पास है उसे टैप करो। जो बना सकते हो वो दाईं तरफ़ दिखेगा।",
+  legend_t:"❓ रेसिपी पर लगे लेबल का क्या मतलब है?",lg1:"यह तुम अकेले बना सकते हो।",lg2:"चूल्हा या ओवन चाहिए। कभी अकेले मत करो।",lg3:"कुछ काटना पड़ेगा।",lg4:"एक बार सेफ़्टी क्विज़ पास करो, चूल्हे वाली रेसिपी खुल जाएँगी।",lg5:"कितना समय लगेगा, और कितना मुश्किल है (3 में से)।",lg6:"कुछ कम है, पर जो तुम्हारे पास है उससे काम चल जाएगा।",lg7:"सिर्फ़ 1–2 चीज़ें कम हैं। \"कमी जोड़ो\" टैप करो।",lg8:"इस महीने मौसमी · तुम्हारी अपनी रेसिपी · पहले बना चुके हो।",
+  grp_learn:"सीखो",grp_look:"अपने हिसाब से",grp_apps:"मेरे दूसरे ऐप",grp_recipes:"और रेसिपी",grp_fridge:"फ्रिज ऑप्शन",grp_adult:"बड़ों के लिए",
+  tile_help:"यह कैसे काम करता है",tile_help_s:"पूरे ऐप की 1 मिनट की गाइड",tile_health:"Health Helper",tile_health_s:"तबीयत ठीक नहीं? देखो →",
+  cookmode_hint:"पकाने का सबसे अच्छा तरीका: एक बार में एक बड़ा स्टेप, पढ़कर सुनाना, टाइमर के साथ।",
+  act_after:"जब बना लो",act_other:"और क्या कर सकते हो",
+  help_t:"Fridge Chef कैसे काम करता है",help_s:"पूरा ऐप चार स्टेप में।",
+  h1t:"1. बताओ क्या-क्या है",h1s:"Cook टैब पर घर की हर चीज़ टैप करो। ऐप याद रखता है, इसलिए एक बार ठीक से करो, फिर बस बदलते रहो।",
+  h2t:"2. देखो क्या बन सकता है",h2s:"\"अभी बना सकते हो\" मतलब सब कुछ है। \"बस थोड़ा और\" मतलब सिर्फ़ 1–2 चीज़ें कम हैं — और कौन सी, वो भी बताता है।",
+  h3t:"3. बदल कर भी बन जाएगा",h3s:"दही नहीं है? ऐप बताएगा कि दूध + नींबू से काम चल जाएगा, और वो रेसिपी बन सकने वाली लिस्ट में आ जाएगी।",
+  h4t:"4. कुकिंग मोड साथ रहेगा",h4s:"रेसिपी खोलो, कुकिंग मोड दबाओ। एक बार में एक बड़ा स्टेप, चाहो तो पढ़कर सुनाएगा, और जहाँ मिनट लिखा हो वहाँ टाइमर। स्क्रीन बंद नहीं होगी।",
+  help_tabs:"चार टैब",ht_cook:"तुम्हारा फ्रिज और बन सकने वाली रेसिपी",ht_plan:"जो चीज़ें अभी लेनी हैं उनकी लिस्ट",ht_me:"जीते हुए बैज और बनाई चीज़ों की फ़ोटो",ht_more:"सेटिंग, गाइड, और रेसिपी पैक, बड़ों के कंट्रोल",
+  help_safe:"🔒 ताले के बारे में",help_safe_s:"चूल्हे वाली रेसिपी तब तक बंद हैं जब तक छोटा सेफ़्टी क्विज़ पास न करो। उसके बाद भी हमेशा किसी बड़े के साथ ही पकाओ — ऐप तुम्हारा किचन नहीं देख सकता।",
+  help_priv:"तुम्हारा डेटा कहाँ रहता है",help_priv_s:"सब कुछ — फ्रिज, बैज, फ़ोटो, प्लान — सिर्फ़ इसी डिवाइस के ब्राउज़र में सेव होता है। कहीं अपलोड नहीं होता और कोई और नहीं देख सकता।",
+  nav_cook:"पकाओ",nav_plan:"शॉपिंग",nav_me:"मैं",nav_more:"और",fridge_title:"फ्रिज में क्या है?",clear:"🧹 साफ़",search_ph:"खोजो… kela, banana, कुछ भी",
   results_title:"तो क्या बना सकते हैं?",results_sub:"रेसिपी पर टैप करो → स्टेप्स, स्वैप, सब कुछ",surprise:"🎲 सरप्राइज़",makeown:"✨ अपनी रेसिपी",
   tab_all:"सब",tab_nostove:"🧊 बिना चूल्हा",tab_quick:"⚡ झटपट",tab_snack:"🍪 स्नैक्स",tab_season:"🌱 मौसमी",tab_fav:"❤️ फ़ेव",tab_mine:"✨ मेरी",
   have0:"जो है उसे टैप करके शुरू करो",haveN:"फ्रिज में {n} चीज़ें",letscook:"चलो पकाएँ!",empty_fridge:"फ्रिज खाली है (स्क्रीन पर)।<br>जो है उसे टैप करो।",
@@ -1767,15 +1789,13 @@ const STR={
   mine_empty:"अभी तुम्हारी कोई रेसिपी नहीं।<br>\"अपनी रेसिपी\" टैप करके बनाओ!",fav_empty:"अभी कोई फ़ेव नहीं। किसी रेसिपी पर 🤍 टैप करो।",
   need:"चाहिए:",or:"या",insteadof:"की जगह",addmissing:"🛒 कमी जोड़ो",quizfirst:"🔒 पहले क्विज़",
   pill_stove:"🔥 चूल्हा · बड़े के साथ",pill_oven:"🔥 ओवन · बड़े के साथ",pill_micro:"📡 माइक्रोवेव",pill_knife:"🔪 चाकू · बड़े के साथ",pill_none:"🧊 न आग, न चाकू",
-  plan_title:"📅 इस हफ़्ते",plan_sub:"Cook से रेसिपी खींचकर किसी दिन पर छोड़ो, या रेसिपी में दिन टैप करो",plan_shop:"🛒 हफ़्ते की कमी जोड़ो",today:"आज",drop_here:"यहाँ रेसिपी छोड़ो",
-  day0:"सोम",day1:"मंगल",day2:"बुध",day3:"गुरु",day4:"शुक्र",day5:"शनि",day6:"रवि",
-  shop_title:"🛒 शॉपिंग लिस्ट",shop_empty:"रेसिपी पर \"कमी जोड़ो\" टैप करो।",tobuy:"{n} खरीदने हैं",copy_list:"📋 लिस्ट कॉपी",remove_bought:"✅ खरीदा हटाओ",clear_all:"🧹 सब साफ़",
+  shop_title:"🛒 शॉपिंग लिस्ट",shop_how:"जिस रेसिपी में 1–2 चीज़ें कम हैं उसे खोलो और <b>कमी जोड़ो</b> दबाओ — सब यहाँ आ जाएगा।",shop_empty:"रेसिपी पर \"कमी जोड़ो\" टैप करो।",tobuy:"{n} खरीदने हैं",copy_list:"📋 लिस्ट कॉपी",remove_bought:"✅ खरीदा हटाओ",clear_all:"🧹 सब साफ़",
   badge_title:"🏅 बैज वॉल",badge_sub:"{b} में से {a} मिले · {c} रेसिपी बनाई",diary_title:"📸 फ़ीड",diary_sub:"जो बनाया उसकी फ़ोटो · सिर्फ़ इस डिवाइस पर",diary_empty:"अभी कोई फ़ोटो नहीं। कुछ बनाओ, \"फ़ोटो जोड़ो\" टैप करो, फ्लेक्स करो।",
   tile_measure:"माप",tile_measure_s:"कप, चम्मच, चुटकी",tile_quiz:"सेफ़्टी क्विज़",tile_quiz_s:"चूल्हा अनलॉक करो 🔓",tile_theme:"थीम",tile_a11y:"पढ़ना और रंग",tile_a11y_s:"फ़ॉन्ट + कलर-ब्लाइंड मोड",tile_sounds:"आवाज़ें",tile_lang:"भाषा",tile_cal:"कैलोरी ट्रैकर",tile_cal_s:"जो खाया वो ट्रैक करो →",
   packs_title:"📦 रेसिपी पैक",packs_sub:"किचन का DLC। और कलेक्शन चालू करो।",fridge_opts:"🧂 फ्रिज ऑप्शन",staples_lbl:"पेंट्री बेसिक्स हमेशा हैं (नमक, चीनी, तेल, मसाले…)",hindi_lbl:"हिंदी नाम दिखाओ — Curd (dahi)",
   parent_title:"🔒 बड़ों की सेटिंग",unlock:"🔑 अनलॉक",lock:"🔒 लॉक",changepin:"PIN बदलो",footer:"चूल्हा, ओवन या चाकू इस्तेमाल करने से पहले हमेशा किसी बड़े से पूछो।",jump:"रेसिपी तैयार · स्क्रॉल ↓",
   safe_stove_knife:"🔥🔪 चूल्हा और चाकू — किसी बड़े को साथ रखो।",safe_stove:"🔥 चूल्हा — किसी बड़े को साथ रखो।",safe_knife:"🔪 चाकू चाहिए — काटने में बड़े की मदद लो।",safe_micro:"📡 माइक्रोवेव — बाउल गरम होगा, ध्यान से!",safe_none:"🧊 न आग, न चाकू। तुम अकेले कर सकते हो!",
-  mine:"मेरी",inseason:"मौसमी",servings:"कितने लोग?",youneed:"चाहिए",missing:"नहीं है",nicetohave:"हो तो अच्छा",staples_short:"नमक, चीनी, तेल, मसाले",addmissing_long:"कमी शॉपिंग लिस्ट में जोड़ो",steps:"स्टेप्स — टिक करो",protip:"प्रो टिप:",addtoweek:"हफ़्ते में जोड़ो",
+  mine:"मेरी",inseason:"मौसमी",servings:"कितने लोग?",youneed:"चाहिए",missing:"नहीं है",nicetohave:"हो तो अच्छा",staples_short:"नमक, चीनी, तेल, मसाले",addmissing_long:"कमी शॉपिंग लिस्ट में जोड़ो",steps:"स्टेप्स — टिक करो",protip:"प्रो टिप:",
   cookmode:"कुकिंग मोड",logmeal:"खाना लॉग करो",madeit:"बना लिया!",favit:"फ़ेव करो",faved:"फ़ेव में",addphoto:"फ़ोटो जोड़ो",print:"प्रिंट",copy:"कॉपी",delete:"हटाओ",copied:"कॉपी हो गया!",nocopy:"इस ब्राउज़र में कॉपी नहीं हुआ।",deleted:"रेसिपी हटा दी।",cooked_toast:"बन गया। असली शेफ़ 🔥",
   fav:"फ़ेव में जोड़ा ❤️",unfav:"फ़ेव से हटाया",autoread:"स्टेप्स पढ़कर सुनाओ",step:"स्टेप",start_timer:"टाइमर",stop_timer:"रोको",back:"पीछे",next:"आगे",times_up:"टाइम खत्म!",
   muted:"म्यूट · बदलने के लिए टैप",tap_change:"बदलने के लिए टैप",pack_pop:"पॉप",pack_arcade:"रेट्रो आर्केड",pack_asmr:"ASMR किचन",sounds_title:"आवाज़ें",sounds_sub:"एक वाइब चुनो। सुनने के लिए टैप करो।",mute_lbl:"सब म्यूट",
@@ -1787,7 +1807,7 @@ const STR={
 const t=k=>(STR[G.lang]&&STR[G.lang][k])??STR.en[k]??k;
 function applyLang(){
   document.documentElement.lang=G.lang==="hi"?"hi":"en";
-  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=t(el.dataset.i18n); if(/<br>/.test(v)) el.innerHTML=v; else el.textContent=v; });
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=t(el.dataset.i18n); if(/<[a-z]/i.test(v)) el.innerHTML=v; else el.textContent=v; });
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
   document.getElementById("langSmall").textContent=G.lang==="hi"?"हिंदी · English":"English · हिंदी";
 }
@@ -1800,7 +1820,6 @@ function openLang(){
   sheet.querySelectorAll("#langSegs button").forEach(b=>b.addEventListener("click",()=>{ setLang(b.dataset.l); sfx.pop(); closeSheet(); toast(b.dataset.l==="hi"?"हिंदी चालू 🇮🇳":"English on 🇬🇧"); }));
   document.getElementById("langDone").addEventListener("click",closeSheet);
 }
-
 /* ---- sounds sheet ---- */
 function openSounds(){
   openSheet(`${head("🔊",t("sounds_title"),t("sounds_sub"))}
@@ -1811,7 +1830,6 @@ function openSounds(){
   document.getElementById("muteT").addEventListener("change",e=>{ G.muted=e.target.checked; saveGlobal(); renderMute(); if(!G.muted) sfx.pop(); });
   document.getElementById("sndDone").addEventListener("click",closeSheet);
 }
-
 /* ---- onboarding (first visit only) ---- */
 function openOnboarding(){
   let step=1, av=AVATARS[Math.floor(Math.random()*AVATARS.length)], name="", picked=new Set();
@@ -1850,7 +1868,6 @@ function openOnboarding(){
   }
   modal.hidden=false; document.body.style.overflow="hidden"; render();
 }
-
 /* =====================================================================
    MISC
    ===================================================================== */
@@ -1895,16 +1912,16 @@ function confetti(){
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   fetch("sw.js",{method:"HEAD"}).then(r=>{ if(r.ok) navigator.serviceWorker.register("sw.js").catch(()=>{}); }).catch(()=>{});
 }
-
 /* =====================================================================
    BOOT
    ===================================================================== */
 function renderAll(){
   applyLang(); renderProfileBtn(); renderMute(); applyA11y();
+  initClarity();
   staplesEl.checked=G.staples; hindiEl.checked=G.hindi; quizReqEl.checked=G.quizReq;
   document.querySelectorAll(".allergy").forEach(cb=>cb.checked=!!G.allergy[cb.dataset.key]);
   renderParent();
-  renderGroups(); renderResults(); renderShop(); renderPacks(); renderPlanner(); renderBadges(); renderDiary();
+  renderGroups(); renderResults(); renderShop(); renderPacks(); renderBadges(); renderDiary();
 }
 loadGlobal(); loadProfile(G.active); renderAll(); checkBadges();
 { const door=document.getElementById("door"); if(sessionStorage.getItem("fc_door")||!G.onboarded) door.remove(); else { door.addEventListener("animationend",()=>door.remove()); try{ sessionStorage.setItem("fc_door","1"); }catch(e){} } }
